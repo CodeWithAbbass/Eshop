@@ -1,0 +1,202 @@
+.DesktopFooter_First_Container {
+  background: #f57224;
+  padding: 22px 0 30px;
+  color: #fff;
+}
+.DesktopFooterFirst_FirstTitle,
+.DesktopFooterFirst_SecondTitle,
+.DesktopFooter_Second_Title {
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 18px;
+}
+.DesktopFooter_Menu_item {
+  line-height: 100%;
+}
+.DesktopFooter_Menu_Link {
+  font-size: 12px;
+  font-weight: 400;
+}
+.DesktopFooter_Menu_Link:hover {
+  text-decoration: underline;
+}
+.DesktopFooter_FirstQRImg {
+  width: 100px;
+  border-radius: 10px;
+  vertical-align: baseline;
+}
+.DesktopFooter_HappyShopping_img {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+}
+.DesktopFooter_HappyShopping_Title {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 18px;
+  color: #f57224;
+}
+.DesktopFooter_DownloadApp_Link {
+  background-image: url("//laz-img-cdn.alicdn.com/tfs/TB1iD3fNbvpK1RjSZFqXXcXUVXa-317-281.png");
+  display: inline-block;
+  background-position: 0 -110px;
+  width: 120px;
+  height: 40px;
+}
+.DesktopFooter_DownloadApp_GooglePlay {
+  background-position: 0 -65px;
+  width: 134px;
+  height: 40px;
+  margin: 0 10px;
+}
+.DesktopFooter_DownloadApp_AppGallery {
+  background-image: url("//laz-img-cdn.alicdn.com/imgextra/i1/O1CN019Azkom1wUwdwcWPgA_!!6000000006312-2-tps-1772-532.png") !important;
+  background-size: contain !important;
+  background-position: 0 !important;
+  background-repeat: no-repeat !important;
+  width: 134px;
+  height: 40px;
+}
+.DesktopFooter_Second_Column_Container {
+  padding: 24px 0;
+  min-height: 165px;
+}
+.DesktopFooter_Second_Title {
+  color: #333;
+}
+.DesktopFooter_Second_PaymentImg {
+  background-image: url("//laz-img-cdn.alicdn.com/tfs/TB1iD3fNbvpK1RjSZFqXXcXUVXa-317-281.png");
+  display: inline-block;
+  width: 55px;
+  height: 40px;
+}
+.PaymentImg1 {
+  background-position: -161px 0;
+}
+.PaymentImg2 {
+  background-position: -60px -200px;
+}
+.PaymentImg3 {
+  background-position: -120px -200px;
+}
+.PaymentImg4 {
+  background-position: -161px -90px;
+}
+.PaymentImg5 {
+  background-position: 0 -155px;
+}
+.PaymentImg6 {
+  background-position: -60px -155px;
+}
+.DesktopFooter_Second_CountryLink {
+  background-image: url("//laz-img-cdn.alicdn.com/tfs/TB1iD3fNbvpK1RjSZFqXXcXUVXa-317-281.png");
+  display: inline-block;
+  width: 36px;
+  height: 36px;
+}
+.CountryLink1 {
+  background-position: -164px -245px;
+}
+.CountryLink2 {
+  background-position: 0 -245px;
+}
+.CountryLink3 {
+  background-position: -41px -245px;
+}
+.CountryLink4 {
+  background-position: -82px -245px;
+}
+.CountryLink5 {
+  background-position: -123px -245px;
+}
+.DesktopFooter_Second_FollowLink {
+  background-image: url("//laz-img-cdn.alicdn.com/tfs/TB1iD3fNbvpK1RjSZFqXXcXUVXa-317-281.png");
+  display: inline-block;
+  width: 36px;
+  height: 36px;
+}
+.FollowLink1 {
+  background-position: -281px -164px;
+}
+.FollowLink2 {
+  background-position: -281px -123px;
+}
+.FollowLink3 {
+  background-position: -281px -41px;
+}
+.FollowLink4 {
+  background-position: -180px -155px;
+}
+.FollowLink5 {
+  background-position: -240px -200px;
+}
+.DesktopFooter_Second_Verified {
+  background-image: url("//laz-img-cdn.alicdn.com/tfs/TB1iD3fNbvpK1RjSZFqXXcXUVXa-317-281.png");
+  display: inline-block;
+  background-position: 0 0;
+  width: 156px;
+  height: 60px;
+}
+.DesktopFooter_Copyright_Container {
+  color: #fff;
+  background: #f57224;
+  padding: 10px;
+}
+.DesktopFooter_Copyright {
+  font-size: 18px;
+  font-weight: 400;
+  line-height: normal;
+}
+
+/* ********************************************************* */
+/*                      Mobile Footer                        */
+/* ********************************************************* */
+.Mobile_Footer {
+  display: none;
+  height: 48px;
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 1000;
+  box-shadow: 0 -1px 1px 0 rgba(0, 0, 0, 0.15);
+  background-color: #fff;
+}
+.Mobile_Footer_Container {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+.MobileFooter_Link {
+  padding: 4px 2px;
+  color: #989898;
+  font-size: 12px;
+  transition: 0.4s ease-in-out;
+}
+.MobileFooter_Link:hover,
+.MobileFooter_Link_Active {
+  color: #f57224;
+}
+.MobileFooter_Link_Txt {
+  font-size: 12px;
+  -webkit-transform: scale(0.83);
+  -ms-transform: scale(0.83);
+  transform: scale(0.83);
+  height: 14px;
+  line-height: 1.231;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  display: block;
+  margin-top: -1px;
+}
+@media (max-width: 768px) {
+  .Desktop_Footer {
+    display: none;
+  }
+  .Mobile_Footer {
+    display: block;
+  }
+}

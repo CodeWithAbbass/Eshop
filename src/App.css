@@ -1,0 +1,9 @@
+.Top_Header {
+  height: 80px;
+}
+
+@media (max-width: 768px) {
+  .Top_Header {
+    display: none;
+  }
+}

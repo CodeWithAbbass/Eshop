@@ -1,0 +1,276 @@
+/* **************************************************** */
+/*                  Top Header Css                      */
+/* **************************************************** */
+.Header {
+  position: sticky;
+  top: 0;
+  z-index: 4;
+  background: #fff;
+  transition: 0.4s ease-in-out;
+}
+.H_Shadow {
+  box-shadow: 0 3px 10px #00000026;
+}
+.MainHeader_TopBar {
+  background: rgba(158, 158, 158, 0.2);
+  height: 25px;
+  overflow: hidden;
+  -webkit-transition: height 0.25s linear, zIndex 0s linear 0.25s;
+  transition: height 0.25s linear, zIndex 0s linear 0.25s;
+}
+.TopBar_Menu_Container {
+  list-style: none;
+}
+.TopBar_Link {
+  display: inline-block;
+  font-size: 12px;
+  height: 25px;
+  line-height: 25px;
+  white-space: nowrap;
+  cursor: pointer;
+  color: #212121;
+  -webkit-transition: color 0.2s;
+  transition: color 0.2s;
+  padding: 0 16px;
+  text-transform: uppercase;
+  /* background: #fff; */
+}
+.TopBar_Link.active,
+.TopBar_Link:hover {
+  color: #f85606;
+  text-decoration: underline;
+  opacity: 0.8;
+}
+/* **************************************************** */
+/*                  Main Header Css                     */
+/* **************************************************** */
+.Desktop_MainHeader {
+  position: sticky;
+  top: 0;
+  left: 0;
+  height: 100%;
+  transition: 0.4s ease-in-out;
+}
+.MainHeader_Container {
+  background: #fff;
+  height: 75px;
+  padding-top: 11px;
+}
+.MainHeader_Logo_Container {
+  width: 200px;
+}
+.MainHeader_Logo_Link {
+  width: 135px;
+  height: 41px;
+}
+.MainHeader_Logo_Img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.MainHeader_SearchBox_Container {
+  width: 688px;
+  height: 45px;
+  line-height: 45px;
+  background-color: #fff;
+  border-radius: 3px;
+}
+.MainHeader_SearchBox_Input {
+  padding: 13px 19px;
+  background-color: #f5f5f5;
+  border: 1px solid #f5f5f5;
+  font-size: 14px;
+  line-height: 1;
+  letter-spacing: 0;
+  color: #212121;
+  border-radius: 2px;
+  outline: none;
+}
+.MainHeader_SearchBox_Input:hover,
+.MainHeader_SearchBox_Input:focus,
+.MainHeader_SearchBox_Input:focus-within,
+.MainHeader_SearchBox_Input:active {
+  outline: none;
+  border: 1px solid #f5f5f5;
+}
+.MainHeader_SearchBox_Icon_Container {
+  right: 0;
+  line-height: 1;
+  width: 45px;
+  height: 45px;
+  text-indent: -9999px;
+  border-radius: 0 2px 2px 0;
+  outline: none;
+  background: #f57224;
+  background-size: 22px;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  cursor: pointer;
+}
+
+.MainHeader_Cart_Container {
+  height: 34px;
+  width: 40px;
+  margin: 0 10px;
+}
+.MainHeader_Cart_Link {
+  color: #212121;
+  text-decoration: none;
+  position: relative;
+  background-color: transparent;
+}
+.MainHeader_Cart_Counter {
+  position: absolute;
+  background: #f85606;
+  color: #fff;
+  top: -4px;
+  font-weight: 400;
+  right: -4px;
+  text-align: center;
+  font-size: 13px;
+  min-width: 16px;
+  line-height: 14px;
+  border-radius: 50%;
+  padding: 3px 2px;
+}
+.MainHeader_Banner_Container {
+  width: 188px;
+  height: 45px;
+}
+
+@media (max-width: 1200px) {
+  .MainHeader_Content {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1rem;
+  }
+  .MainHeader_Logo_Container {
+    width: 15%;
+  }
+  .MainHeader_Logo_Link {
+    width: 100%;
+  }
+  .MainHeader_Logo_Img {
+    width: 100%;
+    height: 100%;
+  }
+  .MainHeader_Cart_Container {
+    line-height: 35px;
+    width: 5%;
+  }
+  .MainHeader_Banner_Container {
+    width: 20%;
+  }
+  .MainHeader_Banner_Img {
+    object-fit: contain;
+    height: 100%;
+  }
+}
+@media (max-width: 991px) {
+  .MainHeader_SearchBox_Container {
+    width: 500px;
+  }
+}
+/* **************************************************** */
+/*                  Nav Category Css                     */
+/* **************************************************** */
+.MainHeader_BottomHeader_Container {
+  position: relative;
+  height: 40px;
+  line-height: 40px;
+  visibility: hidden;
+  display: none;
+}
+.MainHeader_NavCategory > .dropdown {
+  width: 180px;
+}
+.ToggleBtn {
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  color: #666666;
+  transition: 0.4s ease-in-out;
+}
+.ToggleBtn:hover {
+  opacity: 0.7;
+}
+.dropdown-item {
+  font-size: 14px;
+  color: black;
+}
+.dropdown-menu {
+  border-radius: 0;
+}
+.MH_LayoutHandler_Icon {
+  color: #666666;
+  transition: 0.4s ease-in-out !important;
+  cursor: pointer;
+}
+.MH_LayoutHandler_Icon:hover,
+.MH_LayoutHandler_Icon.active {
+  color: #f57224;
+}
+/* **************************************************** */
+/*              Mobile Main Header Css                 */
+/* **************************************************** */
+.Mobile_MainHeader {
+  position: fixed;
+  top: 0px;
+  width: 100%;
+  height: 100px;
+  display: none;
+  padding: 22px 10px;
+  transition: 0.4s ease-in-out;
+}
+.Mobile_StickyBg {
+  background: linear-gradient(to right, #442e93 0, #25a5d8 100%);
+}
+.Mobile_MainHeader_Content {
+  height: 100%;
+  position: relative;
+  background: #fff;
+  box-shadow: 0 5px 10px 0 rgb(0 0 0 / 6%), 0 2px 2px 0 rgb(0 0 0 / 17%);
+}
+.MH_SearchBox_Link {
+  line-height: 55px;
+}
+.MH_Search_Icon_Container {
+  width: 70px;
+  height: 100%;
+  position: absolute;
+  /* line-height: 105px; */
+  top: 0;
+  color: #212121;
+  text-align: center;
+}
+.MH_Search_Icon {
+  width: 40px !important;
+  height: 40px !important;
+}
+.Mobile_SearchBox_txt {
+  font-size: 16px;
+  display: block;
+  height: 100%;
+  /* line-height: 100px; */
+  color: #bfbfbf;
+  padding: 0 5rem;
+}
+@media (max-width: 768px) {
+  .Desktop_MainHeader {
+    display: none;
+  }
+  .Mobile_MainHeader {
+    display: block;
+  }
+}
+@media (max-width: 425px) {
+  .Mobile_MainHeader {
+    padding: 10px;
+    height: 70px;
+  }
+  .MH_SearchBox_Link {
+    line-height: 50px;
+  }
+}

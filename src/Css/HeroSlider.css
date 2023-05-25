@@ -1,0 +1,29 @@
+.Slide_Image {
+  object-fit: contain;
+}
+.swiper-button-next,
+.swiper-button-prev {
+  color: #f57224 !important;
+}
+.swiper-pagination-bullet-active {
+  background: #f57224 !important;
+}
+.MobileSlideImg {
+  display: none;
+}
+@media (max-width: 768px) {
+  .DesktopSlideImg {
+    display: none;
+  }
+  .MobileSlideImg {
+    display: block;
+  }
+  .swiper-pagination-bullet {
+    width: 10px !important;
+    height: 10px !important;
+  }
+  .swiper-button-next::after,
+  .swiper-button-prev::after {
+    font-size: 30px !important;
+  }
+}
