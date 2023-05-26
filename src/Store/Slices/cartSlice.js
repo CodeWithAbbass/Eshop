@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-
 const initialState = {
   items: [],
   totalPrice: 0,
@@ -81,25 +80,46 @@ const cartSlice = createSlice({
       return { ...state, items: res };
     },
     TotalPrice(state, action) {
-      // let totalPrice = state.items.reduce((initialNumber, curElem) => {
-      //   console.log(initialNumber);
-      //   let { price, quantity, discount } = curElem;
-      //   let NewAmount;
-      //   if (discount > 0) {
-      //     NewAmount = price - (price * discount) / 100;
-      //     initialNumber = initialNumber + NewAmount * quantity;
-      //   } else {
-      //     initialNumber = initialNumber + price * quantity;
-      //   }
-      //   //    initialNumber =         0     +   50  x    1    === 50
-      //   //    initialNumber =         50    +   50  x    1    === 100
-      //   //    initialNumber =         100   +   100 x    1    === 200
-      //   return initialNumber;
-      // }, 0);
-      // return { ...state, totalPrice };
+      let totalPrice = state.items.reduce((initialNumber, curElem) => {
+        let { Price, Quantity, Discount } = curElem;
+        let NewAmount;
+        if (Discount > 0) {
+          NewAmount = Price - (Price * Discount) / 100;
+          initialNumber = initialNumber + NewAmount * Quantity;
+        } else {
+          initialNumber = initialNumber + Price * Discount;
+        }
+        //    initialNumber =         0     +   50  x    1    === 50
+        //    initialNumber =         50    +   50  x    1    === 100
+        //    initialNumber =         100   +   100 x    1    === 200
+        return initialNumber;
+      }, 0);
+
+      return { ...state, totalPrice };
     },
   },
+  // extraReducers(builder) {
+  //   builder.addCase(TotalPrice, (state, action) => {
+  //     let totalPrice = state.items.reduce((initialNumber, curElem) => {
+  //       let { Price, Quantity, Discount } = curElem;
+  //       let NewAmount;
+  //       if (Discount > 0) {
+  //         NewAmount = Price - (Price * Discount) / 100;
+  //         initialNumber = initialNumber + NewAmount * Quantity;
+  //       } else {
+  //         initialNumber = initialNumber + Price * Discount;
+  //       }
+  //       //    initialNumber =         0     +   50  x    1    === 50
+  //       //    initialNumber =         50    +   50  x    1    === 100
+  //       //    initialNumber =         100   +   100 x    1    === 200
+  //       return initialNumber;
+  //     }, 0);
+
+  //     return { ...state, totalPrice };
+  //   });
+  // },
 });
+
 // Action creators are generated for each case reducer function
 export const {
   AddToCart,

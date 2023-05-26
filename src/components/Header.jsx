@@ -6,11 +6,12 @@ import { useEffect } from "react";
 import AppsRoundedIcon from "@mui/icons-material/AppsRounded";
 import GridViewRoundedIcon from "@mui/icons-material/GridViewRounded";
 import SquareRoundedIcon from "@mui/icons-material/SquareRounded";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { changeLayout } from "../Store/Slices/productSlice";
 const Header = () => {
   const location = useLocation();
   const Cart = useSelector((state) => state.Cart.items);
+  const dispatch = useDispatch();
   const myScrollFunc = function () {
     const Desktop_MainHeader = document.querySelector(".Desktop_MainHeader");
     const Header_TopBar = document.querySelector(".MainHeader_TopBar");

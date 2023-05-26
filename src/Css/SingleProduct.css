@@ -379,13 +379,25 @@
   border: 1px solid #d5d9d9;
   border-right: 0;
 }
-.SP_Subtotal_Item {
-  border-bottom: 1px solid #ccc;
+.SP_Retail_Cart_Container {
+  width: 200px;
 }
 .SP_Subtotal_Header {
+  position: relative;
+  z-index: 1;
   box-shadow: 0 2px 5px rgba(15, 17, 17, 0.15);
   padding: 0.5rem;
   border-bottom: 1px solid #ccc;
+}
+.SP_Subtotal_Item {
+  padding: 0.8rem 0.5rem;
+  height: 200px;
+  border-bottom: 1px solid #ccc;
+}
+.SP_Cart_Product_Link {
+  display: block;
+  height: 100px;
+  margin-bottom: 1rem;
 }
 .SP_SubTotal_Txt {
   font-size: 12px;
@@ -415,9 +427,7 @@
 .SP_Retail_Cart_Container::-webkit-scrollbar {
   display: none;
 }
-.SP_Subtotal_Item {
-  padding: 0.8rem 0.5rem;
-}
+
 .SP_Retail_Product_Price {
   font-size: 14px;
   font-weight: 600;
@@ -426,7 +436,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 1.3rem;
+  margin-top: 10px;
   margin-bottom: 0.5rem;
   gap: 0.6rem;
 }
@@ -439,6 +449,17 @@
   box-shadow: 0 2px 5px 0 rgba(228, 228, 228, 0.5);
   border: 1px solid #d5d9d9;
   background: #f8f1f1;
+  transition: 0.4s ease-in-out;
+  cursor: pointer;
+}
+.SP_Subtotal_Quantity_Select:hover,
+.SP_Subtotal_Quantity_Select:focus,
+.SP_Subtotal_Quantity_Select:focus-visible,
+.SP_Subtotal_Quantity_Select:focus-within {
+  outline: none;
+  background-color: #f8f1f100;
+  box-shadow: 0 0 0 3px #f57224, 0 0 0 2px #e8aa42;
+  border-color: #f8f1f1;
 }
 .SP_Subtotal_Delete_Link {
   color: #0f1111;

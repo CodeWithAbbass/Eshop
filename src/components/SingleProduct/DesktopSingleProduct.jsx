@@ -1,8 +1,6 @@
 import "../../Css/SingleProduct.css";
 import ReactImageMagnify from "react-image-magnify";
-import SamsungLED from "../../assets/Products/SamsungLED.jpg";
 import PlaceOutlinedIcon from "@mui/icons-material/PlaceOutlined";
-import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,6 +13,7 @@ import {
 } from "../../Store/Slices/cartSlice";
 import CalcDiscount from "../../helpers/CalcDiscount";
 import PriceFormat from "../../helpers/PriceFormat";
+import SubTotal from "./SubTotal";
 
 const DesktopSingleProduct = () => {
   const dispatch = useDispatch();
@@ -27,10 +26,10 @@ const DesktopSingleProduct = () => {
     let res = state.Cart.items.filter((item) => item.id == id);
     return res;
   });
+
   let PId,
     Title,
     Price,
-    oldPrice,
     Rating,
     MainImage,
     SideImage,
@@ -40,13 +39,12 @@ const DesktopSingleProduct = () => {
     isSale,
     isSold,
     ProductSubtotal;
-  // if (Cart.length > 0) {
-  //   Cart.map((item) => {
-  //     const { Quantity, Price } = item;
-  //     subtotal = subtotal + Quantity * Price;
-  //   });
-  // }
 
+  const QuantityOnchange = (e, id) => {
+    const { value } = e.target;
+    dispatch(SelectIncrementDecrement({ value, id }));
+    dispatch(TotalPrice());
+  };
   if (Product.length > 0) {
     Product.map((item, index) => {
       PId = item.id;
@@ -63,7 +61,7 @@ const DesktopSingleProduct = () => {
       ProductSubtotal =
         Cart.length > 0
           ? Cart[0].Quantity * CalcDiscount(Cart[0].Discount, Cart[0].Price)
-          : PriceFormat(CalcDiscount(Discount, Price));
+          : CalcDiscount(Discount, Price);
     });
   }
   useEffect(() => {
@@ -72,10 +70,7 @@ const DesktopSingleProduct = () => {
   const ChangeMainImage = (ImageItem) => {
     setImageURL(ImageItem);
   };
-  const QuantityOnchange = (e, id) => {
-    const { value } = e.target;
-    dispatch(SelectIncrementDecrement({ value, id }));
-  };
+
   return (
     <div className="Desktop_SingleProduct">
       <div className="SingleProduct_Product_Container">
@@ -226,7 +221,10 @@ const DesktopSingleProduct = () => {
                     <Link
                       className="BuyBox_AddToCart_Link text-white w-100 h-100 d-block p-1"
                       // to="/cart"
-                      onClick={() => dispatch(AddToCart(Product[0]))}
+                      onClick={() => {
+                        dispatch(AddToCart(Product[0]));
+                        dispatch(TotalPrice());
+                      }}
                     >
                       Add to Cart
                     </Link>
@@ -290,48 +288,7 @@ const DesktopSingleProduct = () => {
           </div>
         </div>
       </div>
-
-      <div className="SingleProduct_SubTotal_Container">
-        <div className="SP_Subtotal_Header">
-          <div className="SP_SubTotal_Txt">Subtotal</div>
-          <div className="SP_SubTotal_Price">$109</div>
-          <Link to="/cart" className="SP_SubTotal_GoToCart_Btn">
-            Go to Cart
-          </Link>
-        </div>
-        <div className="SP_Retail_Cart_Container">
-          <div className="SP_Subtotal_Item">
-            <Link to="/product/2" className="SP_Cart_Product_Link">
-              <img src={SamsungLED} alt="Retail Cart Product Image" />
-            </Link>
-            <div className="SP_Retail_Product_Price">$59.99</div>
-            <form className="SP_Subtotal_Quantity_Info">
-              <select
-                name="Quantity"
-                id="Quantity"
-                className="SP_Subtotal_Quantity_Select"
-                value={Cart.length > 0 ? Cart[0].Quantity : "1"}
-                onChange={(e) => QuantityOnchange(e, id)}
-              >
-                {Array(Stock + 1)
-                  .fill()
-                  .map((_, i) => {
-                    if (i > 0) {
-                      return (
-                        <option value={i} className="Quantity_Option" key={i}>
-                          {i}
-                        </option>
-                      );
-                    }
-                  })}
-              </select>
-              <Link className="SP_Subtotal_Delete_Link">
-                <DeleteOutlineOutlinedIcon className="SP_Subtotal_Delete_Icon" />
-              </Link>
-            </form>
-          </div>
-        </div>
-      </div>
+      <SubTotal />
     </div>
   );
 };

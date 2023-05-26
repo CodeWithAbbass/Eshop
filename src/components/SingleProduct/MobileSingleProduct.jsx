@@ -1,7 +1,7 @@
 import "../../Css/SingleProduct.css";
 import StoreIcon from "@mui/icons-material/Store";
 import { Link, useParams } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation } from "swiper";
@@ -19,7 +19,10 @@ import {
   PlusIncrement,
   MinusDecrement,
   DeleteFromCart,
+  TotalPrice,
 } from "../../Store/Slices/cartSlice";
+import CalcDiscount from "../../helpers/CalcDiscount";
+import PriceFormat from "../../helpers/PriceFormat";
 
 const MobileSingleProduct = () => {
   const dispatch = useDispatch();
@@ -28,6 +31,10 @@ const MobileSingleProduct = () => {
   const Product = useSelector((state) =>
     state.Products.items.filter((item) => item.id == id)
   );
+  useEffect(() => {
+    dispatch(TotalPrice());
+    return () => {};
+  }, []);
   return (
     <div className="Mobile_SingleProduct ">
       {Product.length == 0
@@ -37,7 +44,6 @@ const MobileSingleProduct = () => {
               id,
               Title,
               Price,
-              oldPrice,
               Rating,
               Image,
               Quantity,
@@ -49,8 +55,7 @@ const MobileSingleProduct = () => {
             ISSold = isSold;
             const MainImage = Image.MainImage;
             const SideImage = Image.SideImage;
-            const WDPrice = Price.toString().split(".");
-            const WDOldPrice = oldPrice.toString().split(".");
+
             return (
               <div
                 className="Mobile_SingleProduct_Container container-xl"
@@ -80,15 +85,13 @@ const MobileSingleProduct = () => {
                   <h2 className="MSP_Title pb-5 pt-2">{Title}</h2>
                   <div className="MSP_Price_Container ">
                     <div className="MSP_Price d-inline  ">
-                      <span className="MSP_Currency">Rs.</span>
                       <span className="MSP_Price_Txt">
-                        {WDPrice[0] ? WDPrice[0] : ""}
+                        {PriceFormat(CalcDiscount(Discount, Price))}
                       </span>
                     </div>
                     <div className="MSP_OldPrice d-inline ms-4">
-                      <span className="MSP_Currency">Rs.</span>
                       <span className="MSP_Price_Txt">
-                        {WDOldPrice[0] ? WDOldPrice[0] : ""}
+                        {PriceFormat(Price)}
                       </span>
                     </div>
                     <div className="MSP_Discount d-inline ms-2">
@@ -166,7 +169,10 @@ const MobileSingleProduct = () => {
                 ) : (
                   <Link
                     className="MSPF_Shortcut_Link d-inline-block h-100 w-100"
-                    onClick={() => dispatch(AddToCart(Product[0]))}
+                    onClick={() => {
+                      dispatch(AddToCart(Product[0]));
+                      dispatch(TotalPrice());
+                    }}
                   >
                     <span className="MSPF_Shortcut_Txt">Add To Cart</span>
                   </Link>

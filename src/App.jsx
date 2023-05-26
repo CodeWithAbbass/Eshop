@@ -8,6 +8,7 @@ import SingleProduct from "./Pages/SingleProduct";
 import User from "./Pages/User";
 import Cart from "./Pages/Cart";
 import Checkout from "./Pages/Checkout";
+
 const App = () => {
   useEffect(() => {
     return () => {};

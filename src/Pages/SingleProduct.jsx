@@ -10,7 +10,7 @@ const SingleProduct = ({}) => {
   return (
     <div className="SingleProduct">
       <DesktopSingleProduct />
-      {/* <MobileSingleProduct /> */}
+      <MobileSingleProduct />
     </div>
   );
 };
