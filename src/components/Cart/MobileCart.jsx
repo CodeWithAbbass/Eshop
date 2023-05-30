@@ -78,7 +78,7 @@ const MobileCart = () => {
                             <span
                               className="MCCD_CartItem_Dec_Icon_Container text-center position-absolute top-0 start-0"
                               onClick={() => {
-                                dispatch(MinusDecrement());
+                                dispatch(MinusDecrement(id));
                                 dispatch(TotalPrice());
                               }}
                             >
@@ -94,7 +94,7 @@ const MobileCart = () => {
                             <span
                               className="MCCD_CartItem_Inc_Icon_Container text-center position-absolute top-0 end-0"
                               onClick={() => {
-                                dispatch(PlusIncrement());
+                                dispatch(PlusIncrement(id));
                                 dispatch(TotalPrice());
                               }}
                             >
@@ -180,7 +180,10 @@ const MobileCart = () => {
                                 <button className="CPPOperation_WishList_Btn btn p-0 m-0 me-1">
                                   <FavoriteBorderOutlinedIcon className="CPPOperation_WishList_Icon" />
                                 </button>
-                                <button className="CPPOperation_Delete_Btn btn p-0 m-0 ms-1">
+                                <button
+                                  className="CPPOperation_Delete_Btn btn p-0 m-0 ms-1"
+                                  onClick={() => dispatch(DeleteFromCart(id))}
+                                >
                                   <DeleteOutlinedIcon className="CPPOperation_Delete_Icon" />
                                 </button>
                               </div>
@@ -211,7 +214,7 @@ const MobileCart = () => {
           </div>
           <div className="MCC_Order_Summery_Right text-end">
             <button className="MCCOS_Checkout_Btn btn BtnStyle1 text-center rounded-0">
-              <Link className="MCCOS_Checkout_Link text-white">
+              <Link className="MCCOS_Checkout_Link text-white" to="/checkout">
                 Checkout ({Cart.length})
               </Link>
             </button>

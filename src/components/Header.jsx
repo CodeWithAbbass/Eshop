@@ -25,7 +25,7 @@ const Header = () => {
     } else {
       Desktop_MainHeader.classList.remove("H_Shadow");
     }
-    if (y >= 300) {
+    if (y >= 100) {
       Header_TopBar.classList.add("d-none");
       DropDown.style.display = "block";
       DropDown.style.visibility = "visible";
@@ -65,22 +65,63 @@ const Header = () => {
       <div className="Desktop_MainHeader">
         <div className="MainHeader_TopBar">
           <ul className="TopBar_Menu_Container mb-0 text-center w-100 px-4">
-            <li className="d-inline">
-              <Link className="TopBar_Link active" to="/">
+            <li className="d-inline p-0">
+              <Link
+                className={`TopBar_Link ${
+                  location.pathname == "/" ? "active" : ""
+                }`}
+                to="/"
+              >
                 Home
               </Link>
             </li>
-            <li className="d-inline">
-              <Link className="TopBar_Link">Shopping</Link>
+            <li className="d-inline p-0">
+              <Link
+                to="/user"
+                className={`TopBar_Link ${
+                  location.pathname == "/user" ||
+                  location.pathname == "/user/profile" ||
+                  location.pathname == "/user/wishlist" ||
+                  location.pathname == "/user/address" ||
+                  location.pathname == "/user/payment" ||
+                  location.pathname == "/user/returns" ||
+                  location.pathname == "/user/cancellations"
+                    ? "active"
+                    : ""
+                }`}
+              >
+                Account
+              </Link>
             </li>
-            <li className="d-inline">
-              <Link className="TopBar_Link">ORDER</Link>
+            <li className="d-inline p-0">
+              <Link
+                className={`TopBar_Link ${
+                  location.pathname == "/user/order" ? "active" : ""
+                }`}
+                to="/user/order"
+              >
+                ORDER
+              </Link>
             </li>
-            <li className="d-inline">
-              <Link className="TopBar_Link">Categories</Link>
+            <li className="d-inline p-0">
+              <Link
+                className={`TopBar_Link ${
+                  location.pathname == "/" ? "active" : ""
+                }`}
+                to="/"
+              >
+                Categories
+              </Link>
             </li>
-            <li className="d-inline">
-              <Link className="TopBar_Link">LOGIN</Link>
+            <li className="d-inline p-0">
+              <Link
+                className={`TopBar_Link ${
+                  location.pathname == "/login" ? "active" : ""
+                }`}
+                to="/login"
+              >
+                LOGIN
+              </Link>
             </li>
           </ul>
         </div>
@@ -163,38 +204,68 @@ const Header = () => {
                 </a>
 
                 <ul
-                  className="dropdown-menu"
+                  className="dropdown-menu pt-0"
                   aria-labelledby="dropdownMenuLink "
                   onMouseEnter={() => ToggleDropDown()}
                   onMouseLeave={() => ToggleDropDown()}
                 >
                   <li>
-                    <a
-                      className="dropdown-item TopBar_Link active bg-white"
-                      href="#"
+                    <Link
+                      to="/"
+                      className={`dropdown-item d-block TopBar_Link bg-white ${
+                        location.pathname == "/" ? "active" : ""
+                      }`}
                     >
                       Home
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a className="dropdown-item TopBar_Link" href="#">
-                      Shopping
-                    </a>
+                    <Link
+                      to="/user"
+                      className={`dropdown-item d-block TopBar_Link ${
+                        location.pathname == "/user" ||
+                        location.pathname == "/user/profile" ||
+                        location.pathname == "/user/wishlist" ||
+                        location.pathname == "/user/address" ||
+                        location.pathname == "/user/payment" ||
+                        location.pathname == "/user/returns" ||
+                        location.pathname == "/user/cancellations"
+                          ? "active"
+                          : ""
+                      }`}
+                    >
+                      Account
+                    </Link>
                   </li>
                   <li>
-                    <a className="dropdown-item TopBar_Link" href="#">
+                    <Link
+                      to="/user/order"
+                      className={`dropdown-item d-block TopBar_Link ${
+                        location.pathname == "/user/order" ? "active" : ""
+                      }`}
+                    >
                       Order
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a className="dropdown-item TopBar_Link" href="#">
+                    <Link
+                      to="/"
+                      className={`dropdown-item d-block TopBar_Link ${
+                        location.pathname == "/" ? "active" : ""
+                      }`}
+                    >
                       Categories
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a className="dropdown-item TopBar_Link" href="#">
+                    <Link
+                      to="login"
+                      className={`dropdown-item d-block TopBar_Link ${
+                        location.pathname == "/login" ? "active" : ""
+                      }`}
+                    >
                       Login
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               </div>

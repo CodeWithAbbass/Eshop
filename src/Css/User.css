@@ -1,0 +1,266 @@
+.User {
+  background-color: #f4f4f4;
+}
+
+.MobileUser {
+  display: none;
+  padding: 6rem 0;
+}
+
+@media (max-width: 768px) {
+  .MobileUser {
+    display: block;
+  }
+  .DesktopUser {
+    display: none;
+  }
+}
+/* ************************************************* */
+/*                   Profile                         */
+/* ************************************************* */
+.UserLink_Heading {
+  line-height: 24px;
+  color: #424242;
+  font-weight: 500;
+}
+.UserLink_Heading.active {
+  color: #1a9cb7;
+}
+
+.UserLink {
+  font-size: 14px;
+  transition: 0.4s ease-in-out;
+  cursor: pointer;
+  color: #757575;
+  letter-spacing: 0;
+  line-height: 22px;
+  text-transform: capitalize;
+  transition: 0.4s ease-in-out;
+}
+.UserLink:hover {
+  color: #1a9cb7;
+}
+.UserLink.active {
+  color: #1a9cb7;
+  font-weight: 500 !important;
+}
+.User_Container_Heading {
+  font-size: 22px;
+  font-weight: 400;
+  color: #424242;
+}
+
+.MMA_Profile_Item_Title {
+  color: #424242;
+  font-size: 12px;
+  font-weight: 400;
+  margin-bottom: 10px;
+  text-transform: capitalize;
+}
+.MMA_Profile_Item_Info {
+  color: #212121;
+  font-size: 14px;
+  padding-top: 7px;
+  word-wrap: break-word;
+  line-height: normal;
+}
+.MMA_Profile_Item_Btn {
+  color: #1a9cb7;
+  font-size: 12px;
+  font-weight: 400;
+}
+.MMA_Profile_Item_Info_Optional {
+  color: #9e9e9e;
+  font-size: 12px;
+  font-weight: 400;
+}
+.MMA_Profile_Link {
+  margin-bottom: 20px;
+  display: block;
+  width: 288px;
+}
+.MMA_Profile_Newsletter_Link {
+  color: #1a9cb7;
+  margin-bottom: 20px;
+  font-size: 12px;
+  display: block;
+  transition: 0.4s ease-in-out;
+}
+.MMA_Profile_Newsletter_Link:hover {
+  color: #16849b;
+}
+.MMA_Profile_Edit_Btn {
+  background-color: #1a9cb7;
+  margin: 0;
+  height: 48px;
+  padding: 0 36px;
+  font-size: 14px;
+  line-height: 46px;
+  border-width: 1px;
+  color: #fff;
+  text-transform: uppercase;
+  transition: 0.4s ease-in-out;
+}
+.MMA_Profile_Edit_Btn:hover {
+  color: #fff;
+  background-color: #16849b;
+  border-color: #16849b;
+  text-decoration: none;
+}
+/* ************************************************* */
+/*                   AddressBook                     */
+/* ************************************************* */
+.User_Container_Right_Btn {
+  color: #1a1a1a;
+  font-size: 12px;
+}
+.UC_Right_Btn_Icon {
+  width: 20px !important;
+  height: 20px !important;
+  color: #f57224;
+}
+.UAC_Container,
+.UPC_Container {
+  height: 500px;
+}
+.UAC_AddressBook {
+  font-size: 12px;
+  border: 1px solid #e5e5e5;
+  border-radius: 4px;
+  line-height: 16px;
+  margin-bottom: 20px;
+  cursor: pointer;
+  transition: 0.4s ease-in-out;
+}
+.UAC_AddressBook:hover {
+  -webkit-box-shadow: 0 1px 2px -2px #00000029, 0 3px 6px #0000001f,
+    0 5px 12px 4px #00000017;
+  box-shadow: 0 1px 2px -2px #00000029, 0 3px 6px #0000001f,
+    0 5px 12px 4px #00000017;
+}
+.UAC_AddressBook_Info_MainTag,
+.UAC_AddressBook_Info_SecondaryTag {
+  padding: 2px 6px;
+  line-height: 14px;
+  background: rgba(0, 119, 135, 0.08);
+  border-radius: 2px;
+  margin-right: 8px;
+  color: #007787;
+}
+.UAC_AddressBook_Info_SecondaryTag {
+  background-color: #f5f5f5;
+  color: #1a1a1a;
+}
+/* ************************************************* */
+/*                   Payment                         */
+/* ************************************************* */
+.UPC_Container {
+  padding-top: 180px !important;
+}
+.UPC_NoPaymentOption_Icon {
+  width: 100px !important;
+  height: 100px !important;
+  color: #dadada;
+}
+
+.UPC_NoPaymentOption_Txt {
+  font-size: 14px;
+  font-weight: 400;
+  color: #757575;
+  letter-spacing: 0;
+}
+/* ************************************************* */
+/*                   Wishlist                        */
+/* ************************************************* */
+.UWN_Txt {
+  font-size: 14px;
+  color: #757575;
+}
+.UWN_ShoppingNow {
+  width: 180px;
+  font-weight: 400;
+  font-size: 14px;
+  border: 1px solid #f57224;
+  border-radius: 2px;
+  color: #f57224;
+  height: 35px;
+  line-height: 34px;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin: auto;
+  text-transform: uppercase;
+}
+.User_JustForYou_Heading {
+  font-size: 22px;
+  color: #757575;
+  width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.User_Wishlist_AddAllToCart_Container {
+  height: 48px;
+  line-height: 48px;
+  margin-top: 12px;
+  padding-right: 20px;
+  padding-left: 14px;
+  background: #fff;
+  margin-bottom: 12px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+.User_Wishlist_AddAllToCart_Link {
+  text-transform: uppercase;
+  color: #1a9cb7;
+  font-size: 14px;
+}
+.User_Wishlist_Item_Header {
+  height: 50px;
+  line-height: 50px;
+  background: #fafafa;
+  padding-left: 12px;
+  color: #202020;
+  font-size: 12px;
+}
+.User_Wishlist_Item_Separator {
+  border-bottom: 1px solid #eff0f5;
+}
+.User_Wishlist_Item_Pic_Container {
+  width: 15%;
+}
+.User_Wishlist_Item_Info {
+  display: inline-block;
+  width: 83%;
+  font-size: 12px;
+  font-weight: 400;
+  text-align: left;
+}
+
+.User_Wishlist_Item_Info_Title_Link {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 16px;
+  font-size: 12px;
+  width: 100%;
+  max-height: 32px;
+  white-space: nowrap;
+  padding-left: 0;
+  color: #212121;
+}
+.User_Wishlist_Item_Information {
+  line-height: 0;
+  font-size: 11px;
+}
+.User_Wishlist_Item_Price {
+  width: 115px;
+}
+
+.User_Wishlist_Item_NewPrice {
+  color: #f57224;
+  font-size: 18px;
+}

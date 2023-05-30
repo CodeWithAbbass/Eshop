@@ -56,7 +56,6 @@ const DesktopCart = () => {
                         Discount,
                         Image,
                         Price,
-                        oldPrice,
                         Quantity,
                         Rating,
                         Stock,
@@ -150,7 +149,10 @@ const DesktopCart = () => {
                                   <button className="CPPOperation_WishList_Btn btn p-0 m-0 me-1">
                                     <FavoriteBorderOutlinedIcon className="CPPOperation_WishList_Icon" />
                                   </button>
-                                  <button className="CPPOperation_Delete_Btn btn p-0 m-0 ms-1">
+                                  <button
+                                    className="CPPOperation_Delete_Btn btn p-0 m-0 ms-1"
+                                    onClick={() => dispatch(DeleteFromCart(id))}
+                                  >
                                     <DeleteOutlinedIcon className="CPPOperation_Delete_Icon" />
                                   </button>
                                 </div>
@@ -198,7 +200,9 @@ const DesktopCart = () => {
             <div className="DCC_Order_Summery_Container p-3 bg-white">
               <h4 className="DCC_Order_Summery_Heading">Order Summery</h4>
               <div className="DCC_Subtotal_Container mb-3 d-flex justify-content-between align-items-center">
-                <p className="DCC_Subtotal_Txt mb-0">Subtotal (0 items)</p>
+                <p className="DCC_Subtotal_Txt mb-0">
+                  Subtotal ({Cart.length} items)
+                </p>
                 <p className="DCC_Subtotal_Price mb-0">
                   {PriceFormat(totalPrice)}
                 </p>

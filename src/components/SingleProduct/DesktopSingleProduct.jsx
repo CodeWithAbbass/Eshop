@@ -140,6 +140,9 @@ const DesktopSingleProduct = () => {
                     {PriceFormat(CalcDiscount(Discount, Price))}
                   </span>
                 </span>
+                <span className="text-muted text-secondary text-decoration-line-through ms-3">
+                  {Discount > 0 ? `$${Price}` : ""}
+                </span>
               </div>
 
               <div className="SP_LeftStock">
@@ -252,12 +255,12 @@ const DesktopSingleProduct = () => {
 
                   <tr className="BuyBox_Labels">
                     <td className="Label_Heading">Ship from</td>
-                    <td className="Label_Txt">Amazon.com</td>
+                    <td className="Label_Txt">E-Shop.pk</td>
                   </tr>
 
                   <tr className="BuyBox_Labels">
                     <td className="Label_Heading">Sold by</td>
-                    <td className="Label_Txt">Amazon.com</td>
+                    <td className="Label_Txt">E-Shop.com</td>
                   </tr>
                   <tr className="BuyBox_Labels">
                     <td className="Label_Heading">Returns</td>
@@ -269,7 +272,7 @@ const DesktopSingleProduct = () => {
                   <tr className="BuyBox_Labels">
                     <td className="Label_Heading">Support</td>
                     <td className="Label_Txt">
-                      Free Amazon tech support included
+                      Free E-Shop tech support included
                     </td>
                   </tr>
                 </tbody>
@@ -281,9 +284,9 @@ const DesktopSingleProduct = () => {
               </div>
             </div>
 
-            <div className="BuyBox_SellOnAmazon text-center">
+            <div className="BuyBox_SellOn text-center">
               <p className="HOTS_Txt mb-0">Have one to sell?</p>
-              <Link className="BuyBox_SellOnAmazon_Link">Sell On Amazon</Link>
+              <Link className="BuyBox_SellOnAmazon_Link">Sell On E-Shop</Link>
             </div>
           </div>
         </div>

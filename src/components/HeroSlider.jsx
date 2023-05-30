@@ -16,6 +16,12 @@ const HeroSlider = () => {
   const SlideArr = [
     {
       DesktopSlideImage:
+        "https://gcp-img.slatic.net/lazada/d1e8e452-abc3-4f06-97df-b7b0409f316a_PK-1976-688.jpg",
+      MobileSlideImage:
+        "https://gcp-img.slatic.net/lazada/bc6ee331-bee5-4f6f-8435-3e9cd47150ec_PK-1440-944.jpg",
+    },
+    {
+      DesktopSlideImage:
         "https://icms-image.slatic.net/images/ims-web/7838279a-14dd-4815-a842-78fe49925e55.jpg",
       MobileSlideImage:
         "https://icms-image.slatic.net/images/ims-web/be07148b-21d3-4c5f-8d97-0039ddd226f4.jpg",

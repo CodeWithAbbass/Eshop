@@ -1,12 +1,19 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import "../Css/Footer.css";
 import HomeIcon from "@mui/icons-material/Home";
 import WindowIcon from "@mui/icons-material/Window";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import PersonIcon from "@mui/icons-material/Person";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
 const Footer = () => {
+  const Cart = useSelector((state) => state.Cart.items);
+  const location = useLocation();
+  useEffect(() => {
+    return () => {};
+  }, [location]);
   return (
-    <div className="Footer">
+    <div className="Footer w-100">
       <div className="Desktop_Footer">
         <div className="DesktopFooter_First_Container  text-white ">
           <div className="DesktopFooter_First container-xxl  text-center">
@@ -210,26 +217,48 @@ const Footer = () => {
           <div className="row w-100 m-0">
             <Link
               to="/"
-              className="MobileFooter_Link text-center MobileFooter_Link_Active col-3"
+              className={`MobileFooter_Link text-center col-3 ${
+                location.pathname == "/" ? "MobileFooter_Link_Active" : ""
+              }`}
             >
               <div className="MobileFooter_Link_Icon_Container">
                 <HomeIcon className="MobileFooter_Link_Icon" />
               </div>
               <span className="MobileFooter_Link_Txt">Home</span>
             </Link>
-            <Link to="/" className="MobileFooter_Link text-center  col-3">
+            <Link
+              to="/"
+              className={`MobileFooter_Link text-center col-3 ${
+                location.pathname == "/categories"
+                  ? "MobileFooter_Link_Active"
+                  : ""
+              }`}
+            >
               <div className="MobileFooter_Link_Icon_Container">
                 <WindowIcon className="MobileFooter_Link_Icon" />
               </div>
               <span className="MobileFooter_Link_Txt">Categories</span>
             </Link>
-            <Link to="/cart" className="MobileFooter_Link text-center  col-3">
+            <Link
+              to="/cart"
+              className={`MobileFooter_Link text-center col-3 position-relative ${
+                location.pathname == "/cart" ? "MobileFooter_Link_Active" : ""
+              }`}
+            >
               <div className="MobileFooter_Link_Icon_Container">
                 <ShoppingCartIcon className="MobileFooter_Link_Icon" />
               </div>
               <span className="MobileFooter_Link_Txt">Cart</span>
+              <span className="MF_Counter position-absolute">
+                {Cart.length}
+              </span>
             </Link>
-            <Link to="/user" className="MobileFooter_Link text-center  col-3">
+            <Link
+              to="/user"
+              className={`MobileFooter_Link text-center col-3 position-relative ${
+                location.pathname == "/user" ? "MobileFooter_Link_Active" : ""
+              }`}
+            >
               <div className="MobileFooter_Link_Icon_Container">
                 <PersonIcon className="MobileFooter_Link_Icon" />
               </div>

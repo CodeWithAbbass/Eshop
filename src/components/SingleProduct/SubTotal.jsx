@@ -47,12 +47,12 @@ const SubTotal = () => {
           </div>
         ) : (
           Cart.map((item, index) => {
-            const { Image, Price, Discount, id } = item;
+            const { Image, Price, Discount, id, Quantity } = item;
 
             return (
               <div className="SP_Subtotal_Item" key={index}>
                 <Link
-                  to="/product/2"
+                  to={`/product/${id}`}
                   className="SP_Cart_Product_Link text-center w-100"
                 >
                   <img
@@ -69,7 +69,7 @@ const SubTotal = () => {
                     name="Quantity"
                     id="Quantity"
                     className="SP_Subtotal_Quantity_Select"
-                    value={Cart.length > 0 ? Cart[0].Quantity : "1"}
+                    value={Cart.length > 0 ? Quantity : "1"}
                     onChange={(e) => {
                       QuantityOnchange(e, id);
                       dispatch(TotalPrice());

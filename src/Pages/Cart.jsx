@@ -1,18 +1,8 @@
 import "../Css/Cart.css";
 import { Link } from "react-router-dom";
-import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
-import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
-import RemoveRoundedIcon from "@mui/icons-material/RemoveRounded";
-import AddRoundedIcon from "@mui/icons-material/AddRounded";
-import GradeRoundedIcon from "@mui/icons-material/GradeRounded";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  PlusIncrement,
-  MinusDecrement,
-  DeleteFromCart,
-} from "../Store/Slices/cartSlice";
 import DesktopCart from "../components/Cart/DesktopCart";
 import MobileCart from "../components/Cart/MobileCart";
+import { useSelector } from "react-redux";
 const Cart = () => {
   const Cart = useSelector((state) => state.Cart.items);
 

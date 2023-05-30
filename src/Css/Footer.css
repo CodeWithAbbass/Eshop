@@ -1,3 +1,6 @@
+.Footer {
+  margin-top: auto;
+}
 .DesktopFooter_First_Container {
   background: #f57224;
   padding: 22px 0 30px;
@@ -191,6 +194,16 @@
   max-width: 100%;
   display: block;
   margin-top: -1px;
+}
+.MF_Counter {
+  text-align: center;
+  top: 1px;
+  z-index: 1;
+  background: #f85606;
+  padding: 2px 4px;
+  border-radius: 50%;
+  color: white;
+  min-width: 20px;
 }
 @media (max-width: 768px) {
   .Desktop_Footer {
