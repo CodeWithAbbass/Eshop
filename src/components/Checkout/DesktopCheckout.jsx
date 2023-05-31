@@ -21,7 +21,7 @@ const DesktopCheckout = () => {
                   Add New Delivery Address
                 </span>
               </button>
-              {/* <div className="DCC_Left_Address_Wrapper py-3">
+              <div className="DCC_Left_Address_Wrapper py-3">
                 <p className="DCC_Left_Address_DeliverTo mb-2">
                   <span className="DCC_Left_Address_Heading">Deliver To:</span>
                   <span className="DCC_Left_Address_Txt ms-1">Abbas Ali</span>
@@ -53,7 +53,7 @@ const DesktopCheckout = () => {
                     abbas.ali@chaoscorporated.com
                   </span>
                 </p>
-              </div> */}
+              </div>
             </div>
             <div className="DCC_Left_Checkout_Products_Wrapper w-100 m-0 p-3 bg-white">
               <div className="DCC_Left_Checkout_Product_Container">

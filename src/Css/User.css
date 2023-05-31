@@ -4,7 +4,6 @@
 
 .MobileUser {
   display: none;
-  padding: 6rem 0;
 }
 
 @media (max-width: 768px) {
@@ -107,6 +106,17 @@
   border-color: #16849b;
   text-decoration: none;
 }
+.Mobile_User_Profile {
+  display: none;
+}
+@media (max-width: 768px) {
+  .Mobile_User_Profile {
+    display: block;
+  }
+  .Desktop_User_Profile {
+    display: none;
+  }
+}
 /* ************************************************* */
 /*                   AddressBook                     */
 /* ************************************************* */
@@ -151,6 +161,17 @@
   background-color: #f5f5f5;
   color: #1a1a1a;
 }
+.Mobile_AddressBook_Container {
+  display: none;
+}
+@media (max-width: 768px) {
+  .Desktop_AddressBook_Container {
+    display: none;
+  }
+  .Mobile_AddressBook_Container {
+    display: block;
+  }
+}
 /* ************************************************* */
 /*                   Payment                         */
 /* ************************************************* */
@@ -169,9 +190,19 @@
   color: #757575;
   letter-spacing: 0;
 }
+@media (max-width: 768px) {
+  .User_Container_Heading {
+    padding-left: 1rem;
+  }
+}
 /* ************************************************* */
 /*                   Wishlist                        */
 /* ************************************************* */
+.User_Wishlist_Container {
+  overflow: auto;
+  height: 100%;
+  padding-bottom: 4rem;
+}
 .UWN_Txt {
   font-size: 14px;
   color: #757575;
@@ -233,7 +264,6 @@
   width: 15%;
 }
 .User_Wishlist_Item_Info {
-  display: inline-block;
   width: 83%;
   font-size: 12px;
   font-weight: 400;
@@ -256,11 +286,306 @@
   line-height: 0;
   font-size: 11px;
 }
-.User_Wishlist_Item_Price {
-  width: 115px;
-}
 
 .User_Wishlist_Item_NewPrice {
   color: #f57224;
-  font-size: 18px;
+  font-size: 16px;
+}
+.User_Wishlist_Item_Discount,
+.User_Wishlist_Item_OldPrice {
+  font-size: 14px;
+}
+
+.User_Wishlist_Item_Delete_Link {
+  color: #dadada;
+  transition: 0.4s ease-in-out;
+}
+.User_Wishlist_Item_Delete_Link:hover {
+  color: #f57224;
+}
+
+.User_Wishlist_To_Cart_Link {
+  background-color: #f57224;
+  height: 35px;
+  width: 75px;
+  line-height: 33px;
+  border-radius: 2px;
+  transition: 0.4s ease-in-out;
+}
+.User_Wishlist_To_Cart_Link:hover {
+  background-color: #ec5700;
+}
+.Mobile_User_Wishlist_Item_Wrapper {
+  display: none;
+}
+@media (max-width: 991px) {
+  .User_Wishlist_Item_Pic_Container {
+    width: 25%;
+  }
+  .User_Wishlist_Item_Info {
+    margin-left: 0.5rem;
+    width: 75%;
+  }
+}
+@media (max-width: 768px) {
+  .User_Wishlist_Item_Pic_Container {
+    width: 15%;
+  }
+  .User_Wishlist_Item_Info {
+    margin-left: 0.5rem;
+    width: 85%;
+  }
+  .User_Wishlist_Item_NewPrice {
+    font-size: 14px;
+  }
+  .User_Wishlist_Item_Discount,
+  .User_Wishlist_Item_OldPrice {
+    font-size: 12px;
+  }
+
+  .Desktop_User_Wishlist_Item_Wrapper {
+    display: none;
+  }
+  .Mobile_User_Wishlist_Item_Wrapper {
+    display: block;
+  }
+}
+@media (max-width: 576px) {
+  .User_Wishlist_Item_Pic_Container {
+    width: 20%;
+  }
+  .User_Wishlist_Item_Info {
+    width: 80%;
+  }
+}
+@media (max-width: 425px) {
+  .User_Wishlist_Item_Pic_Container {
+    width: 30%;
+  }
+  .User_Wishlist_Item_Info {
+    width: 70%;
+  }
+}
+
+/* ************************************************* */
+/*                     Orders                        */
+/* ************************************************* */
+.User_Orders_Nav_Container {
+  height: 28px;
+  border-bottom: 2px solid #979797;
+  margin-bottom: 13px;
+}
+.User_Orders_Nav_Link {
+  display: inline-block;
+  font-size: 13px;
+  height: 29px;
+  line-height: 29px;
+  color: #5d5d5d;
+  padding: 0 20px;
+  text-transform: capitalize;
+}
+.User_Orders_Nav_Link.active {
+  border-bottom: 4px solid #003e52;
+}
+
+.UOC_Orders_Header_Requested_Heading {
+  font-size: 14px;
+}
+.UOC_Orders_Header_Order {
+  font-size: 12px;
+}
+.UOC_Orders_Header_Order_Number {
+  color: #1a9cb7;
+}
+.UOC_Orders_Header_ManageBtn {
+  font-size: 14px;
+  color: #1a9cb7;
+}
+.UOC_Orders_Item_Pic_Container {
+  width: 15%;
+}
+.UOC_Orders_Item_Info_Container {
+  width: 83%;
+  font-size: 12px;
+  font-weight: 400;
+  text-align: left;
+}
+
+.UOC_Orders_Item_Info_Title_Link {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 16px;
+  font-size: 12px;
+  max-height: 50px;
+  word-wrap: break-word;
+  color: #212121;
+}
+.UOC_Orders_Quantity_Title,
+.UOC_Orders_Quantity_Txt {
+  font-size: 14px;
+  color: #c9c9c9;
+}
+.UOC_Orders_Tag {
+  font-size: 12px;
+  padding: 4px 12px;
+  display: inline-block;
+  border-radius: 24px;
+  background-color: #eff0f5;
+  max-width: 150px;
+}
+
+@media (max-width: 991px) {
+  .UOC_Orders_Item_Pic_Container {
+    width: 21%;
+  }
+  .UOC_Orders_Item_Info_Container {
+    width: 77%;
+  }
+}
+
+/* ************************************************* */
+/*                  Cancellations                    */
+/* ************************************************* */
+.UCC_Cancellations_Header_Requested_Heading {
+  font-size: 14px;
+}
+.UCC_Cancellations_Header_Order {
+  font-size: 12px;
+}
+.UCC_Cancellations_Header_Order_Number {
+  color: #1a9cb7;
+}
+.UCC_Cancellations_Header_MoreBtn {
+  font-size: 14px;
+  color: #1a9cb7;
+}
+.UCC_Cancellations_Item_Pic_Container {
+  width: 15%;
+}
+.UCC_Cancellations_Item_Info_Container {
+  width: 83%;
+  font-size: 12px;
+  font-weight: 400;
+  text-align: left;
+}
+
+.UCC_Cancellations_Item_Info_Title_Link {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 16px;
+  font-size: 12px;
+  max-height: 50px;
+  word-wrap: break-word;
+  color: #212121;
+}
+.UCC_Cancellations_Quantity_Title,
+.UCC_Cancellations_Quantity_Txt {
+  font-size: 14px;
+  color: #c9c9c9;
+}
+.UCC_Cancellations_Tag {
+  font-size: 12px;
+  padding: 4px 12px;
+  display: inline-block;
+  border-radius: 24px;
+  background-color: #eff0f5;
+  max-width: 150px;
+}
+@media (max-width: 991px) {
+  .UCC_Cancellations_Item_Pic_Container {
+    width: 21%;
+  }
+  .UCC_Cancellations_Item_Info_Container {
+    width: 77%;
+  }
+}
+
+/* ************************************************* */
+/*                      Returns                      */
+/* ************************************************* */
+.User_Returns_No_Returns_Heading {
+  font-size: 14px;
+  color: #757575;
+}
+.User_Returns_No_Rturns_Btn {
+  width: 180px;
+  font-weight: 400;
+  font-size: 14px;
+  border: 1px solid #f57224;
+  border-radius: 2px;
+  color: #f57224;
+  height: 35px;
+  line-height: 34px;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin: auto;
+  text-transform: uppercase;
+}
+
+/* ************************************************* */
+/*                  Mobile User Css                  */
+/* ************************************************* */
+.Mobile_User_Header {
+  font-size: 12px;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05), 0 0.5px 0 rgba(0, 0, 0, 0.09);
+  height: 48px;
+  line-height: 48px;
+  background: -webkit-linear-gradient(
+    292.66deg,
+    #f85606 60.36%,
+    #f87a06 94.93%
+  );
+  background: linear-gradient(157.34deg, #f85606 60.36%, #f87a06 94.93%);
+  color: #fff;
+}
+.MUH_Back_Link {
+  width: 100px;
+}
+.MUH_Header_Title {
+  font-size: 14px;
+}
+.Mobile_User_Header_Bottom {
+  height: 48px;
+  line-height: 48px;
+  position: relative;
+  background: #f5f5f5;
+}
+.MUHB_Login_Member {
+  color: #000;
+  margin-left: 16px;
+  font-size: 14px;
+  font-weight: 500;
+  margin-right: 30px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.Mobile_User_Nav_Link {
+  height: 56px;
+}
+.Mobile_User_Icon_Container {
+  line-height: 36px;
+}
+.Mobile_User_Link_Icon {
+  color: #dadada;
+}
+.Mobile_User_Link_Txt {
+  color: #212121;
+  line-height: 40px;
+  max-width: 100%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.Mobile_User_Fixed_Page_Container {
+  position: fixed;
+  right: 0;
+  top: 0px;
+  height: 100vh;
+  width: 0;
+  transition: 0.4s ease-in-out;
+}
+.Mobile_User_Fixed_Page_Container.active {
+  width: 100%;
 }
