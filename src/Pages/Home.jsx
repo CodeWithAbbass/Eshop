@@ -1,13 +1,13 @@
-import HeroSlider from "../components/HeroSlider";
 import "../Css/Home.css";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { useState } from "react";
-import JustForYou from "../components/JustForYou";
-import Categories from "../components/Categories";
-import FlashSale from "../components/FlashSale";
-import AdsBanner from "../components/AdsBanner";
+
+import HeroSlider from "../components/Home/HeroSlider";
+import AdsBanner from "../components/Home/AdsBanner";
+import FlashSale from "../components/Home/FlashSale";
+import CategoriesCard from "../components/Home/CategoriesCard";
+import JustForYou from "../components/Home/JustForYou";
 const Home = () => {
   const Products = useSelector((state) => {
     return state.Products.items;
@@ -91,7 +91,7 @@ const Home = () => {
         </div>
       </div>
       <FlashSale />
-      <Categories />
+      <CategoriesCard />
       <JustForYou />
     </div>
   );

@@ -3,7 +3,7 @@ import "../../Css/User.css";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
-import ProductCard from "../ProductCard";
+import ProductCard from "../Home/ProductCard";
 import { useSelector } from "react-redux";
 import PriceFormat from "../../helpers/PriceFormat";
 import CalcDiscount from "../../helpers/CalcDiscount";
@@ -182,7 +182,7 @@ const Wishlist = () => {
         </div>
       </div>
 
-      <div className="User_JustForYou_Container mt-5">
+      <div className="User_JustForYou_Container mt-5 p-3">
         <div className="User_JustForYou_Heading">Just For You</div>
         <div className="User_JustForYou_Content_Container py-4">
           <div className="User_Card_Container">

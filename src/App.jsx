@@ -15,6 +15,7 @@ import Payment from "./components/User/Payment";
 import Returns from "./components/User/Returns";
 import Cancellations from "./components/User/Cancellations";
 import Order from "./components/User/Order";
+import Categories from "./Pages/Categories";
 
 const App = () => {
   useEffect(() => {
@@ -40,6 +41,7 @@ const App = () => {
           <Route path="/product/:id" element={<SingleProduct />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
+          <Route path="/categories" element={<Categories />} />
           <Route path="/user" element={<User />}>
             <Route path="/user" element={<Profile />} />
             <Route path="address" element={<AddressBook />} />

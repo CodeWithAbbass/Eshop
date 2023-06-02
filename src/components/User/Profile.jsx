@@ -59,12 +59,20 @@ const Profile = () => {
               Subscribe to our Newsletter
             </Link>
             <Link className="MMA_Profile_Link" to="/user">
-              <button className="MMA_Profile_Edit_Btn btn shadow-none rounded-1 w-100">
+              <button
+                className="MMA_Profile_Edit_Btn btn shadow-none rounded-1 w-100"
+                data-bs-toggle="modal"
+                data-bs-target="#UserMadal"
+              >
                 Edit Profile
               </button>
             </Link>
             <Link className="MMA_Profile_Link" to="/user">
-              <button className="MMA_Profile_Edit_Btn btn shadow-none rounded-1 w-100">
+              <button
+                className="MMA_Profile_Edit_Btn btn shadow-none rounded-1 w-100"
+                data-bs-toggle="modal"
+                data-bs-target="#UserMadal"
+              >
                 Change Password
               </button>
             </Link>

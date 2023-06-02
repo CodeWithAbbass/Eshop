@@ -13,8 +13,14 @@ const AddressBook = () => {
             to="#"
             className="User_Container_Right_Btn float-end d-inline-flex align-items-center"
           >
-            <AddRoundedIcon className="UC_Right_Btn_Icon" />
-            <span className="UC_Right_Btn_Txt">Add New Address</span>
+            <button
+              className="User_Container_Right_Btn btn float-end d-inline-flex align-items-center rounded-0"
+              data-bs-toggle="modal"
+              data-bs-target="#UserMadal"
+            >
+              <AddRoundedIcon className="UC_Right_Btn_Icon" />
+              <span className="UC_Right_Btn_Txt">Add New Address</span>
+            </button>
           </Link>
         </div>
         <div className="UAC_Container bg-white p-3 mt-2">
@@ -24,7 +30,13 @@ const AddressBook = () => {
                 <div className="UAC_AddressBook_Header mb-2  d-flex align-items-center justify-content-between">
                   <div className=".MMA_Profile_Item_Title">Abbas Ali</div>
                   <Link className="MMA_Profile_Item_Btn text-uppercase">
-                    Edit
+                    <button
+                      className="User_Container_Right_Btn btn float-end d-inline-flex align-items-center rounded-0"
+                      data-bs-toggle="modal"
+                      data-bs-target="#UserMadal"
+                    >
+                      Edit
+                    </button>
                   </Link>
                 </div>
                 <div className="UAC_AddressBook_Info">

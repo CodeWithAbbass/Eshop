@@ -1,4 +1,4 @@
-import "../Css/HeroSlider.css";
+import "../../Css/HeroSlider.css";
 import { useEffect } from "react";
 import React, { useRef, useState } from "react";
 // Import Swiper React components

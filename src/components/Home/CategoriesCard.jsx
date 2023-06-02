@@ -1,7 +1,6 @@
-import React from "react";
 import { Link } from "react-router-dom";
 
-const Categories = () => {
+const CategoriesCard = () => {
   const Categories = [
     {
       CLink: "/",
@@ -133,4 +132,4 @@ const Categories = () => {
   );
 };
 
-export default Categories;
+export default CategoriesCard;

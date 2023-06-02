@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
-import "../Css/ProductCard.css";
+import "../../Css/ProductCard.css";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-
+import PriceFormat from "../../helpers/PriceFormat";
+import CalcDiscount from "../../helpers/CalcDiscount";
 const ProductCard = ({ item }) => {
   const {
     id,
@@ -30,11 +31,11 @@ const ProductCard = ({ item }) => {
       ${Grid6x ? "col-lg-2" : ""} 
       ${Grid4x ? "col-md-3" : ""} 
       ${Grid3x ? "col-4" : ""} 
-      col-4 p-0 border-0 rounded-0 mb-4`}
+      col-4 p-0 border-0 rounded-0 mb-4 bg-transparent`}
     >
-      <div className="Product_Link_Wrapper mx-1 h-100">
+      <div className="Product_Link_Wrapper mx-2 h-100">
         <Link
-          className="H_Product_Link h-100 bg-white d-block "
+          className="H_Product_Link h-100 d-block bg-white"
           to={`product/${id}`}
         >
           <img
@@ -45,13 +46,15 @@ const ProductCard = ({ item }) => {
           <div className="card-body p-2">
             <h5 className="card-title">{Title}</h5>
             <div className="card-text H_Product_Price">
-              <span className="H_Product_Currency">Rs.</span>
-              <span className="H_Product_Price">{Price}</span>
+              <span className="H_Product_Price">
+                {PriceFormat(CalcDiscount(Discount, Price))}
+              </span>
             </div>
             <div className="card-text H_Product_CardOriginalPrice">
               <span className="card-text H_Product_OriginalPrice">
-                <span className="H_Product_Currency">Rs.</span>
-                <span className="H_Product_OriginalPrice">{oldPrice}</span>
+                <span className="H_Product_OriginalPrice">
+                  {Discount > 0 ? PriceFormat(Price) : ""}
+                </span>
               </span>
               <span className="H_Product_Discount">
                 {Discount > 0 ? `-${Discount}%` : ""}

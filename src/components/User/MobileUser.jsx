@@ -18,9 +18,10 @@ const MobileUser = () => {
     SidePage.classList.toggle("active");
   };
   useEffect(() => {
-    document.querySelector(".Mobile_MainHeader").style.display = "none";
+    const MMHeader = document.querySelector(".Mobile_MainHeader");
+    MMHeader.classList.add("D_None_MainHeader");
     return () => {
-      document.querySelector(".Mobile_MainHeader").style.display = "block";
+      MMHeader.classList.remove("D_None_MainHeader");
     };
   }, []);
   return (

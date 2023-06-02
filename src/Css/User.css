@@ -1,11 +1,12 @@
 .User {
   background-color: #f4f4f4;
 }
-
 .MobileUser {
   display: none;
 }
-
+.D_None_MainHeader {
+  display: none;
+}
 @media (max-width: 768px) {
   .MobileUser {
     display: block;

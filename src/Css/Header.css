@@ -242,25 +242,32 @@
   line-height: 55px;
 }
 .MH_Search_Icon_Container {
-  width: 70px;
+  width: 60px;
   height: 100%;
   position: absolute;
-  /* line-height: 105px; */
   top: 0;
   color: #212121;
   text-align: center;
 }
+
 .MH_Search_Icon {
   width: 40px !important;
   height: 40px !important;
 }
-.Mobile_SearchBox_txt {
+.Mobile_SearchBox_Input {
   font-size: 16px;
   display: block;
   height: 100%;
-  /* line-height: 100px; */
   color: #bfbfbf;
-  padding: 0 5rem;
+  padding-left: 4rem;
+  padding-right: 1rem;
+}
+
+.Mobile_SearchBox_Input:focus,
+.Mobile_SearchBox_Input:focus-visible,
+.Mobile_SearchBox_Input:focus-within,
+.Mobile_SearchBox_Input:active {
+  outline: none;
 }
 @media (max-width: 768px) {
   .Desktop_MainHeader {

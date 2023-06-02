@@ -1,8 +1,12 @@
+import { useEffect } from "react";
 import "../../Css/User.css";
 import { Link, Outlet, useLocation } from "react-router-dom";
 
 const DesktopUser = () => {
   const location = useLocation();
+  useEffect(() => {
+    return () => {};
+  }, []);
   return (
     <div className="DesktopUser">
       <div className="container-xl">

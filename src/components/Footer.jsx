@@ -27,28 +27,44 @@ const Footer = () => {
                     </Link>
                   </li>
                   <li className="DesktopFooter_Menu_item ">
-                    <Link to="/" className="DesktopFooter_Menu_Link text-white">
+                    <Link
+                      to="/cart"
+                      className="DesktopFooter_Menu_Link text-white"
+                    >
                       Cart
                     </Link>
                   </li>
                   <li className="DesktopFooter_Menu_item ">
-                    <Link to="/" className="DesktopFooter_Menu_Link text-white">
+                    <Link
+                      to="/user"
+                      className="DesktopFooter_Menu_Link text-white"
+                    >
                       Account
                     </Link>
                   </li>
+
                   <li className="DesktopFooter_Menu_item ">
-                    <Link to="/" className="DesktopFooter_Menu_Link text-white">
-                      E-Shop
+                    <Link
+                      to="/categories"
+                      className="DesktopFooter_Menu_Link text-white"
+                    >
+                      Categories
                     </Link>
                   </li>
                   <li className="DesktopFooter_Menu_item ">
-                    <Link to="/" className="DesktopFooter_Menu_Link text-white">
-                      Contact Us
-                    </Link>
-                  </li>
-                  <li className="DesktopFooter_Menu_item ">
-                    <Link to="/" className="DesktopFooter_Menu_Link text-white">
+                    <Link
+                      to="/user/returns"
+                      className="DesktopFooter_Menu_Link text-white"
+                    >
                       Returns & Refunds
+                    </Link>
+                  </li>
+                  <li className="DesktopFooter_Menu_item ">
+                    <Link
+                      to="/user/order"
+                      className="DesktopFooter_Menu_Link text-white"
+                    >
+                      Orders
                     </Link>
                   </li>
                 </ul>
@@ -227,7 +243,7 @@ const Footer = () => {
               <span className="MobileFooter_Link_Txt">Home</span>
             </Link>
             <Link
-              to="/"
+              to="/categories"
               className={`MobileFooter_Link text-center col-3 ${
                 location.pathname == "/categories"
                   ? "MobileFooter_Link_Active"

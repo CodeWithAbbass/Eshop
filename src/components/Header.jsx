@@ -54,10 +54,12 @@ const Header = () => {
 
   useEffect(() => {
     const TopHeader = document.querySelector(".Top_Header");
+
     if (location.pathname == "/") {
       TopHeader.classList.remove("d-none");
       return;
     }
+
     TopHeader.classList.add("d-none");
   }, [location]);
   return (
@@ -80,7 +82,6 @@ const Header = () => {
                 to="/user"
                 className={`TopBar_Link ${
                   location.pathname == "/user" ||
-                  location.pathname == "/user/profile" ||
                   location.pathname == "/user/wishlist" ||
                   location.pathname == "/user/address" ||
                   location.pathname == "/user/payment" ||
@@ -106,9 +107,9 @@ const Header = () => {
             <li className="d-inline p-0">
               <Link
                 className={`TopBar_Link ${
-                  location.pathname == "/" ? "active" : ""
+                  location.pathname == "/categories" ? "active" : ""
                 }`}
-                to="/"
+                to="/categories"
               >
                 Categories
               </Link>
@@ -249,9 +250,9 @@ const Header = () => {
                   </li>
                   <li>
                     <Link
-                      to="/"
+                      to="/categories"
                       className={`dropdown-item d-block TopBar_Link ${
-                        location.pathname == "/" ? "active" : ""
+                        location.pathname == "/categories" ? "active" : ""
                       }`}
                     >
                       Categories
@@ -303,8 +304,14 @@ const Header = () => {
             <span className="MH_Search_Icon_Container">
               <SearchIcon className="MH_Search_Icon" />
             </span>
-            <span className="Mobile_SearchBox_txt">Search in Daraz</span>
           </Link>
+          <input
+            type="search"
+            className="Mobile_SearchBox_Input w-100 border-0"
+            placeholder="Search in Daraz"
+            id="gsearch"
+            name="gsearch"
+          />
         </div>
       </div>
     </div>

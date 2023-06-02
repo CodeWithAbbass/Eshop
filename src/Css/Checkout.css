@@ -136,12 +136,13 @@
 .DCC_Checkout_Input:active {
   border-color: #f85606;
 }
-input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button {
+.DCC_Checkout_Input_Container > input[type="number"]::-webkit-outer-spin-button,
+.DCC_Checkout_Input_Container
+  > input[type="number"]::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-input[type="number"] {
+.DCC_Checkout_Input_Container > input[type="number"] {
   -moz-appearance: textfield;
   appearance: none;
 }
