@@ -8,6 +8,7 @@ export const productSlice = createSlice({
         id: "1",
         Title:
           "Bird Cage Wall Clock European Modern Wall Hanging Wooden Clock Crafts Decoration Home Livingroom Mute Luminous Quartz Wall Clocks Mural Ornaments Art",
+        description: "",
         Price: 1900.49,
         Rating: 5,
         Image: {

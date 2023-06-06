@@ -37,11 +37,10 @@ exports.signup = async (req, res) => {
     const SecPass = await bcrypt.hash(password, salt);
 
     const newUser = await pool.query(
-      `INSERT INTO users (fullname, phone, email, password, address) VALUES ($1, $2, $3, $4, $5)`,
+      `INSERT INTO users (fullname, phone, email, password, address) VALUES ($1, $2, $3, $4, $5) RETURNING *`,
       [fullname, phone, email, SecPass, address]
     );
-
-    res.send({ "Signup Successfully": newUser });
+    res.send({ "Signup Successfully": newUser.rows[0] });
   } catch (error) {
     return serverResponse(res, STATUS_VARIABLES.EXCEPTION_ERROR, error.message);
   }
@@ -51,7 +50,6 @@ exports.login = async (req, res) => {
   try {
     const { phone, password } = req.body;
     if (!phone || !password) {
-      // return res.status(404).send("");
       return serverResponse(res, STATUS_VARIABLES.INVALID_ARGUMENTS);
     }
     if (phone.length < 11) {
@@ -79,7 +77,7 @@ exports.login = async (req, res) => {
       secure: true, //it is applicable when we use https method
     });
 
-    res.status(200).send({ authtoken });
+    res.status(200).send({ user, authtoken });
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Internal Server Error");
@@ -88,21 +86,15 @@ exports.login = async (req, res) => {
 
 exports.update = async (req, res) => {
   try {
-    const { fullname, email, phone, address } = req.body;
-
-    const userUpdate = await pool.query(
-      `
-      UPDATE users
-      SET
-      fullname = $1,
-      email = $2,
-      phone = $3,
-      address = $4
-      WHERE id = '${req.user.id}'
+    const { fullname, address } = req.body;
+    const adminUpdate = await pool.query(
+      `UPDATE users 
+      SET fullname = $2, address = $3
+      WHERE id = $1
       RETURNING *`,
-      [fullname, email, phone, address]
+      [req.user.id, fullname, address]
     );
-    res.send(userUpdate.rows);
+    res.send(adminUpdate.rows[0]);
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Internal Server Error");

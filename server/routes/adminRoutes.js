@@ -1,12 +1,11 @@
-const jwt = require('jsonwebtoken');
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const { adminSignup ,adminLogin} = require('../controller/adminController');
-const fetchAdmin = require('../middleware/fetchAdmin');
+const { signup, login, update } = require("../controller/adminController");
+const { fetchAdmin } = require("../middleware/fetchAdmin");
+const { FormValidator } = require("../middleware/formValidation");
 
-// Route: 1. Create a Admin using: POST "/api/auth/createadmin". No Login Require.
-router.post('/signup',  adminSignup)
-router.post('/login' ,adminLogin)
-
+router.post("/signup", FormValidator, signup);
+router.post("/login", login);
+router.post("/update", fetchAdmin, update);
 
 module.exports = router;
