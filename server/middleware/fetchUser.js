@@ -10,7 +10,7 @@ exports.fetchUser = async (req, res, next) => {
   try {
     const data = jwt.verify(token, process.env.JWT_SECRET_PRIVATE);
     const user = await pool.query(
-      `SELECT * FROM users WHERE id = '${data.id}'`
+      `SELECT * FROM users WHERE uid = '${data.uid}'`
     );
     if (user.rowCount == 0) {
       throw new Error("User not found");

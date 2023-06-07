@@ -2,10 +2,12 @@ const express = require("express");
 const router = express.Router();
 const {
   addToWishlist,
-  RemoveFromWishlist,
+  deleteFromWishlist,
+  getWishlist,
 } = require("../controller/wishlistController");
 const { fetchUser } = require("../middleware/fetchUser");
+router.get("/get", fetchUser, getWishlist);
 router.post("/add/:id", fetchUser, addToWishlist);
-router.post("/delete/:id", fetchUser, RemoveFromWishlist);
+router.delete("/delete/:id", fetchUser, deleteFromWishlist);
 
 module.exports = router;

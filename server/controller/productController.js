@@ -1,4 +1,5 @@
 const pool = require("../db");
+const crypto = require("crypto");
 
 exports.allProduct = async (req, res) => {
   try {
@@ -17,7 +18,7 @@ exports.allProduct = async (req, res) => {
 exports.singleProduct = async (req, res) => {
   try {
     const singleProduct = await pool.query(
-      `SELECT * FROM products WHERE id = $1`,
+      `SELECT * FROM products WHERE uid = $1`,
       [req.params.id]
     );
     if (singleProduct.rowCount == 0) {
@@ -29,7 +30,6 @@ exports.singleProduct = async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 };
-// Login Required
 exports.addProduct = async (req, res) => {
   try {
     const {
@@ -38,22 +38,27 @@ exports.addProduct = async (req, res) => {
       price,
       discount,
       stock,
-      issale,
-      issold,
       images,
+      brand,
+      issale,
       description,
     } = req.body;
+    const uid =
+      crypto.randomBytes(5).toString("hex") +
+      Date.now().toString(36) +
+      crypto.randomBytes(5).toString("hex");
     const addProduct = await pool.query(
-      `INSERT INTO products (title, rating, price, discount, stock, issale, issold, images, description) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`,
+      `INSERT INTO products (uid, title, rating, price, discount, stock, images, brand, issale, description) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *`,
       [
+        uid,
         title,
         rating,
         price,
         discount,
         stock,
-        issale,
-        issold,
         images,
+        brand,
+        issale,
         description,
       ]
     );
@@ -66,7 +71,6 @@ exports.addProduct = async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 };
-// Login Required
 exports.updateProduct = async (req, res) => {
   try {
     const {
@@ -75,22 +79,37 @@ exports.updateProduct = async (req, res) => {
       price,
       discount,
       stock,
-      issale,
-      issold,
       images,
+      brand,
+      issale,
       description,
     } = req.body;
+    // if (
+    //   !title ||
+    //   !rating ||
+    //   !price ||
+    //   !discount ||
+    //   !stock ||
+    //   !images ||
+    //   !brand ||
+    //   !issale ||
+    //   !description
+    // ) {
+    //   return res.status(400).send("Please Fill The Product Mandotory Fields");
+    // }
     const productExist = await pool.query(
-      `SELECT * FROM products WHERE id = ${req.params.id}`
+      `SELECT * FROM products WHERE uid = $1`,
+      [req.params.id]
     );
     if (productExist.rowCount == 0) {
       return res.status(404).send("Product Not Found");
     }
+
     const updateProduct = await pool.query(
       `
     UPDATE products 
-    SET title = $2, rating = $3, price = $4, discount = $5, stock = $6, issale = $7, issold = $8, images = $9, description = $10
-    WHERE id = $1
+    SET title = $2, rating = $3, price = $4, discount = $5, stock = $6, images = $7, brand = $8, issale = $9, description = $10
+    WHERE uid = $1
     RETURNING *;
     `,
       [
@@ -100,9 +119,9 @@ exports.updateProduct = async (req, res) => {
         price,
         discount,
         stock,
-        issale,
-        issold,
         images,
+        brand,
+        issale,
         description,
       ]
     );
@@ -111,26 +130,26 @@ exports.updateProduct = async (req, res) => {
     }
     const UpdatedProduct = updateProduct.rows[0];
 
-    res.send({ "Updated Successfully": UpdatedProduct });
+    res.send(UpdatedProduct);
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Internal Server Error");
   }
 };
-// Login Required
 exports.deleteProduct = async (req, res) => {
   try {
     const deleteProduct = await pool.query(
       `DELETE FROM products
-    WHERE id = ${req.params.id}
-    RETURNING *;`
+    WHERE uid = $1
+    RETURNING *;`,
+      [req.params.id]
     );
 
     if (deleteProduct.rowCount == 0) {
       return res.status(404).send("Product Not Found");
     }
     const DeletedProduct = deleteProduct.rows[0];
-    res.send({ "Product Deleted Successfully": DeletedProduct });
+    res.send(DeletedProduct);
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Internal Server Error");

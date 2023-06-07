@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const { fetchAdmin } = require("../middleware/fetchAdmin");
 const {
   allProduct,
   addProduct,
@@ -14,8 +13,8 @@ const {
 
 router.get("/allproducts", allProduct);
 router.get("/:id", singleProduct);
-router.post("/add", productFormValidation, fetchAdmin, addProduct);
-router.put("/update/:id", productFormValidation, fetchAdmin, updateProduct);
-router.delete("/delete/:id", fetchAdmin, deleteProduct);
+router.post("/add", productFormValidation, addProduct);
+router.put("/update/:id", productFormValidation, updateProduct);
+router.delete("/delete/:id", deleteProduct);
 
 module.exports = router;

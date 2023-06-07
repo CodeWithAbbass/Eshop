@@ -3,10 +3,25 @@ const { serverResponse } = require("../utils/status_code");
 const { STATUS_VARIABLES } = require("../utils/status_code");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
+
+exports.get = async (req, res) => {
+  try {
+    const user = await pool.query(`SELECT * FROM users WHERE uid = $1`, [
+      req.user.uid,
+    ]);
+    res.send({ "User Found Successfully": user.rows[0] });
+  } catch (error) {
+    return serverResponse(res, STATUS_VARIABLES.EXCEPTION_ERROR, error.message);
+  }
+};
 
 exports.signup = async (req, res) => {
   try {
-    let { email, phone, fullname, address, password, cpassword } = req.body;
+    let { name, email, phone, password, role } = req.body;
+    if (role.length < 2) {
+      role = "user";
+    }
     if (!password) {
       return serverResponse(res, STATUS_VARIABLES.INVALID_ARGUMENTS);
     }
@@ -14,9 +29,6 @@ exports.signup = async (req, res) => {
       return res
         .status(400)
         .send("The password must be at least 8 characters.");
-    }
-    if (password != cpassword) {
-      return res.status(400).send("The password confirmation does not match.");
     }
 
     const allUsers = await pool.query(
@@ -27,20 +39,23 @@ exports.signup = async (req, res) => {
     if (allUsers.rowCount > 0) {
       return res
         .status(400)
-        .send(
-          "Uhh Ohh! Sorry, User Already Exist! Check Your Email And Phone Again."
-        );
+        .send("User Already Exist! Check Your Email And Phone Again.");
     }
+    const uid =
+      crypto.randomBytes(5).toString("hex") +
+      Date.now().toString(36) +
+      crypto.randomBytes(5).toString("hex");
 
     // Here We Hashing
     const salt = await bcrypt.genSalt(8);
     const SecPass = await bcrypt.hash(password, salt);
 
     const newUser = await pool.query(
-      `INSERT INTO users (fullname, phone, email, password, address) VALUES ($1, $2, $3, $4, $5) RETURNING *`,
-      [fullname, phone, email, SecPass, address]
+      `INSERT INTO users (uid, name, email, phone, password, role ) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
+      [uid, name, email, phone, SecPass, role]
     );
-    res.send({ "Signup Successfully": newUser.rows[0] });
+    const data = newUser.rows[0];
+    res.send(data);
   } catch (error) {
     return serverResponse(res, STATUS_VARIABLES.EXCEPTION_ERROR, error.message);
   }
@@ -68,7 +83,7 @@ exports.login = async (req, res) => {
     }
 
     const authtoken = jwt.sign(
-      { id: user.id },
+      { uid: user.uid },
       process.env.JWT_SECRET_PRIVATE,
       { expiresIn: "7d", algorithm: "RS256" }
     );
@@ -86,13 +101,17 @@ exports.login = async (req, res) => {
 
 exports.update = async (req, res) => {
   try {
-    const { fullname, address } = req.body;
+    const { name, avatar } = req.body;
+    if (!name || !avatar) {
+      return res.status(400).send("Please Fill The Mandatory Fields");
+    }
     const adminUpdate = await pool.query(
       `UPDATE users 
-      SET fullname = $2, address = $3
-      WHERE id = $1
+      SET name = $2,
+      avatar = $3
+      WHERE uid = $1
       RETURNING *`,
-      [req.user.id, fullname, address]
+      [req.user.uid, name, avatar]
     );
     res.send(adminUpdate.rows[0]);
   } catch (error) {
