@@ -11,10 +11,16 @@ const {
   productFormValidation,
 } = require("../middleware/productFormValidation");
 const { fetchAdmin } = require("../middleware/fetchAdmin");
+const upload = require("../middleware/upload");
 
 router.get("/allproducts", allProduct);
 router.get("/:id", singleProduct);
-router.post("/add", productFormValidation, addProduct);
+router.post(
+  "/add",
+  // productFormValidation,
+  upload.array("images", 5),
+  addProduct
+);
 router.put("/update/:id", productFormValidation, updateProduct);
 router.delete("/delete/:id", deleteProduct);
 

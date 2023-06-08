@@ -35,43 +35,54 @@ exports.singleProduct = async (req, res) => {
 };
 exports.addProduct = async (req, res) => {
   try {
-    let {
-      title,
-      rating,
-      price,
-      discount,
-      stock,
-      images,
-      brand,
-      issale,
-      category,
-      description,
-    } = req.body;
-    const uid =
-      crypto.randomBytes(5).toString("hex") +
-      Date.now().toString(36) +
-      crypto.randomBytes(5).toString("hex");
-    images = JSON.stringify(images);
-    const addProduct = await pool.query(
-      `INSERT INTO products (uid, title, rating, price, discount, stock, images, brand, issale, category, description) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING *`,
-      [
-        uid,
-        title,
-        parseFloat(rating),
-        parseFloat(price),
-        parseFloat(discount),
-        parseFloat(stock),
-        images,
-        brand,
-        issale,
-        category,
-        description,
-      ]
-    );
-    if (addProduct.rowCount == 0) {
-      return res.status(500).send("Internal Server Error");
+    // let {
+    //   title,
+    //   rating,
+    //   price,
+    //   discount,
+    //   stock,
+    //   images,
+    //   brand,
+    //   issale,
+    //   category,
+    //   description,
+    // } = req.body;
+    // const uid =
+    //   crypto.randomBytes(5).toString("hex") +
+    //   Date.now().toString(36) +
+    //   crypto.randomBytes(5).toString("hex");
+    // images = JSON.stringify(images);
+    // const addProduct = await pool.query(
+    //   `INSERT INTO products (uid, title, rating, price, discount, stock, images, brand, issale, category, description) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING *`,
+    //   [
+    //     uid,
+    //     title,
+    //     parseFloat(rating),
+    //     parseFloat(price),
+    //     parseFloat(discount),
+    //     parseFloat(stock),
+    //     images,
+    //     brand,
+    //     issale,
+    //     category,
+    //     description,
+    //   ]
+    // );
+    // if (addProduct.rowCount == 0) {
+    //   return res.status(500).send("Internal Server Error");
+    // }
+    // res.send(addProduct.rows[0]);
+    let image;
+    if (req.files) {
+      console.log("Ok");
+      let path = [];
+      req.files.forEach(function (files, index, arr) {
+        path.push("http://localhost:5000/" + files.filename);
+        console.log(files.filename);
+      });
+      image = path;
     }
-    res.send(addProduct.rows[0]);
+    res.send({ Pass: image });
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Internal Server Error");
