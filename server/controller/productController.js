@@ -8,7 +8,9 @@ exports.allProduct = async (req, res) => {
     if (allProduct.rows == 0) {
       return res.status(404).send("Product Not Found");
     }
-
+    for (const iterator of allProduct.rows) {
+      iterator.images = JSON.parse(iterator.images);
+    }
     res.status(200).send(allProduct.rows);
   } catch (error) {
     console.error(error.message);
@@ -24,6 +26,7 @@ exports.singleProduct = async (req, res) => {
     if (singleProduct.rowCount == 0) {
       return res.status(404).send("Product Not Found");
     }
+    singleProduct.rows[0].images = JSON.parse(singleProduct.rows[0].images);
     res.send(singleProduct.rows[0]);
   } catch (error) {
     console.error(error.message);
@@ -32,7 +35,7 @@ exports.singleProduct = async (req, res) => {
 };
 exports.addProduct = async (req, res) => {
   try {
-    const {
+    let {
       title,
       rating,
       price,
@@ -41,24 +44,27 @@ exports.addProduct = async (req, res) => {
       images,
       brand,
       issale,
+      category,
       description,
     } = req.body;
     const uid =
       crypto.randomBytes(5).toString("hex") +
       Date.now().toString(36) +
       crypto.randomBytes(5).toString("hex");
+    images = JSON.stringify(images);
     const addProduct = await pool.query(
-      `INSERT INTO products (uid, title, rating, price, discount, stock, images, brand, issale, description) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *`,
+      `INSERT INTO products (uid, title, rating, price, discount, stock, images, brand, issale, category, description) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING *`,
       [
         uid,
         title,
-        rating,
-        price,
-        discount,
-        stock,
+        parseFloat(rating),
+        parseFloat(price),
+        parseFloat(discount),
+        parseFloat(stock),
         images,
         brand,
         issale,
+        category,
         description,
       ]
     );
@@ -73,7 +79,7 @@ exports.addProduct = async (req, res) => {
 };
 exports.updateProduct = async (req, res) => {
   try {
-    const {
+    let {
       title,
       rating,
       price,
@@ -82,21 +88,10 @@ exports.updateProduct = async (req, res) => {
       images,
       brand,
       issale,
+      category,
       description,
     } = req.body;
-    // if (
-    //   !title ||
-    //   !rating ||
-    //   !price ||
-    //   !discount ||
-    //   !stock ||
-    //   !images ||
-    //   !brand ||
-    //   !issale ||
-    //   !description
-    // ) {
-    //   return res.status(400).send("Please Fill The Product Mandotory Fields");
-    // }
+
     const productExist = await pool.query(
       `SELECT * FROM products WHERE uid = $1`,
       [req.params.id]
@@ -104,11 +99,11 @@ exports.updateProduct = async (req, res) => {
     if (productExist.rowCount == 0) {
       return res.status(404).send("Product Not Found");
     }
-
+    images = JSON.stringify(images);
     const updateProduct = await pool.query(
       `
     UPDATE products 
-    SET title = $2, rating = $3, price = $4, discount = $5, stock = $6, images = $7, brand = $8, issale = $9, description = $10
+    SET title = $2, rating = $3, price = $4, discount = $5, stock = $6, images = $7, brand = $8, issale = $9, category = $10, description = $11
     WHERE uid = $1
     RETURNING *;
     `,
@@ -122,6 +117,7 @@ exports.updateProduct = async (req, res) => {
         images,
         brand,
         issale,
+        category,
         description,
       ]
     );

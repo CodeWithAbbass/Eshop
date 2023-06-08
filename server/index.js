@@ -23,7 +23,7 @@ app.use(function (req, res, next) {
 });
 
 // Available Routes
-app.use("/api/user", user);
+app.use("/api/auth", user);
 app.use("/api/product", product);
 app.use("/api/wishlist", wishlist);
 app.use("/api/order", order);

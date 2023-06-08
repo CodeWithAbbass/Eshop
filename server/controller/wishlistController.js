@@ -78,7 +78,8 @@ exports.addToWishlist = async (req, res) => {
       `INSERT INTO wishlist (uid, userid, wishitem) VALUES ($1, $2, $3) RETURNING *`,
       [uid, req.user.uid, StrWishlist]
     );
-    res.send("Item Added To Wishlist Successfully");
+
+    res.send(wishitem);
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Internal Server Error");
@@ -98,13 +99,18 @@ exports.deleteFromWishlist = async (req, res) => {
     if (WishItemsArr.length == 0) {
       return res.status(400).send("Wishlist is Empty!");
     }
+
     const NewWishlist = WishItemsArr.filter((item) => item != req.params.id);
+    if (WishItemsArr.length == NewWishlist.length) {
+      return res.send("Product Not Found");
+    }
     const StrNewWishlist = JSON.stringify(NewWishlist);
     const UpdateWishlist = await pool.query(
       `UPDATE wishlist SET wishitem = $2 WHERE userid = $1`,
       [req.user.uid, StrNewWishlist]
     );
-    res.send(NewWishlist);
+
+    res.send({ success: "Item Deleted Successfully", data: NewWishlist });
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Internal Server Error");

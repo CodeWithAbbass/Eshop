@@ -7,11 +7,14 @@ const {
   updateStatus,
   deleteOrder,
 } = require("../controller/orderController");
+const { fetchUser } = require("../middleware/fetchUser");
+const { fetchAdmin } = require("../middleware/fetchAdmin");
+const { orderFormValidation } = require("../middleware/orderFormValidation");
 
-router.get("/", getAllOrders);
-router.get("/user", getUserOrders);
-router.post("/confirm", placeOrder);
-router.put("/update/:id", updateStatus);
-router.delete("/delete", deleteOrder);
+router.get("/", fetchAdmin, getAllOrders);
+router.get("/user", fetchUser, getUserOrders);
+router.post("/confirm", orderFormValidation, fetchUser, placeOrder);
+router.post("/update/:id", fetchAdmin, updateStatus);
+router.delete("/delete/:id", fetchAdmin, deleteOrder);
 
 module.exports = router;

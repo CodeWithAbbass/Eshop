@@ -6,11 +6,19 @@ const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 
 exports.get = async (req, res) => {
+  const token = req.headers.authtoken;
+  if (!token) {
+    return serverResponse(res, STATUS_VARIABLES.INVALID_TOKEN);
+  }
   try {
+    const data = jwt.verify(token, process.env.JWT_SECRET_PRIVATE);
     const user = await pool.query(`SELECT * FROM users WHERE uid = $1`, [
-      req.user.uid,
+      data.uid,
     ]);
-    res.send({ "User Found Successfully": user.rows[0] });
+    if (user.rowCount == 0) {
+      throw new Error("User not found");
+    }
+    res.send(user.rows[0]);
   } catch (error) {
     return serverResponse(res, STATUS_VARIABLES.EXCEPTION_ERROR, error.message);
   }
@@ -19,7 +27,7 @@ exports.get = async (req, res) => {
 exports.signup = async (req, res) => {
   try {
     let { name, email, phone, password, role } = req.body;
-    if (role.length < 2) {
+    if (role.toLowerCase() != "admin") {
       role = "user";
     }
     if (!password) {
@@ -52,7 +60,7 @@ exports.signup = async (req, res) => {
 
     const newUser = await pool.query(
       `INSERT INTO users (uid, name, email, phone, password, role ) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
-      [uid, name, email, phone, SecPass, role]
+      [uid, name, email.toLowerCase(), phone, SecPass, role.toLowerCase()]
     );
     const data = newUser.rows[0];
     res.send(data);
@@ -100,18 +108,37 @@ exports.login = async (req, res) => {
 };
 
 exports.update = async (req, res) => {
+  const token = req.headers.authtoken;
+  if (!token) {
+    return serverResponse(res, STATUS_VARIABLES.INVALID_TOKEN);
+  }
   try {
-    const { name, avatar } = req.body;
-    if (!name || !avatar) {
+    const data = jwt.verify(token, process.env.JWT_SECRET_PRIVATE);
+    const user = await pool.query(`SELECT * FROM users WHERE uid = $1`, [
+      data.uid,
+    ]);
+    if (user.rowCount == 0) {
+      throw new Error("User not found");
+    }
+
+    let { name, avatar, role } = req.body;
+
+    if (role.toLowerCase() == "admin") {
+      role = "admin";
+    } else {
+      role = "user";
+    }
+    if (!name) {
       return res.status(400).send("Please Fill The Mandatory Fields");
     }
     const adminUpdate = await pool.query(
       `UPDATE users 
       SET name = $2,
-      avatar = $3
+      avatar = $3,
+      role = $4
       WHERE uid = $1
       RETURNING *`,
-      [req.user.uid, name, avatar]
+      [data.uid, name, avatar, role]
     );
     res.send(adminUpdate.rows[0]);
   } catch (error) {

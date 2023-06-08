@@ -10,6 +10,7 @@ const {
 const {
   productFormValidation,
 } = require("../middleware/productFormValidation");
+const { fetchAdmin } = require("../middleware/fetchAdmin");
 
 router.get("/allproducts", allProduct);
 router.get("/:id", singleProduct);

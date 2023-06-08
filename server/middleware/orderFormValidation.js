@@ -1,11 +1,9 @@
 const validator = require("../helpers/validate");
-const productFormValidation = async (req, res, next) => {
+const orderFormValidation = async (req, res, next) => {
   const validationRule = {
-    title: "required|string|min:5",
-    price: "required",
-    stock: "required",
-    images: "required",
-    description: "required|string|min:8",
+    products: "required",
+    paymentmethod: "required|string",
+    shipaddress: "required|string",
   };
 
   await validator(req.body, validationRule, {}, (err, status) => {
@@ -21,5 +19,5 @@ const productFormValidation = async (req, res, next) => {
   }).catch((err) => console.log(err));
 };
 module.exports = {
-  productFormValidation,
+  orderFormValidation,
 };
