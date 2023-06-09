@@ -1,0 +1,39 @@
+.UserSignup {
+  background-color: #eff0f5;
+}
+.UserSignupForm_Heading {
+  font-size: 22px;
+  color: #424242;
+  font-weight: 400;
+}
+
+.UserSignupForm_Container {
+  width: 810px;
+}
+
+.UserSignupForm_Input {
+  border: 1px solid #ddd;
+  font-size: 14px;
+  height: 40px;
+  padding: 0 35px 0 10px;
+  outline: none;
+}
+.UserSignupForm_Input::placeholder {
+  color: #999;
+  font-size: 14px;
+  font-weight: 400;
+}
+.UserSignupForm_Label {
+  font-size: 12px;
+  height: 15px;
+  line-height: 15px;
+  overflow: hidden;
+  color: #424242;
+  display: block;
+  margin-bottom: 5px;
+}
+@media (max-width: 991px) {
+  .UserSignupForm_Container {
+    width: 100%;
+  }
+}
