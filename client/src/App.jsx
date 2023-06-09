@@ -17,8 +17,15 @@ import Cancellations from "./components/User/Cancellations";
 import Order from "./components/User/Order";
 import Categories from "./Pages/Categories";
 import UserSignup from "./Pages/UserSignup";
+import UserLogin from "./Pages/UserLogin";
+import { getUser } from "./Store/Slices/userSlice";
+import { useDispatch } from "react-redux";
+import { getProduct } from "./Store/Slices/productSlice";
 
 const App = () => {
+  const dispatch = useDispatch();
+  dispatch(getUser());
+  dispatch(getProduct());
   useEffect(() => {
     return () => {};
   }, []);
@@ -44,6 +51,7 @@ const App = () => {
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/categories" element={<Categories />} />
           <Route path="/signup" element={<UserSignup />} />
+          <Route path="/login" element={<UserLogin />} />
           <Route path="/user" element={<User />}>
             <Route path="/user" element={<Profile />} />
             <Route path="address" element={<AddressBook />} />

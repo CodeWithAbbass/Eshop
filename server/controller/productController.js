@@ -3,15 +3,19 @@ const crypto = require("crypto");
 
 exports.allProduct = async (req, res) => {
   try {
+    let success = false;
     const allProduct = await pool.query("SELECT * FROM products");
 
     if (allProduct.rows == 0) {
-      return res.status(404).send("Product Not Found");
+      return res.status(404).send({ success, message: "Products Not Found" });
     }
     for (const iterator of allProduct.rows) {
       iterator.images = JSON.parse(iterator.images);
     }
-    res.status(200).send(allProduct.rows);
+    success = true;
+    res
+      .status(200)
+      .send({ success, message: "All Product Found", data: allProduct.rows });
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Internal Server Error");

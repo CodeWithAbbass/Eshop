@@ -1,0 +1,80 @@
+.UserForm {
+  background-color: #eff0f5;
+  padding: 3rem 0rem;
+}
+.UserForm_Container {
+  width: 810px;
+}
+
+.UserForm_Heading {
+  font-size: 22px;
+  color: #424242;
+  font-weight: 400;
+}
+.UserForm_LoginBtn_Container {
+  color: #757575;
+  font-size: 12px;
+}
+.UserSignupForm_LoginBtn {
+  color: #1a9cb7;
+}
+
+.UserForm_Input {
+  border: 1px solid #ddd;
+  font-size: 14px;
+  height: 40px;
+  outline: none;
+}
+.UserForm_Input::placeholder {
+  color: #999;
+  font-size: 14px;
+  font-weight: 400;
+}
+.UserForm_Label {
+  font-size: 12px;
+  height: 15px;
+  line-height: 15px;
+  overflow: hidden;
+  color: #424242;
+  display: block;
+  margin-bottom: 5px;
+}
+.UserForm_Btn {
+  line-height: 40px;
+  background-color: #f72;
+  border-color: #f72;
+  color: #fff;
+}
+.UserForm_Validation {
+  font-size: 12px;
+  color: red;
+  transition: 0.4s ease-in-out;
+}
+.UserForm_Validation.invalid {
+  visibility: visible;
+  opacity: 1;
+}
+.UserForm_Validation.valid {
+  visibility: hidden;
+  opacity: 0;
+}
+
+@media (max-width: 991px) {
+  .UserForm_Container {
+    width: 100%;
+  }
+}
+@media (max-width: 768px) {
+  .UserForm {
+    padding-top: 7rem;
+  }
+  .UserForm_Header {
+    justify-content: center !important;
+    flex-wrap: wrap;
+  }
+}
+@media (max-width: 425px) {
+  .UserForm_Promotion {
+    height: 40px;
+  }
+}

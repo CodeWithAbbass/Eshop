@@ -1,9 +1,12 @@
 import { useEffect } from "react";
 import "../../Css/User.css";
 import { Link, Outlet, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const DesktopUser = () => {
   const location = useLocation();
+  // const user = useSelector((state) => state.User.user);
+
   useEffect(() => {
     return () => {};
   }, []);

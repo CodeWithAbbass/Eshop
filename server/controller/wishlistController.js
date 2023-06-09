@@ -58,7 +58,7 @@ exports.addToWishlist = async (req, res) => {
       const PrevWishItems = JSON.parse(PrevWishlist); // Convert To Original State
       for (const iterator of PrevWishItems) {
         if (iterator == req.params.id) {
-          return res.send("Product Already Exist In Your Wishlist");
+          return res.status(400).send("Product Already Exist In Your Wishlist");
         }
       }
 
@@ -102,7 +102,7 @@ exports.deleteFromWishlist = async (req, res) => {
 
     const NewWishlist = WishItemsArr.filter((item) => item != req.params.id);
     if (WishItemsArr.length == NewWishlist.length) {
-      return res.send("Product Not Found");
+      return res.status(400).send("Product Not Found");
     }
     const StrNewWishlist = JSON.stringify(NewWishlist);
     const UpdateWishlist = await pool.query(

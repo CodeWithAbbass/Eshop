@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
 import "../../Css/User.css";
-import { useEffect } from "react";
-const Profile = () => {
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+const Profile = ({}) => {
+  let user = useSelector((state) => state.User.user);
   useEffect(() => {
     return () => {};
   }, []);
@@ -15,7 +17,9 @@ const Profile = () => {
           <div className="row m-0 w-100">
             <div className="col-lg-4 col-md-5 p-0">
               <h3 className="MMA_Profile_Item_Title">Full Name</h3>
-              <div className="MMA_Profile_Item_Info">Abbas Ali</div>
+              <div className="MMA_Profile_Item_Info">
+                {user ? user.name : ""}
+              </div>
             </div>
             <div className="col-lg-4 col-md-7 p-0">
               <h3 className="MMA_Profile_Item_Title d-inline">Email Address</h3>
@@ -23,7 +27,7 @@ const Profile = () => {
                 Edit
               </Link>
               <div className="MMA_Profile_Item_Info">
-                abbas.ali@chaoscorporated.com
+                {user ? user.email : ""}
               </div>
             </div>
             <div className="col-lg-4 col-md-5 p-0 mt-md-4 mt-lg-0">
@@ -31,9 +35,16 @@ const Profile = () => {
               <Link className="MMA_Profile_Item_Btn d-inline border-start ps-1 ms-2">
                 Add
               </Link>
-              <div className="MMA_Profile_Item_Info_Optional">
-                Please Add Your Mobile
+              <div className="MMA_Profile_Item_Info">
+                {user ? user.phone : ""}
               </div>
+              {/* {user.phone.length < 11 ? (
+                <div className="MMA_Profile_Item_Info_Optional">
+                  Please Add Your Mobile
+                </div>
+              ) : (
+                ""
+              )} */}
             </div>
             <div className="col-lg-4 col-md-7 p-0 mt-4">
               <h3 className="MMA_Profile_Item_Title d-inline">Birthday</h3>

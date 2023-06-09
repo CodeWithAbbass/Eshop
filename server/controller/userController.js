@@ -6,19 +6,25 @@ const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 
 exports.get = async (req, res) => {
-  const token = req.headers.authtoken;
+  const token = req.cookies.authtoken;
   if (!token) {
     return serverResponse(res, STATUS_VARIABLES.INVALID_TOKEN);
   }
   try {
+    let success = false;
     const data = jwt.verify(token, process.env.JWT_SECRET_PRIVATE);
     const user = await pool.query(`SELECT * FROM users WHERE uid = $1`, [
       data.uid,
     ]);
     if (user.rowCount == 0) {
-      throw new Error("User not found");
+      throw new Error({ success, message: "User not found" });
     }
-    res.send(user.rows[0]);
+    success = true;
+    res.send({
+      success,
+      message: "User Found Successfully",
+      user: user.rows[0],
+    });
   } catch (error) {
     return serverResponse(res, STATUS_VARIABLES.EXCEPTION_ERROR, error.message);
   }
@@ -26,17 +32,22 @@ exports.get = async (req, res) => {
 
 exports.signup = async (req, res) => {
   try {
+    let success = false;
     let { name, email, phone, password, role } = req.body;
     if (role.toLowerCase() != "admin") {
       role = "user";
     }
     if (!password) {
-      return serverResponse(res, STATUS_VARIABLES.INVALID_ARGUMENTS);
+      return res.status(400).send({
+        message: "Please Fill The Password Fields",
+        success,
+      });
     }
     if (password.length < 8) {
-      return res
-        .status(400)
-        .send("The password must be at least 8 characters.");
+      return res.status(400).send({
+        message: "The password must be at least 8 characters.",
+        success,
+      });
     }
 
     const allUsers = await pool.query(
@@ -45,9 +56,10 @@ exports.signup = async (req, res) => {
     );
 
     if (allUsers.rowCount > 0) {
-      return res
-        .status(400)
-        .send("User Already Exist! Check Your Email And Phone Again.");
+      return res.status(400).send({
+        message: "User Already Exist! Check Your Email And Phone Again.",
+        success,
+      });
     }
     const uid =
       crypto.randomBytes(5).toString("hex") +
@@ -63,7 +75,11 @@ exports.signup = async (req, res) => {
       [uid, name, email.toLowerCase(), phone, SecPass, role.toLowerCase()]
     );
     const data = newUser.rows[0];
-    res.send(data);
+    res.send({
+      success: true,
+      data: data,
+      message: "Account Created Successfully",
+    });
   } catch (error) {
     return serverResponse(res, STATUS_VARIABLES.EXCEPTION_ERROR, error.message);
   }
@@ -71,23 +87,32 @@ exports.signup = async (req, res) => {
 
 exports.login = async (req, res) => {
   try {
+    let success = false;
     const { phone, password } = req.body;
     if (!phone || !password) {
-      return serverResponse(res, STATUS_VARIABLES.INVALID_ARGUMENTS);
+      return res.status.send({
+        success,
+        message: "Please Fill The Form.",
+      });
     }
     if (phone.length < 11) {
-      return res.status(400).send("The phone must be at least 11 characters.");
+      return res.status(400).send({
+        success,
+        message: "The phone must be at least 11 characters.",
+      });
     }
     const userExist = await pool.query(
       `SELECT * FROM users WHERE phone = '${phone}'`
     );
-    if (userExist.rowCount < 1) {
-      return res.status(404).send("User Not Found");
+    if (userExist.rowCount == 0) {
+      return res.status(404).send({ success, message: "User Not Found" });
     }
     const user = userExist.rows[0];
     const verifyPass = await bcrypt.compare(password, user.password);
     if (!verifyPass) {
-      return res.status(400).send("Try Again With Correct Credentials");
+      return res
+        .status(400)
+        .send({ success, message: "Try Again With Correct Credentials" });
     }
 
     const authtoken = jwt.sign(
@@ -99,8 +124,13 @@ exports.login = async (req, res) => {
       httpOnly: true, // For Localhost
       secure: true, //it is applicable when we use https method
     });
-
-    res.status(200).send({ user, authtoken });
+    success = true;
+    res.send({
+      success,
+      user,
+      authtoken,
+      message: `${user.name} Login Successfully`,
+    });
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Internal Server Error");
