@@ -19,14 +19,20 @@ import Categories from "./Pages/Categories";
 import UserSignup from "./Pages/UserSignup";
 import UserLogin from "./Pages/UserLogin";
 import { getUser } from "./Store/Slices/userSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getProduct } from "./Store/Slices/productSlice";
+import { getUserWishlist } from "./Store/Slices/wishlistSlice";
 
 const App = () => {
   const dispatch = useDispatch();
-  dispatch(getUser());
-  dispatch(getProduct());
+  let userLoading = useSelector((state) => state.User.loading);
+  let productLoading = useSelector((state) => state.Products.loading);
+  let cartLoading = useSelector((state) => state.Cart.loading);
+  let wishlistLoading = useSelector((state) => state.Wishlist.loading);
   useEffect(() => {
+    dispatch(getUser());
+    dispatch(getUserWishlist());
+    dispatch(getProduct());
     return () => {};
   }, []);
   return (
@@ -63,7 +69,25 @@ const App = () => {
           </Route>
           <Route path="*" element={<h1>404 Not Found</h1>} />
         </Routes>
+
         <Footer />
+        {(userLoading || productLoading || cartLoading || wishlistLoading) && (
+          <div
+            className="d-flex align-items-center justify-content-center position-fixed top-0 start-0 w-100"
+            style={{
+              height: "100%",
+              zIndex: "9999",
+              backgroundColor: "rgb(0 0 0 / 60%)",
+            }}
+          >
+            <img
+              src="https://i.gifer.com/VAyR.gif"
+              alt="Loading"
+              className=""
+              style={{ width: "80px" }}
+            />
+          </div>
+        )}
       </BrowserRouter>
     </div>
   );

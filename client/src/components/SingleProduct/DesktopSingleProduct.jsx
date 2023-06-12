@@ -14,20 +14,21 @@ import {
 import CalcDiscount from "../../helpers/CalcDiscount";
 import PriceFormat from "../../helpers/PriceFormat";
 import SubTotal from "./SubTotal";
+import { getSingleProduct } from "../../Store/Slices/productSlice";
 
 const DesktopSingleProduct = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
   const [ImageURL, setImageURL] = useState(null);
-  const Product = useSelector((state) =>
-    state.Products.items.filter((item) => item.id == id)
-  );
+
+  const SingleProduct = useSelector((state) => state.Products.singleproduct);
+
   const Cart = useSelector((state) => {
     let res = state.Cart.items.filter((item) => item.id == id);
     return res;
   });
 
-  let PId,
+  let Uid,
     Title,
     Price,
     Rating,
@@ -37,7 +38,6 @@ const DesktopSingleProduct = () => {
     Discount,
     Stock,
     isSale,
-    isSold,
     ProductSubtotal;
 
   const QuantityOnchange = (e, id) => {
@@ -45,26 +45,25 @@ const DesktopSingleProduct = () => {
     dispatch(SelectIncrementDecrement({ value, id }));
     dispatch(TotalPrice());
   };
-  if (Product.length > 0) {
-    Product.map((item, index) => {
-      PId = item.id;
-      Title = item.Title;
-      Price = item.Price;
-      Rating = item.Rating;
-      Quantity = item.Quantity;
-      Discount = item.Discount;
-      Stock = item.Stock;
-      isSale = item.isSale;
-      isSold = item.isSold;
-      MainImage = item.Image.MainImage;
-      SideImage = item.Image.SideImage;
-      ProductSubtotal =
-        Cart.length > 0
-          ? Cart[0].Quantity * CalcDiscount(Cart[0].Discount, Cart[0].Price)
-          : CalcDiscount(Discount, Price);
-    });
-  }
+
+  Uid = SingleProduct.uid;
+  Title = SingleProduct.title;
+  Price = SingleProduct.price;
+  Rating = SingleProduct.rating;
+  Quantity = 0;
+  Discount = SingleProduct.discount;
+  Stock = SingleProduct.stock;
+  isSale = SingleProduct.issale;
+  MainImage = SingleProduct.images ? SingleProduct.images[0] : [];
+  SideImage = SingleProduct.images ? SingleProduct.images : [];
+  ProductSubtotal =
+    Cart.length > 0
+      ? Cart[0].Quantity * CalcDiscount(Cart[0].Discount, Cart[0].Price)
+      : CalcDiscount(Discount, Price);
+
   useEffect(() => {
+    dispatch(TotalPrice());
+    dispatch(getSingleProduct(id));
     return () => {};
   }, []);
   const ChangeMainImage = (ImageItem) => {
@@ -96,15 +95,18 @@ const DesktopSingleProduct = () => {
               </div>
               <div className="SingleProduct_MainImage">
                 <ReactImageMagnify
+                  style={{ height: "100%" }}
                   {...{
                     imageClassName: "SP_MainImage_Image",
+
                     smallImage: {
                       alt: "Wristwatch by Ted Baker London",
                       isFluidWidth: true,
-                      src: ImageURL == null ? MainImage : ImageURL,
+                      src: ImageURL == null ? `${MainImage}` : `${ImageURL}`,
+                      height: 400,
                     },
                     largeImage: {
-                      src: ImageURL == null ? MainImage : ImageURL,
+                      src: ImageURL == null ? `${MainImage}` : `${ImageURL}`,
                       width: 1200,
                       height: 1200,
                     },
@@ -116,14 +118,15 @@ const DesktopSingleProduct = () => {
             <div className="SingleProduct_Info_Container">
               <h2 className="SP_Title">{Title}</h2>
               <span className="SP_RatingStar_Txt">Rating:</span>
-              {Array(Rating)
+              <span className="SP_RatingStar_Txt ms-1">{Rating}</span>
+              {Array(parseInt(Rating ? Rating : 0))
                 .fill()
                 .map((_, i) => (
                   <span className="RatingStar text-warning" key={i}>
                     <GradeRoundedIcon />
                   </span>
                 ))}
-              {Array(5 - Rating)
+              {Array(5 - parseInt(Rating ? Rating : 0))
                 .fill()
                 .map((_, i) => (
                   <span className="RatingStarSecondary text-secondary" key={i}>
@@ -180,7 +183,7 @@ const DesktopSingleProduct = () => {
                 <PlaceOutlinedIcon className="BuyBox_LocationIcon" />
                 <span className="BuyBox_Country_Txt">Pakistan</span>
               </div>
-              {!isSold ? (
+              {Stock > 0 ? (
                 <div className="BuyBox_InStock">In Stock</div>
               ) : (
                 <div className="BuyBox_OutOfStock">Out Of Stock</div>
@@ -193,7 +196,7 @@ const DesktopSingleProduct = () => {
                     value={Cart.length > 0 ? Cart[0].Quantity : "1"}
                     onChange={(e) => QuantityOnchange(e, id)}
                   >
-                    {Array(Stock + 1)
+                    {Array(Stock ? Stock : 0 + 1)
                       .fill()
                       .map((_, i) => {
                         if (i > 0) {
@@ -213,7 +216,7 @@ const DesktopSingleProduct = () => {
                 </form>
               </div>
               <div className="BuyBox_MainBtn">
-                {isSold ? (
+                {Stock == 0 ? (
                   <button className="btn BuyBox_AddToCart w-100 text-light text-center d-block p-0 text-muted bg-secondary border">
                     <Link className="BuyBox_AddToCart_Link text-white w-100 h-100 d-block p-1">
                       Out of Stock
@@ -225,7 +228,7 @@ const DesktopSingleProduct = () => {
                       className="BuyBox_AddToCart_Link text-white w-100 h-100 d-block p-1"
                       // to="/cart"
                       onClick={() => {
-                        dispatch(AddToCart(Product[0]));
+                        dispatch(AddToCart(SingleProduct));
                         dispatch(TotalPrice());
                       }}
                     >
@@ -233,7 +236,7 @@ const DesktopSingleProduct = () => {
                     </Link>
                   </button>
                 )}
-                {isSold ? (
+                {Stock == 0 ? (
                   ""
                 ) : (
                   <button className="btn BuyBox_BuyNow w-100 text-light text-center d-block p-0">

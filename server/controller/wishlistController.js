@@ -7,26 +7,45 @@ const crypto = require("crypto");
 
 exports.getWishlist = async (req, res) => {
   try {
-    const UserWishList = [];
+    let success = false;
+    let UserWishList = [];
+    // Getting User Wishitems
     const user = await pool.query(`SELECT * FROM wishlist WHERE userid = $1`, [
       req.user.uid,
     ]);
+
     if (user.rowCount == 0) {
-      return res.status(400).send("Wishlist is Empty!");
+      return res.send({ success, data: null, message: "Wishlist is Empty!" });
     }
 
     const WishItemsArr = JSON.parse(user.rows[0].wishitem);
-    for (const iterator of WishItemsArr) {
-      const ProductFound = await pool.query(
-        "SELECT * FROM products WHERE uid = $1",
-        [iterator]
-      );
-      if (ProductFound.rowCount > 0) {
-        UserWishList.push(ProductFound.rows[0]);
-      }
-    }
+    // let ProductFound;
+    // for (const iterator of WishItemsArr) {
+    //   console.log(iterator, "========", WishItemsArr);
+    //   ProductFound = await pool.query(
+    //     "SELECT * FROM products WHERE uid = $1",
+    //     [iterator] // uid of product
+    //   );
+    //   if (ProductFound.rowCount == 0) {
+    //     return res.send({ success, data: null, message: "Wishlist is Empty!" });
+    //   }
+    //   if (ProductFound.rowCount > 0) {
+    //     UserWishList = ProductFound.rows;
+    //   }
+    // }
+    // console.log(ProductFound);
+    // console.log(UserWishList);
+    // for (const iterator of UserWishList) {
+    //   // console.log(iterator);
+    //   iterator.images = JSON.parse(iterator.images);
+    // }
 
-    res.send(UserWishList);
+    success = true;
+    res.send({
+      success,
+      data: WishItemsArr,
+      message: "Wishitems Founded Successfully",
+    });
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Internal Server Error");
@@ -35,6 +54,7 @@ exports.getWishlist = async (req, res) => {
 
 exports.addToWishlist = async (req, res) => {
   try {
+    let success = false;
     const uid =
       crypto.randomBytes(5).toString("hex") +
       Date.now().toString(36) +
@@ -45,7 +65,7 @@ exports.addToWishlist = async (req, res) => {
       [req.params.id]
     );
     if (ProductExist.rowCount == 0) {
-      return res.status(400).send("Product Not Found!");
+      return res.status(400).send({ success, message: "Product Not Found!" });
     }
     const userWishlistExist = await pool.query(
       `SELECT * FROM wishlist WHERE userid = $1`,
@@ -58,7 +78,10 @@ exports.addToWishlist = async (req, res) => {
       const PrevWishItems = JSON.parse(PrevWishlist); // Convert To Original State
       for (const iterator of PrevWishItems) {
         if (iterator == req.params.id) {
-          return res.status(400).send("Product Already Exist In Your Wishlist");
+          return res.status(400).send({
+            success,
+            message: "Product Already Exist In Your Wishlist",
+          });
         }
       }
 
@@ -69,7 +92,11 @@ exports.addToWishlist = async (req, res) => {
         `UPDATE wishlist SET wishitem = $1 RETURNING *`,
         [StrNewWishlist]
       );
-      return res.send(PrevWishItems);
+      return res.send({
+        success,
+        data: PrevWishItems,
+        message: "Item Added Successfully",
+      });
     }
 
     const wishitem = [req.params.id]; // Product ID
@@ -79,7 +106,16 @@ exports.addToWishlist = async (req, res) => {
       [uid, req.user.uid, StrWishlist]
     );
 
-    res.send(wishitem);
+    for (const iterator of AddToWishList.rows) {
+      iterator.wishitem = JSON.parse(iterator.wishitem);
+    }
+
+    success = true;
+    res.send({
+      success,
+      data: AddToWishList.rows,
+      message: "Item Added Successfully",
+    });
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Internal Server Error");
@@ -88,21 +124,22 @@ exports.addToWishlist = async (req, res) => {
 
 exports.deleteFromWishlist = async (req, res) => {
   try {
+    let success = false;
     const user = await pool.query(`SELECT * FROM wishlist WHERE userid = $1`, [
       req.user.uid,
     ]);
     if (user.rowCount == 0) {
-      return res.status(400).send("Wishlist is Empty!");
+      return res.status(400).send({ success, message: "Wishlist is Empty!" });
     }
 
     const WishItemsArr = JSON.parse(user.rows[0].wishitem);
     if (WishItemsArr.length == 0) {
-      return res.status(400).send("Wishlist is Empty!");
+      return res.status(400).send({ success, message: "Wishlist is Empty!" });
     }
 
     const NewWishlist = WishItemsArr.filter((item) => item != req.params.id);
     if (WishItemsArr.length == NewWishlist.length) {
-      return res.status(400).send("Product Not Found");
+      return res.status(400).send({ success, message: "Product Not Found" });
     }
     const StrNewWishlist = JSON.stringify(NewWishlist);
     const UpdateWishlist = await pool.query(
@@ -110,7 +147,12 @@ exports.deleteFromWishlist = async (req, res) => {
       [req.user.uid, StrNewWishlist]
     );
 
-    res.send({ success: "Item Deleted Successfully", data: NewWishlist });
+    success = true;
+    res.send({
+      success,
+      message: "Item Deleted Successfully",
+      data: NewWishlist,
+    });
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Internal Server Error");

@@ -13,7 +13,6 @@ export const getProduct = createAsyncThunk("getProduct", async (data) => {
 
     const result = await response.json();
     if (result.success) {
-      console.log(result);
       return result.data;
     }
   } catch (error) {
@@ -21,9 +20,31 @@ export const getProduct = createAsyncThunk("getProduct", async (data) => {
     throw new Error(error);
   }
 });
+export const getSingleProduct = createAsyncThunk(
+  "getSingleProduct",
+  async (data) => {
+    try {
+      const URL = `http://localhost:5000/api/product/${data}`;
+      const response = await fetch(URL, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        return result.data;
+      }
+    } catch (error) {
+      alert(result.message);
+      throw new Error(error);
+    }
+  }
+);
 
 export const productSlice = createSlice({
-  name: "products",
+  name: "Products",
   initialState: {
     // items: [
     //   {
@@ -277,6 +298,7 @@ export const productSlice = createSlice({
     //   },
     // ],
     items: [],
+    singleproduct: {},
     loading: false,
     error: "",
     layout: {
@@ -300,13 +322,11 @@ export const productSlice = createSlice({
       const Grid = action.payload;
 
       for (let key in state.layout) {
-        // if (Object.hasOwnProperty.call(state.layout, key)) {
         if (key == Grid) {
           state.layout[Grid] = true;
         } else {
           state.layout[key] = false;
         }
-        // }
       }
       return state;
     },
@@ -325,6 +345,18 @@ export const productSlice = createSlice({
       })
       .addCase(getProduct.rejected, (state, action) => {
         // console.log(action, "from rejections");
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(getSingleProduct.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getSingleProduct.fulfilled, (state, action) => {
+        state.loading = false;
+        state.singleproduct = action.payload;
+        state.error = null;
+      })
+      .addCase(getSingleProduct.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       });

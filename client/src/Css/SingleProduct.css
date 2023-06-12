@@ -22,7 +22,7 @@
 }
 .SingleProduct_Image_Container {
   width: 55%;
-  height: 100%;
+  height: 400px;
 }
 .SingleProduct_Info_Container {
   width: 45%;
@@ -53,7 +53,8 @@
   height: 100%;
 }
 .SP_MainImage_Image {
-  height: 100% !important;
+  height: 400px !important;
+  width: 100% !important;
 }
 .SP_SideImage_Image {
   border-radius: 10px;

@@ -12,6 +12,7 @@ exports.allProduct = async (req, res) => {
     for (const iterator of allProduct.rows) {
       iterator.images = JSON.parse(iterator.images);
     }
+
     success = true;
     res
       .status(200)
@@ -23,15 +24,21 @@ exports.allProduct = async (req, res) => {
 };
 exports.singleProduct = async (req, res) => {
   try {
+    let success = false;
     const singleProduct = await pool.query(
       `SELECT * FROM products WHERE uid = $1`,
       [req.params.id]
     );
     if (singleProduct.rowCount == 0) {
-      return res.status(404).send("Product Not Found");
+      return res.status(404).send({ success, message: "Product Not Found" });
     }
     singleProduct.rows[0].images = JSON.parse(singleProduct.rows[0].images);
-    res.send(singleProduct.rows[0]);
+    success = true;
+    res.send({
+      success,
+      data: singleProduct.rows[0],
+      message: "Product Founded Successfully",
+    });
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Internal Server Error");
@@ -39,54 +46,63 @@ exports.singleProduct = async (req, res) => {
 };
 exports.addProduct = async (req, res) => {
   try {
-    // let {
-    //   title,
-    //   rating,
-    //   price,
-    //   discount,
-    //   stock,
-    //   images,
-    //   brand,
-    //   issale,
-    //   category,
-    //   description,
-    // } = req.body;
-    // const uid =
-    //   crypto.randomBytes(5).toString("hex") +
-    //   Date.now().toString(36) +
-    //   crypto.randomBytes(5).toString("hex");
-    // images = JSON.stringify(images);
-    // const addProduct = await pool.query(
-    //   `INSERT INTO products (uid, title, rating, price, discount, stock, images, brand, issale, category, description) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING *`,
-    //   [
-    //     uid,
-    //     title,
-    //     parseFloat(rating),
-    //     parseFloat(price),
-    //     parseFloat(discount),
-    //     parseFloat(stock),
-    //     images,
-    //     brand,
-    //     issale,
-    //     category,
-    //     description,
-    //   ]
-    // );
-    // if (addProduct.rowCount == 0) {
-    //   return res.status(500).send("Internal Server Error");
-    // }
-    // res.send(addProduct.rows[0]);
-    let image;
+    let success = false;
+    let {
+      title,
+      rating,
+      price,
+      discount,
+      stock,
+      images,
+      brand,
+      issale,
+      category,
+      description,
+    } = req.body;
     if (req.files) {
-      console.log("Ok");
       let path = [];
       req.files.forEach(function (files, index, arr) {
         path.push("http://localhost:5000/" + files.filename);
-        console.log(files.filename);
       });
-      image = path;
+      images = [...path];
     }
-    res.send({ Pass: image });
+    const uid =
+      crypto.randomBytes(5).toString("hex") +
+      Date.now().toString(36) +
+      crypto.randomBytes(5).toString("hex");
+    images = JSON.stringify(images);
+    const addProduct = await pool.query(
+      `INSERT INTO products (uid, title, rating, price, discount, stock, images, brand, issale, category, description) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING *`,
+      [
+        uid,
+        title,
+        parseFloat(rating),
+        parseFloat(price),
+        parseFloat(discount),
+        parseFloat(stock),
+        images,
+        brand,
+        issale,
+        category,
+        description,
+      ]
+    );
+    if (addProduct.rowCount == 0) {
+      return res
+        .status(500)
+        .send({ success, message: "Internal Server Error" });
+    }
+
+    const OriginalImageArr = JSON.parse(addProduct.rows[0].images);
+    let NewProduct = addProduct.rows[0];
+    NewProduct.images = OriginalImageArr;
+    success = true;
+    console.log(NewProduct);
+    res.send({
+      success,
+      data: NewProduct,
+      message: "Product Added Successfully",
+    });
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Internal Server Error");

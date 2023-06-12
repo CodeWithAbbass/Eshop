@@ -6,26 +6,18 @@ const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 
 exports.get = async (req, res) => {
-  const token = req.cookies.authtoken;
-  if (!token) {
-    return serverResponse(res, STATUS_VARIABLES.INVALID_TOKEN);
-  }
   try {
     let success = false;
-    const data = jwt.verify(token, process.env.JWT_SECRET_PRIVATE);
-    const user = await pool.query(`SELECT * FROM users WHERE uid = $1`, [
-      data.uid,
-    ]);
-    if (user.rowCount == 0) {
-      throw new Error({ success, message: "User not found" });
-    }
+
     success = true;
     res.send({
       success,
       message: "User Found Successfully",
-      user: user.rows[0],
+      user: req.user,
+      authtoken: req.token,
     });
   } catch (error) {
+    console.log(error.message);
     return serverResponse(res, STATUS_VARIABLES.EXCEPTION_ERROR, error.message);
   }
 };
@@ -118,7 +110,7 @@ exports.login = async (req, res) => {
     const authtoken = jwt.sign(
       { uid: user.uid },
       process.env.JWT_SECRET_PRIVATE,
-      { expiresIn: "7d", algorithm: "RS256" }
+      { expiresIn: "5d", algorithm: "RS256" }
     );
     res.cookie("authtoken", authtoken, {
       httpOnly: true, // For Localhost
@@ -138,19 +130,7 @@ exports.login = async (req, res) => {
 };
 
 exports.update = async (req, res) => {
-  const token = req.headers.authtoken;
-  if (!token) {
-    return serverResponse(res, STATUS_VARIABLES.INVALID_TOKEN);
-  }
   try {
-    const data = jwt.verify(token, process.env.JWT_SECRET_PRIVATE);
-    const user = await pool.query(`SELECT * FROM users WHERE uid = $1`, [
-      data.uid,
-    ]);
-    if (user.rowCount == 0) {
-      throw new Error("User not found");
-    }
-
     let { name, avatar, role } = req.body;
 
     if (role.toLowerCase() == "admin") {
@@ -168,7 +148,7 @@ exports.update = async (req, res) => {
       role = $4
       WHERE uid = $1
       RETURNING *`,
-      [data.uid, name, avatar, role]
+      [req.user.uid, name, avatar, role]
     );
     res.send(adminUpdate.rows[0]);
   } catch (error) {

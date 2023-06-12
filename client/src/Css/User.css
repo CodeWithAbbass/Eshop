@@ -263,6 +263,11 @@
 }
 .User_Wishlist_Item_Pic_Container {
   width: 15%;
+  height: 70px;
+}
+.User_Wishlist_Item_Pic_Link {
+  height: 100px;
+  padding: 10px;
 }
 .User_Wishlist_Item_Info {
   width: 83%;
@@ -331,6 +336,7 @@
 @media (max-width: 768px) {
   .User_Wishlist_Item_Pic_Container {
     width: 15%;
+    height: 100%;
   }
   .User_Wishlist_Item_Info {
     margin-left: 0.5rem;

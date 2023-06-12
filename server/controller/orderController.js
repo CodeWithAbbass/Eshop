@@ -36,6 +36,7 @@ exports.getUserOrders = async (req, res) => {
 };
 exports.placeOrder = async (req, res) => {
   try {
+    let success = false;
     let uid =
       crypto.randomBytes(5).toString("hex") +
       Date.now().toString(36) +
@@ -66,7 +67,9 @@ exports.placeOrder = async (req, res) => {
       ]
     );
     if (placeOrder.rowCount == 0) {
-      return res.status(500).send("Order Confirmation Failed");
+      return res
+        .status(500)
+        .send({ success, message: "Order Confirmation Failed" });
     }
 
     const newOrder = {
@@ -78,7 +81,8 @@ exports.placeOrder = async (req, res) => {
       paymentmethod,
       products: JSON.parse(placeOrder.rows[0].products),
     };
-    res.send(newOrder);
+    success = true;
+    res.send({ success, data: newOrder, message: "Order Placed Successfully" });
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Internal Server Error");
