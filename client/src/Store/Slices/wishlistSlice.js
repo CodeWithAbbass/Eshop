@@ -24,7 +24,53 @@ export const getUserWishlist = createAsyncThunk(
       if (result.success) {
         return result.data;
       }
-      // console.log("User Not Found", result);
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+);
+export const addToWishlist = createAsyncThunk("addToWishlist", async (data) => {
+  try {
+    const URL = `http://localhost:5000/api/wishlist/add/${data}`;
+    const response = await fetch(URL, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      alert(result.message);
+      return result.data;
+    }
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+export const deleteFromWishlist = createAsyncThunk(
+  "deleteFromWishlist",
+  async (data) => {
+    try {
+      const URL = `http://localhost:5000/api/wishlist/delete/${data}`;
+      const response = await fetch(URL, {
+        method: "DELETE",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        alert(result.message);
+        return result.data;
+      }
     } catch (error) {
       throw new Error(error);
     }
@@ -51,8 +97,38 @@ const wishlistSlice = createSlice({
         // console.log(action, "from rejections");
         state.loading = false;
         state.error = action.error.message;
+      })
+      .addCase(addToWishlist.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(addToWishlist.fulfilled, (state, action) => {
+        // console.log(action, "from fulfiled");
+
+        state.loading = false;
+        state.wishitems = action.payload;
+        state.error = null;
+      })
+      .addCase(addToWishlist.rejected, (state, action) => {
+        // console.log(action, "from rejections");
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(deleteFromWishlist.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(deleteFromWishlist.fulfilled, (state, action) => {
+        // console.log(action, "from fulfiled");
+
+        state.loading = false;
+        state.wishitems = action.payload;
+        state.error = null;
+      })
+      .addCase(deleteFromWishlist.rejected, (state, action) => {
+        // console.log(action, "from rejections");
+        state.loading = false;
+        state.error = action.error.message;
       });
   },
 });
-export const {} = wishlistSlice.actions;
+export const { getWishlist } = wishlistSlice.actions;
 export default wishlistSlice.reducer;

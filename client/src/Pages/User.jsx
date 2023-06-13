@@ -1,9 +1,10 @@
+import { useSelector } from "react-redux";
 import "../Css/User.css";
 import DesktopUser from "../components/User/DesktopUser";
 import MobileUser from "../components/User/MobileUser";
 
 const User = () => {
-  
+  let user = useSelector((state) => state.User.user);
   return (
     <div className="User">
       <DesktopUser />
@@ -40,6 +41,7 @@ const User = () => {
                     type="text"
                     id="FullName"
                     className="form-control rounded-0 shadow-none DCC_Checkout_Input"
+                    defaultValue={user ? user.name : ""}
                   />
                 </div>
                 <div className="mb-3 DCC_Checkout_Input_Container">
@@ -51,6 +53,7 @@ const User = () => {
                     className="form-control rounded-0 shadow-none DCC_Checkout_Input"
                     id="Email"
                     aria-describedby="emailHelp"
+                    defaultValue={user ? user.email : ""}
                   />
                 </div>
                 <div className="mb-3 DCC_Checkout_Input_Container">
@@ -61,6 +64,7 @@ const User = () => {
                     type="number"
                     className="form-control rounded-0 shadow-none DCC_Checkout_Input"
                     id="Number"
+                    defaultValue={user ? user.phone : ""}
                     onWheel={function (e) {
                       e.target.blur();
                     }}

@@ -7,14 +7,15 @@ import { useDispatch, useSelector } from "react-redux";
 import GradeRoundedIcon from "@mui/icons-material/GradeRounded";
 // import required actions
 import {
-  AddToCart,
-  SelectIncrementDecrement,
-  TotalPrice,
+  selectIncDec,
+  totalPrice,
+  addToCart,
 } from "../../Store/Slices/cartSlice";
 import CalcDiscount from "../../helpers/CalcDiscount";
 import PriceFormat from "../../helpers/PriceFormat";
 import SubTotal from "./SubTotal";
 import { getSingleProduct } from "../../Store/Slices/productSlice";
+import { addToWishlist } from "../../Store/Slices/wishlistSlice";
 
 const DesktopSingleProduct = () => {
   const dispatch = useDispatch();
@@ -24,9 +25,14 @@ const DesktopSingleProduct = () => {
   const SingleProduct = useSelector((state) => state.Products.singleproduct);
 
   const Cart = useSelector((state) => {
-    let res = state.Cart.items.filter((item) => item.id == id);
+    let res = state.Cart.items.filter((item) => item.uid == id);
     return res;
   });
+  const QuantityOnchange = (e, uid) => {
+    const { value } = e.target;
+    dispatch(selectIncDec({ value, uid }));
+    dispatch(totalPrice());
+  };
 
   let Uid,
     Title,
@@ -40,17 +46,10 @@ const DesktopSingleProduct = () => {
     isSale,
     ProductSubtotal;
 
-  const QuantityOnchange = (e, id) => {
-    const { value } = e.target;
-    dispatch(SelectIncrementDecrement({ value, id }));
-    dispatch(TotalPrice());
-  };
-
   Uid = SingleProduct.uid;
   Title = SingleProduct.title;
   Price = SingleProduct.price;
   Rating = SingleProduct.rating;
-  Quantity = 0;
   Discount = SingleProduct.discount;
   Stock = SingleProduct.stock;
   isSale = SingleProduct.issale;
@@ -58,11 +57,12 @@ const DesktopSingleProduct = () => {
   SideImage = SingleProduct.images ? SingleProduct.images : [];
   ProductSubtotal =
     Cart.length > 0
-      ? Cart[0].Quantity * CalcDiscount(Cart[0].Discount, Cart[0].Price)
+      ? Cart[0].quantity * CalcDiscount(Cart[0].discount, Cart[0].price)
       : CalcDiscount(Discount, Price);
-
+  const AddToCartProduct = { ...SingleProduct, quantity: 1 };
+  // console.log(object);
   useEffect(() => {
-    dispatch(TotalPrice());
+    dispatch(totalPrice());
     dispatch(getSingleProduct(id));
     return () => {};
   }, []);
@@ -193,10 +193,10 @@ const DesktopSingleProduct = () => {
                   <select
                     name="Quantity"
                     id="BuyBox_Quantity_Info_Select"
-                    value={Cart.length > 0 ? Cart[0].Quantity : "1"}
-                    onChange={(e) => QuantityOnchange(e, id)}
+                    value={Cart.length > 0 ? Cart[0].quantity : "1"}
+                    onChange={(e) => QuantityOnchange(e, Uid)}
                   >
-                    {Array(Stock ? Stock : 0 + 1)
+                    {Array(Stock ? Stock + 1 : 0 + 1)
                       .fill()
                       .map((_, i) => {
                         if (i > 0) {
@@ -226,10 +226,10 @@ const DesktopSingleProduct = () => {
                   <button className="btn BuyBox_AddToCart w-100 text-light text-center d-block p-0">
                     <Link
                       className="BuyBox_AddToCart_Link text-white w-100 h-100 d-block p-1"
-                      // to="/cart"
                       onClick={() => {
-                        dispatch(AddToCart(SingleProduct));
-                        dispatch(TotalPrice());
+                        // dispatch(AddToCart(AddToCartProduct));
+                        dispatch(addToCart(AddToCartProduct));
+                        dispatch(totalPrice());
                       }}
                     >
                       Add to Cart
@@ -281,8 +281,11 @@ const DesktopSingleProduct = () => {
                 </tbody>
               </table>
               <div className="BuyBox_AddToList_Container">
-                <button className=" btn BuyBox_AddToList_btn w-100 text-center">
-                  Add To List
+                <button
+                  className=" btn BuyBox_AddToList_btn w-100 text-center"
+                  onClick={() => dispatch(addToWishlist(Uid))}
+                >
+                  Add To Wishlist
                 </button>
               </div>
             </div>

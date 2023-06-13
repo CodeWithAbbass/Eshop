@@ -7,18 +7,19 @@ import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import GradeRoundedIcon from "@mui/icons-material/GradeRounded";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  PlusIncrement,
-  MinusDecrement,
-  DeleteFromCart,
-  TotalPrice,
+  increment,
+  decrement,
+  deleteFromCart,
+  totalPrice,
 } from "../../Store/Slices/cartSlice";
 import { useEffect } from "react";
 import PriceFormat from "../../helpers/PriceFormat";
 import CalcDiscount from "../../helpers/CalcDiscount";
+import { addToWishlist } from "../../Store/Slices/wishlistSlice";
 
 const MobileCart = () => {
   const Cart = useSelector((state) => state.Cart.items);
-  const totalPrice = useSelector((state) => state.Cart.totalPrice);
+  const totalAmount = useSelector((state) => state.Cart.totalAmount);
   const shippingFee = useSelector((state) => state.Cart.shippingFee);
   const dispatch = useDispatch();
   useEffect(() => {
@@ -47,17 +48,15 @@ const MobileCart = () => {
               ? ""
               : Cart.map((item, index) => {
                   let {
-                    id,
-                    Discount,
-                    Image,
-                    Price,
-                    oldPrice,
-                    Quantity,
-                    Rating,
-                    Stock,
-                    Title,
+                    uid,
+                    discount,
+                    images,
+                    price,
+                    quantity,
+                    rating,
+                    stock,
+                    title,
                     isSale,
-                    isSold,
                   } = item;
                   return (
                     <div className="Mobile_CartItem" key={index}>
@@ -66,10 +65,10 @@ const MobileCart = () => {
                         <div className="MCCD_Product_Info col-4 p-0">
                           <Link
                             className="MCCD_Product_Link d-block w-100 mb-3"
-                            to={`/product/${id}`}
+                            to={`/product/${uid}`}
                           >
                             <img
-                              src={Image.MainImage}
+                              src={images ? images[0] : ""}
                               alt="Cart Product"
                               className="MCCD_Product_Image h-100"
                             />
@@ -78,8 +77,8 @@ const MobileCart = () => {
                             <span
                               className="MCCD_CartItem_Dec_Icon_Container text-center position-absolute top-0 start-0"
                               onClick={() => {
-                                dispatch(MinusDecrement(id));
-                                dispatch(TotalPrice());
+                                dispatch(decrement(uid));
+                                dispatch(totalPrice());
                               }}
                             >
                               <RemoveRoundedIcon className="" />
@@ -88,14 +87,14 @@ const MobileCart = () => {
                               type="text"
                               name="Quantity"
                               readOnly
-                              placeholder={Quantity}
+                              placeholder={quantity}
                               className="MCCD_Product_IncDec_Input h-100 w-100 px-4 text-center d-block"
                             />
                             <span
                               className="MCCD_CartItem_Inc_Icon_Container text-center position-absolute top-0 end-0"
                               onClick={() => {
-                                dispatch(PlusIncrement(id));
-                                dispatch(TotalPrice());
+                                dispatch(increment(uid));
+                                dispatch(totalPrice());
                               }}
                             >
                               <AddRoundedIcon />
@@ -106,9 +105,9 @@ const MobileCart = () => {
                           <div className="CartItem_Product_Info w-100 position-relative h-100">
                             <Link
                               className="CartItem_Product_Info_Title w-100 d-block"
-                              to={`/product/${1}`}
+                              to={`/product/${uid}`}
                             >
-                              {Title}
+                              {title}
                             </Link>
                             <div className="CartItem_Product_Info_Details">
                               <div className="CartItem_Product_Rating_Container">
@@ -116,7 +115,7 @@ const MobileCart = () => {
                                   Rating:
                                 </span>
                                 <span className="CartItem_Product_Rating_Star">
-                                  {Array(Rating)
+                                  {Array(parseInt(rating))
                                     .fill()
                                     .map((_, i) => (
                                       <span
@@ -127,7 +126,7 @@ const MobileCart = () => {
                                       </span>
                                     ))}
 
-                                  {Array(5 - Rating)
+                                  {Array(5 - parseInt(rating))
                                     .fill()
                                     .map((_, i) => (
                                       <span
@@ -160,29 +159,31 @@ const MobileCart = () => {
                             </div>
                             <div className="CarItem_Product_LeftStock mt-1 mb-0">
                               <p className="CPLeftStock_Txt mb-0">
-                                Only {Stock} left in stock - order soon
+                                Only {stock} left in stock - order soon
                               </p>
                             </div>
                             <div className="CartItem_Product_Footer d-flex align-items-start justify-content-between position-absolute bottom-0 end-0 w-100">
                               <div className="DCCL_CartItem_Product_PriceInfo w-50">
                                 <p className="CPPPrice mb-0">
-                                  {PriceFormat(CalcDiscount(Discount, Price))}
+                                  {PriceFormat(CalcDiscount(discount, price))}
                                 </p>
                                 <span className="CPPDiscount me-2">
-                                  {" "}
-                                  {Discount ? `-${Discount}%` : ""}
+                                  {discount ? `-${discount}%` : ""}
                                 </span>
                                 <span className="CPPOldPrice">
-                                  {Discount > 0 ? PriceFormat(Price) : ""}
+                                  {discount > 0 ? PriceFormat(price) : ""}
                                 </span>
                               </div>
                               <div className="CPPOperations align-self-end">
-                                <button className="CPPOperation_WishList_Btn btn p-0 m-0 me-1">
+                                <button
+                                  className="CPPOperation_WishList_Btn btn p-0 m-0 me-1"
+                                  onClick={() => dispatch(addToWishlist(uid))}
+                                >
                                   <FavoriteBorderOutlinedIcon className="CPPOperation_WishList_Icon" />
                                 </button>
                                 <button
                                   className="CPPOperation_Delete_Btn btn p-0 m-0 ms-1"
-                                  onClick={() => dispatch(DeleteFromCart(id))}
+                                  onClick={() => dispatch(deleteFromCart(uid))}
                                 >
                                   <DeleteOutlinedIcon className="CPPOperation_Delete_Icon" />
                                 </button>
@@ -208,7 +209,7 @@ const MobileCart = () => {
             <div className="MCCOS_Total_Container">
               <span className="MCCOS_Total_Txt">Total:</span>
               <span className="MCCOS_Total_Price ms-1">
-                {PriceFormat(totalPrice + shippingFee)}
+                {PriceFormat(totalAmount + shippingFee)}
               </span>
             </div>
           </div>

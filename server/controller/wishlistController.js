@@ -78,7 +78,8 @@ exports.addToWishlist = async (req, res) => {
       const PrevWishItems = JSON.parse(PrevWishlist); // Convert To Original State
       for (const iterator of PrevWishItems) {
         if (iterator == req.params.id) {
-          return res.status(400).send({
+          success = true;
+          return res.send({
             success,
             message: "Product Already Exist In Your Wishlist",
           });
@@ -92,6 +93,7 @@ exports.addToWishlist = async (req, res) => {
         `UPDATE wishlist SET wishitem = $1 RETURNING *`,
         [StrNewWishlist]
       );
+      success = true;
       return res.send({
         success,
         data: PrevWishItems,

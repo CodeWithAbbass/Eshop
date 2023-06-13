@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation } from "swiper";
 import { useDispatch, useSelector } from "react-redux";
+import GradeRoundedIcon from "@mui/icons-material/GradeRounded";
+import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 
 // Import Swiper styles
 import "swiper/css";
@@ -14,16 +16,17 @@ import "swiper/css/navigation";
 
 // import required actions
 import {
-  AddToCart,
-  SelectIncrementDecrement,
+  selectIncDec,
+  totalPrice,
+  addToCart,
   PlusIncrement,
   MinusDecrement,
   DeleteFromCart,
-  TotalPrice,
 } from "../../Store/Slices/cartSlice";
 import CalcDiscount from "../../helpers/CalcDiscount";
 import PriceFormat from "../../helpers/PriceFormat";
 import { getSingleProduct } from "../../Store/Slices/productSlice";
+import { addToWishlist } from "../../Store/Slices/wishlistSlice";
 
 const MobileSingleProduct = () => {
   const dispatch = useDispatch();
@@ -31,27 +34,43 @@ const MobileSingleProduct = () => {
   const SingleProduct = useSelector((state) => state.Products.singleproduct);
 
   const Cart = useSelector((state) => {
-    let res = state.Cart.items.filter((item) => item.id == id);
+    let res = state.Cart.items.filter((item) => item.uid == id);
     return res;
   });
 
-  let Uid = SingleProduct.uid;
-  let Title = SingleProduct.title;
-  let Price = SingleProduct.price;
-  let Rating = SingleProduct.rating;
-  let Quantity = 0;
-  let Discount = SingleProduct.discount;
-  let Stock = SingleProduct.stock;
-  let isSale = SingleProduct.issale;
-  let MainImage = SingleProduct.images ? SingleProduct.images[0] : [];
-  let SideImage = SingleProduct.images ? SingleProduct.images : [];
-  let ProductSubtotal =
-    Cart.length > 0
-      ? Cart[0].Quantity * CalcDiscount(Cart[0].Discount, Cart[0].Price)
-      : CalcDiscount(Discount, Price);
+  let Uid,
+    Title,
+    Price,
+    Rating,
+    MainImage,
+    SideImage,
+    Quantity,
+    Discount,
+    Stock,
+    isSale,
+    ProductSubtotal;
+  const QuantityOnchange = (e, uid) => {
+    const { value } = e.target;
+    dispatch(selectIncDec({ value, uid }));
+    dispatch(totalPrice());
+  };
 
+  Uid = SingleProduct.uid;
+  Title = SingleProduct.title;
+  Price = SingleProduct.price;
+  Rating = SingleProduct.rating;
+  Discount = SingleProduct.discount;
+  Stock = SingleProduct.stock;
+  isSale = SingleProduct.issale;
+  MainImage = SingleProduct.images ? SingleProduct.images[0] : [];
+  SideImage = SingleProduct.images ? SingleProduct.images : [];
+  ProductSubtotal =
+    Cart.length > 0
+      ? Cart[0].quantity * CalcDiscount(Cart[0].discount, Cart[0].price)
+      : CalcDiscount(Discount, Price);
+  const AddToCartProduct = { ...SingleProduct, quantity: 1 };
   useEffect(() => {
-    dispatch(TotalPrice());
+    dispatch(totalPrice());
     dispatch(getSingleProduct(id));
     return () => {};
   }, []);
@@ -78,6 +97,12 @@ const MobileSingleProduct = () => {
                 })}
           </Swiper>
         </div>
+        <button
+          className=" btn BuyBox_AddToList_btn w-100 text-center"
+          onClick={() => dispatch(addToWishlist(Uid))}
+        >
+          Add To Wishlist
+        </button>
         <div className="MSP_Info_Container container-xl my-4">
           <h2 className="MSP_Title pb-5 pt-2">{Title}</h2>
           <div className="MSP_Price_Container ">
@@ -94,11 +119,20 @@ const MobileSingleProduct = () => {
             </div>
           </div>
           <div className="MSP_Rating_Container">
+            <span className="SP_RatingStar_Txt">Rating:</span>
+            <span className="SP_RatingStar_Txt ms-1">{Rating}</span>
             {Array(parseInt(Rating ? Rating : 0))
               .fill()
               .map((_, i) => (
-                <span className="MSP_Rating_Star" key={i}>
-                  ⭐
+                <span className="RatingStar text-warning" key={i}>
+                  <GradeRoundedIcon />
+                </span>
+              ))}
+            {Array(5 - parseInt(Rating ? Rating : 0))
+              .fill()
+              .map((_, i) => (
+                <span className="RatingStarSecondary text-secondary" key={i}>
+                  <GradeRoundedIcon />
                 </span>
               ))}
           </div>
@@ -131,7 +165,7 @@ const MobileSingleProduct = () => {
               </Link>
               <span className="MSPF_Separator"></span>
               <Link className="MSPF_Link h-100" to="/user/wishlist">
-                <StoreIcon />
+                <FavoriteBorderOutlinedIcon />
                 <p className="MSPF_Link_Txt p-0 m-0">WishList</p>
               </Link>
             </div>
@@ -141,10 +175,10 @@ const MobileSingleProduct = () => {
               <div className="MSPF_Shortcut h-100 w-100">
                 {Stock > 0 ? (
                   <Link
-                    to="/"
+                    to="/checkout"
                     className="MSPF_Shortcut_Link d-inline-block h-100 w-100"
                   >
-                    <span className="MSPF_Shortcut_Txt">Shopping</span>
+                    <span className="MSPF_Shortcut_Txt">Buy Now</span>
                   </Link>
                 ) : (
                   <Link
@@ -164,8 +198,8 @@ const MobileSingleProduct = () => {
                   <Link
                     className="MSPF_Shortcut_Link d-inline-block h-100 w-100"
                     onClick={() => {
-                      dispatch(AddToCart(SingleProduct));
-                      dispatch(TotalPrice());
+                      dispatch(addToCart(AddToCartProduct));
+                      dispatch(totalPrice());
                     }}
                   >
                     <span className="MSPF_Shortcut_Txt">Add To Cart</span>

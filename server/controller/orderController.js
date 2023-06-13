@@ -18,17 +18,22 @@ exports.getAllOrders = async (req, res) => {
 };
 exports.getUserOrders = async (req, res) => {
   try {
+    let success = false;
     const userOrder = await pool.query(
       `SELECT * FROM orders WHERE userid = $1`,
       [req.user.uid]
     );
     if (userOrder.rowCount == 0 || userOrder.rows.length == 0) {
-      return res.status(400).send("Order Not Found");
+      return res.send({ success, data: [], message: "Order Not Found" });
     }
     for (const iterator of userOrder.rows) {
       iterator.products = JSON.parse(iterator.products);
     }
-    res.send(userOrder.rows);
+    res.send({
+      success,
+      data: userOrder.rows,
+      message: "Order Found Successfully",
+    });
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Internal Server Error");
@@ -44,6 +49,7 @@ exports.placeOrder = async (req, res) => {
     let {
       orderid = uid,
       userid = req.user.uid,
+      date,
       products,
       status = "pending",
       paymentmethod,
@@ -54,11 +60,14 @@ exports.placeOrder = async (req, res) => {
       billaddress = shipaddress;
     }
     const StrProducts = JSON.stringify(products);
+    date = Date.now().toString();
+
     const placeOrder = await pool.query(
-      `INSERT INTO orders (orderid, userid, status, shipaddress, billaddress, paymentmethod, products) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
+      `INSERT INTO orders (orderid, userid, date, status, shipaddress, billaddress, paymentmethod, products) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`,
       [
         orderid,
         userid,
+        date,
         status,
         shipaddress,
         billaddress,
@@ -75,6 +84,7 @@ exports.placeOrder = async (req, res) => {
     const newOrder = {
       orderid,
       userid,
+      date,
       status,
       shipaddress,
       billaddress,

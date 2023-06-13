@@ -22,6 +22,7 @@ import { getUser } from "./Store/Slices/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { getProduct } from "./Store/Slices/productSlice";
 import { getUserWishlist } from "./Store/Slices/wishlistSlice";
+import { totalPrice, getCart } from "./Store/Slices/cartSlice";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -30,9 +31,11 @@ const App = () => {
   let cartLoading = useSelector((state) => state.Cart.loading);
   let wishlistLoading = useSelector((state) => state.Wishlist.loading);
   useEffect(() => {
+    dispatch(getProduct());
     dispatch(getUser());
     dispatch(getUserWishlist());
-    dispatch(getProduct());
+    dispatch(getCart());
+    dispatch(totalPrice());
     return () => {};
   }, []);
   return (

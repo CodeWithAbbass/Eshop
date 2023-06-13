@@ -7,16 +7,17 @@ import RemoveRoundedIcon from "@mui/icons-material/RemoveRounded";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import GradeRoundedIcon from "@mui/icons-material/GradeRounded";
 import {
-  PlusIncrement,
-  MinusDecrement,
-  DeleteFromCart,
-  TotalPrice,
+  decrement,
+  increment,
+  deleteFromCart,
+  totalPrice,
 } from "../../Store/Slices/cartSlice";
 import PriceFormat from "../../helpers/PriceFormat";
 import CalcDiscount from "../../helpers/CalcDiscount";
+import { addToWishlist } from "../../Store/Slices/wishlistSlice";
 const DesktopCart = () => {
   const Cart = useSelector((state) => state.Cart.items);
-  const totalPrice = useSelector((state) => state.Cart.totalPrice);
+  const totalAmount = useSelector((state) => state.Cart.totalAmount);
   const shippingFee = useSelector((state) => state.Cart.shippingFee);
   const dispatch = useDispatch();
   return (
@@ -52,17 +53,17 @@ const DesktopCart = () => {
                   ? ""
                   : Cart.map((item, index) => {
                       let {
-                        id,
-                        Discount,
-                        Image,
-                        Price,
-                        Quantity,
-                        Rating,
-                        Stock,
-                        Title,
+                        uid,
+                        discount,
+                        images,
+                        price,
+                        quantity,
+                        rating,
+                        stock,
+                        title,
                         isSale,
-                        isSold,
                       } = item;
+
                       return (
                         <div className="DCCL_CartItem" key={index}>
                           <hr className="DCCL_Separator" />
@@ -70,10 +71,10 @@ const DesktopCart = () => {
                             <div className="DCCL_CartItem_Product col-9 d-flex align-items-start gap-2 p-0 text-start mb-3 px-3">
                               <Link
                                 className="DCCL_CartItem_Product_Link d-inline-block"
-                                to={`/product/${id}`}
+                                to={`/product/${uid}`}
                               >
                                 <img
-                                  src={Image.MainImage}
+                                  src={images ? images[0] : ""}
                                   alt="Cart Product"
                                   className="DCCL_CartItem_Product_Image w-100"
                                 />
@@ -81,16 +82,16 @@ const DesktopCart = () => {
                               <div className="DCCL_CartItem_Product_Info d-inline-block">
                                 <Link
                                   className="CartItem_Product_Info_Title"
-                                  to={`/product/${1}`}
+                                  to={`/product/${uid}`}
                                 >
-                                  {Title}
+                                  {title}
                                 </Link>
                                 <div className="CartItem_Product_Rating_Container">
                                   <span className="CartItem_Product_Rating_Txt text-muted">
                                     Rating:
                                   </span>
                                   <span className="CartItem_Product_Rating_Star">
-                                    {Array(Rating)
+                                    {Array(parseInt(rating))
                                       .fill()
                                       .map((_, i) => (
                                         <span
@@ -101,7 +102,7 @@ const DesktopCart = () => {
                                         </span>
                                       ))}
 
-                                    {Array(5 - Rating)
+                                    {Array(5 - parseInt(rating))
                                       .fill()
                                       .map((_, i) => (
                                         <span
@@ -130,28 +131,33 @@ const DesktopCart = () => {
                                   </div>
                                   <div className="CarItem_Product_LeftStock mt-1 mb-0">
                                     <p className="CPLeftStock_Txt mb-0">
-                                      Only {Stock} left in stock - order soon
+                                      Only {stock} left in stock - order soon
                                     </p>
                                   </div>
                                 </div>
                               </div>
                               <div className="DCCL_CartItem_Product_PriceInfo d-inline-block">
                                 <p className="CPPPrice mb-0">
-                                  {PriceFormat(CalcDiscount(Discount, Price))}
+                                  {PriceFormat(CalcDiscount(discount, price))}
                                 </p>
                                 <p className="CPPOldPrice">
-                                  {Discount > 0 ? PriceFormat(Price) : ""}
+                                  {discount > 0 ? PriceFormat(price) : ""}
                                 </p>
                                 <p className="CPPDiscount">
-                                  {Discount ? `-${Discount}%` : ""}
+                                  {discount ? `-${discount}%` : ""}
                                 </p>
                                 <div className="CPPOperations">
-                                  <button className="CPPOperation_WishList_Btn btn p-0 m-0 me-1">
+                                  <button
+                                    className="CPPOperation_WishList_Btn btn p-0 m-0 me-1"
+                                    onClick={() => dispatch(addToWishlist(uid))}
+                                  >
                                     <FavoriteBorderOutlinedIcon className="CPPOperation_WishList_Icon" />
                                   </button>
                                   <button
                                     className="CPPOperation_Delete_Btn btn p-0 m-0 ms-1"
-                                    onClick={() => dispatch(DeleteFromCart(id))}
+                                    onClick={() =>
+                                      dispatch(deleteFromCart(uid))
+                                    }
                                   >
                                     <DeleteOutlinedIcon className="CPPOperation_Delete_Icon" />
                                   </button>
@@ -163,8 +169,8 @@ const DesktopCart = () => {
                                 <span
                                   className="DCCL_CartItem_Dec_Icon_Container cursor-pointer text-center"
                                   onClick={() => {
-                                    dispatch(MinusDecrement(id));
-                                    dispatch(TotalPrice());
+                                    dispatch(decrement(uid));
+                                    dispatch(totalPrice());
                                   }}
                                 >
                                   <RemoveRoundedIcon className="DCCL_CartItem_IncDec_Icon" />
@@ -175,14 +181,14 @@ const DesktopCart = () => {
                                   name="Quantity"
                                   // id="DQuantity"
                                   readOnly
-                                  placeholder={Quantity}
+                                  placeholder={quantity}
                                   className="DCCL_CartItem_IncDec_Input w-100 text-center"
                                 />
                                 <span
                                   className="DCCL_CartItem_Inc_Icon_Container text-center"
                                   onClick={() => {
-                                    dispatch(PlusIncrement(id));
-                                    dispatch(TotalPrice());
+                                    dispatch(increment(uid));
+                                    dispatch(totalPrice());
                                   }}
                                 >
                                   <AddRoundedIcon className="DCCL_CartItem_IncDec_Icon" />
@@ -204,7 +210,7 @@ const DesktopCart = () => {
                   Subtotal ({Cart.length} items)
                 </p>
                 <p className="DCC_Subtotal_Price mb-0">
-                  {PriceFormat(totalPrice)}
+                  {PriceFormat(totalAmount)}
                 </p>
               </div>
               <div className="DCC_ShippingFee_Container mb-3 d-flex justify-content-between align-items-center">
@@ -227,7 +233,7 @@ const DesktopCart = () => {
               <div className="DCC_Total_Container d-flex justify-content-between align-items-center gap-1 mb-3">
                 <p className="DCC_Total_Txt m-0">Total</p>
                 <p className="DCC_Total_Price m-0">
-                  {PriceFormat(totalPrice + shippingFee)}
+                  {PriceFormat(totalAmount + shippingFee)}
                 </p>
               </div>
               <button className="btn DCC_Checkout_Btn BtnStyle1 text-center w-100 d-block p-0 rounded-0">

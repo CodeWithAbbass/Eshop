@@ -15,16 +15,16 @@ const ProductCard = ({ item }) => {
   }, []);
   return (
     <div
-      className={`card
+      className={`card col-6
       ${Grid6x ? "col-lg-2" : ""}
       ${Grid4x ? "col-md-3" : ""}
-      ${Grid3x ? "col-4" : ""}
-      col-4 p-0 border-0 rounded-0 mb-4 bg-transparent`}
+      ${Grid3x ? "col-sm-4" : ""}
+        p-0 border-0 rounded-0 mb-4 bg-transparent`}
     >
       <div className="Product_Link_Wrapper mx-2 h-100">
         <Link
           className="H_Product_Link h-100 d-block bg-white"
-          to={`product/${uid}`}
+          to={`/product/${uid}`}
         >
           <img
             className="card-img-top rounded-0 "

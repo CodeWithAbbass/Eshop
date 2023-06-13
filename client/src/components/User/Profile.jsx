@@ -95,7 +95,7 @@ const Profile = ({}) => {
           <li className="list-group-item">
             <div className="d-flex align-items-center justify-content-between">
               <span>Full Name</span>
-              <span>Abbas Ali</span>
+              <span>{user ? user.name : ""}</span>
             </div>
           </li>
           <li className="list-group-item">
@@ -113,27 +113,27 @@ const Profile = ({}) => {
           <li className="list-group-item">
             <div className="d-flex align-items-center justify-content-between">
               <span>Email</span>
-              <span>abbas.ali@chaoscorporated.com</span>
+              <span>{user ? user.email : ""}</span>
             </div>
           </li>
           <li className="list-group-item">
             <div className="d-flex align-items-center justify-content-between">
               <span>Phone</span>
-              <span>3016083148</span>
+              <span>{user ? user.phone : ""}</span>
             </div>
           </li>
-          <li className="list-group-item">
+          {/* <li className="list-group-item">
             <div className="d-flex align-items-center justify-content-between">
               <span>Gender</span>
               <span>Male</span>
             </div>
-          </li>
-          <li className="list-group-item">
+          </li> */}
+          {/* <li className="list-group-item">
             <div className="d-flex align-items-center justify-content-between">
               <span>Birthday</span>
               <span>1947-02-03</span>
             </div>
-          </li>
+          </li> */}
         </ul>
 
         <div className="MMA_Profile_MainBtn_Container mt-5 w-100 h-100 text-center">
