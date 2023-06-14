@@ -5,7 +5,6 @@ import { useSelector } from "react-redux";
 
 const DesktopUser = () => {
   const location = useLocation();
-  const loading = useSelector((state) => state.User.loading);
 
   useEffect(() => {
     return () => {};

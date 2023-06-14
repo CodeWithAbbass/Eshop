@@ -76,7 +76,7 @@ const DesktopCart = () => {
                                 <img
                                   src={images ? images[0] : ""}
                                   alt="Cart Product"
-                                  className="DCCL_CartItem_Product_Image w-100"
+                                  className="DCCL_CartItem_Product_Image w-100 h-100"
                                 />
                               </Link>
                               <div className="DCCL_CartItem_Product_Info d-inline-block">
@@ -241,7 +241,7 @@ const DesktopCart = () => {
                   className="DCC_Checkout_Link w-100 h-100 d-block"
                   to="/checkout"
                 >
-                  Proceed To Checkout <span>(1)</span>
+                  Proceed To Checkout <span>({Cart.length})</span>
                 </Link>
               </button>
             </div>

@@ -16,35 +16,45 @@ const Profile = ({}) => {
         <div className="MMA_Profile_Container bg-white p-5 mt-2">
           <div className="row m-0 w-100">
             <div className="col-lg-4 col-md-5 p-0">
-              <h3 className="MMA_Profile_Item_Title">Full Name</h3>
+              <h3 className="MMA_Profile_Item_Title d-inline">Full Name</h3>
+              <button
+                className="MMA_Profile_Item_Btn d-inline border-start p-0 ps-1 ms-2 btn border-0 rounded-0"
+                data-bs-toggle="modal"
+                data-bs-target="#UserMadal"
+              >
+                Edit
+              </button>
               <div className="MMA_Profile_Item_Info">
                 {user ? user.name : ""}
               </div>
             </div>
             <div className="col-lg-4 col-md-7 p-0">
               <h3 className="MMA_Profile_Item_Title d-inline">Email Address</h3>
-              <Link className="MMA_Profile_Item_Btn d-inline border-start ps-1 ms-2">
+              <button
+                className="MMA_Profile_Item_Btn d-inline border-start p-0 ps-1 ms-2 btn border-0 rounded-0 fst-italic"
+                disabled={true}
+              >
                 Edit
-              </Link>
-              <div className="MMA_Profile_Item_Info">
+              </button>
+              <div className="MMA_Profile_Item_Info text-muted fst-italic">
                 {user ? user.email : ""}
               </div>
             </div>
             <div className="col-lg-4 col-md-5 p-0 mt-md-4 mt-lg-0">
               <h3 className="MMA_Profile_Item_Title d-inline">Mobile</h3>
-              <Link className="MMA_Profile_Item_Btn d-inline border-start ps-1 ms-2">
+              <button className="MMA_Profile_Item_Btn d-inline border-start p-0 ps-1 ms-2 btn border-0 rounded-0">
                 Add
-              </Link>
-              <div className="MMA_Profile_Item_Info">
+              </button>
+              <div className="MMA_Profile_Item_Info text-muted fst-italic">
                 {user ? user.phone : ""}
               </div>
-              {/* {user.phone.length < 11 ? (
+              {!user.phone ? (
                 <div className="MMA_Profile_Item_Info_Optional">
                   Please Add Your Mobile
                 </div>
               ) : (
                 ""
-              )} */}
+              )}
             </div>
             <div className="col-lg-4 col-md-7 p-0 mt-4">
               <h3 className="MMA_Profile_Item_Title d-inline">Birthday</h3>
@@ -113,13 +123,17 @@ const Profile = ({}) => {
           <li className="list-group-item">
             <div className="d-flex align-items-center justify-content-between">
               <span>Email</span>
-              <span>{user ? user.email : ""}</span>
+              <span className="text-muted fst-italic">
+                {user ? user.email : ""}
+              </span>
             </div>
           </li>
           <li className="list-group-item">
             <div className="d-flex align-items-center justify-content-between">
               <span>Phone</span>
-              <span>{user ? user.phone : ""}</span>
+              <span className="text-muted fst-italic">
+                {user ? user.phone : ""}
+              </span>
             </div>
           </li>
           {/* <li className="list-group-item">

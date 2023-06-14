@@ -8,11 +8,13 @@ const initialState = {
 export const getUserWishlist = createAsyncThunk(
   "getUserWishlist",
   async (data) => {
+    const authtoken = localStorage.getItem("authtoken");
     try {
       const URL = "http://localhost:5000/api/wishlist/get";
       const response = await fetch(URL, {
         method: "GET",
         headers: {
+          authtoken,
           Accept: "application/json",
           "Content-Type": "application/json",
         },
@@ -20,7 +22,6 @@ export const getUserWishlist = createAsyncThunk(
       });
 
       const result = await response.json();
-
       if (result.success) {
         return result.data;
       }
@@ -30,11 +31,13 @@ export const getUserWishlist = createAsyncThunk(
   }
 );
 export const addToWishlist = createAsyncThunk("addToWishlist", async (data) => {
+  const authtoken = localStorage.getItem("authtoken");
   try {
     const URL = `http://localhost:5000/api/wishlist/add/${data}`;
     const response = await fetch(URL, {
       method: "POST",
       headers: {
+        authtoken,
         Accept: "application/json",
         "Content-Type": "application/json",
       },
@@ -54,11 +57,13 @@ export const addToWishlist = createAsyncThunk("addToWishlist", async (data) => {
 export const deleteFromWishlist = createAsyncThunk(
   "deleteFromWishlist",
   async (data) => {
+    const authtoken = localStorage.getItem("authtoken");
     try {
       const URL = `http://localhost:5000/api/wishlist/delete/${data}`;
       const response = await fetch(URL, {
         method: "DELETE",
         headers: {
+          authtoken,
           Accept: "application/json",
           "Content-Type": "application/json",
         },

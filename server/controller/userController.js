@@ -8,7 +8,6 @@ const crypto = require("crypto");
 exports.get = async (req, res) => {
   try {
     let success = false;
-
     success = true;
     res.send({
       success,
@@ -112,10 +111,7 @@ exports.login = async (req, res) => {
       process.env.JWT_SECRET_PRIVATE,
       { expiresIn: "5d", algorithm: "RS256" }
     );
-    res.cookie("authtoken", authtoken, {
-      httpOnly: true, // For Localhost
-      secure: true, //it is applicable when we use https method
-    });
+
     success = true;
     res.send({
       success,
@@ -131,6 +127,7 @@ exports.login = async (req, res) => {
 
 exports.update = async (req, res) => {
   try {
+    let success = false;
     let { name, avatar, role } = req.body;
 
     if (role.toLowerCase() == "admin") {
@@ -139,9 +136,12 @@ exports.update = async (req, res) => {
       role = "user";
     }
     if (!name) {
-      return res.status(400).send("Please Fill The Mandatory Fields");
+      return res.status(400).send({
+        success,
+        message: "Please Fill The Mandatory Fields",
+      });
     }
-    const adminUpdate = await pool.query(
+    const userUpdate = await pool.query(
       `UPDATE users 
       SET name = $2,
       avatar = $3,
@@ -150,7 +150,12 @@ exports.update = async (req, res) => {
       RETURNING *`,
       [req.user.uid, name, avatar, role]
     );
-    res.send(adminUpdate.rows[0]);
+    success = true;
+    res.send({
+      success,
+      data: userUpdate.rows[0],
+      message: `${name}'s Profile Updated Successfully`,
+    });
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Internal Server Error");

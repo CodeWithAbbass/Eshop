@@ -23,6 +23,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getProduct } from "./Store/Slices/productSlice";
 import { getUserWishlist } from "./Store/Slices/wishlistSlice";
 import { totalPrice, getCart } from "./Store/Slices/cartSlice";
+import { getUserOrderAddress, getUserOrders } from "./Store/Slices/orderSlice";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -30,13 +31,17 @@ const App = () => {
   let productLoading = useSelector((state) => state.Products.loading);
   let cartLoading = useSelector((state) => state.Cart.loading);
   let wishlistLoading = useSelector((state) => state.Wishlist.loading);
+  let orderLoading = useSelector((state) => state.Orders.loading);
+
   useEffect(() => {
+    // return () => {}
     dispatch(getProduct());
     dispatch(getUser());
-    dispatch(getUserWishlist());
     dispatch(getCart());
+    dispatch(getUserWishlist());
+    dispatch(getUserOrders());
+    dispatch(getUserOrderAddress());
     dispatch(totalPrice());
-    return () => {};
   }, []);
   return (
     <div className="App">
@@ -74,7 +79,11 @@ const App = () => {
         </Routes>
 
         <Footer />
-        {(userLoading || productLoading || cartLoading || wishlistLoading) && (
+        {(userLoading ||
+          productLoading ||
+          cartLoading ||
+          wishlistLoading ||
+          orderLoading) && (
           <div
             className="d-flex align-items-center justify-content-center position-fixed top-0 start-0 w-100"
             style={{

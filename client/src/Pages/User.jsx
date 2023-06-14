@@ -1,10 +1,39 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import "../Css/User.css";
 import DesktopUser from "../components/User/DesktopUser";
 import MobileUser from "../components/User/MobileUser";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { updateUser } from "../Store/Slices/userSlice";
 
 const User = () => {
-  let user = useSelector((state) => state.User.user);
+  const dispatch = useDispatch();
+  let User = useSelector((state) => state.User.user);
+
+  const [credentials, setCredentials] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    area: "",
+    address: "",
+    role: "",
+  });
+  const UpdateUserOnChange = (e) => {
+    const { name, value } = e.target;
+    setCredentials({ ...credentials, [name]: value });
+  };
+
+  useEffect(() => {
+    setCredentials({
+      name: User.name,
+      email: User.email,
+      phone: User.phone,
+      area: "",
+      address: "",
+      role: "",
+    });
+    return () => {};
+  }, [User]);
   return (
     <div className="User">
       <DesktopUser />
@@ -40,8 +69,10 @@ const User = () => {
                   <input
                     type="text"
                     id="FullName"
+                    name="name"
                     className="form-control rounded-0 shadow-none DCC_Checkout_Input"
-                    defaultValue={user ? user.name : ""}
+                    value={credentials.name || ""}
+                    onChange={UpdateUserOnChange}
                   />
                 </div>
                 <div className="mb-3 DCC_Checkout_Input_Container">
@@ -52,8 +83,11 @@ const User = () => {
                     type="email"
                     className="form-control rounded-0 shadow-none DCC_Checkout_Input"
                     id="Email"
+                    name="name"
                     aria-describedby="emailHelp"
-                    defaultValue={user ? user.email : ""}
+                    readOnly
+                    value={credentials.email || ""}
+                    onChange={UpdateUserOnChange}
                   />
                 </div>
                 <div className="mb-3 DCC_Checkout_Input_Container">
@@ -64,7 +98,10 @@ const User = () => {
                     type="number"
                     className="form-control rounded-0 shadow-none DCC_Checkout_Input"
                     id="Number"
-                    defaultValue={user ? user.phone : ""}
+                    name="phone"
+                    readOnly
+                    value={credentials.phone || ""}
+                    onChange={UpdateUserOnChange}
                     onWheel={function (e) {
                       e.target.blur();
                     }}
@@ -78,6 +115,9 @@ const User = () => {
                     type="text"
                     className="form-control rounded-0 shadow-none DCC_Checkout_Input"
                     id="Area"
+                    name="area"
+                    value={credentials.area || ""}
+                    onChange={UpdateUserOnChange}
                   />
                 </div>
                 <div className="mb-3 DCC_Checkout_Input_Container w-100">
@@ -88,6 +128,9 @@ const User = () => {
                     type="text"
                     className="form-control rounded-0 shadow-none DCC_Checkout_Input"
                     id="Address"
+                    name="address"
+                    value={credentials.address || ""}
+                    onChange={UpdateUserOnChange}
                   />
                 </div>
               </form>
@@ -95,13 +138,21 @@ const User = () => {
             <div className="modal-footer">
               <button
                 type="button"
-                className="btn btn-secondary rounded-0"
+                className="btn rounded-0 p-0 w-25"
                 data-bs-dismiss="modal"
               >
-                Close
+                <Link className="UserForm_Btn w-100 d-block text-center bg-secondary">
+                  Close
+                </Link>
               </button>
-              <button type="button" className="btn btn-primary rounded-0">
-                Save
+              <button
+                type="button"
+                className="btn rounded-0 p-0 w-25"
+                onClick={() => dispatch(updateUser(credentials))}
+              >
+                <Link className="w-100 d-block UserForm_Btn text-center">
+                  Save
+                </Link>
               </button>
             </div>
           </div>

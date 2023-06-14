@@ -81,6 +81,7 @@ exports.addToWishlist = async (req, res) => {
           success = true;
           return res.send({
             success,
+            data: PrevWishItems,
             message: "Product Already Exist In Your Wishlist",
           });
         }

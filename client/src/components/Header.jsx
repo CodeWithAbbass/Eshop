@@ -8,9 +8,12 @@ import GridViewRoundedIcon from "@mui/icons-material/GridViewRounded";
 import SquareRoundedIcon from "@mui/icons-material/SquareRounded";
 import { useDispatch, useSelector } from "react-redux";
 import { changeLayout } from "../Store/Slices/productSlice";
+import { Logout } from "../Store/Slices/userSlice";
 const Header = () => {
   const location = useLocation();
   const Cart = useSelector((state) => state.Cart.items);
+  const User = useSelector((state) => state.User.user);
+
   const dispatch = useDispatch();
   const myScrollFunc = function () {
     const Desktop_MainHeader = document.querySelector(".Desktop_MainHeader");
@@ -115,14 +118,25 @@ const Header = () => {
               </Link>
             </li>
             <li className="d-inline p-0">
-              <Link
-                className={`TopBar_Link ${
-                  location.pathname == "/login" ? "active" : ""
-                }`}
-                to="/login"
-              >
-                LOGIN
-              </Link>
+              {Object.keys(User).length !== 0 ? (
+                <Link
+                  className={`TopBar_Link ${
+                    location.pathname == "/login" ? "active" : ""
+                  }`}
+                  onClick={() => dispatch(Logout())}
+                >
+                  LOGOUT
+                </Link>
+              ) : (
+                <Link
+                  className={`TopBar_Link ${
+                    location.pathname == "/login" ? "active" : ""
+                  }`}
+                  to="/login"
+                >
+                  LOGIN
+                </Link>
+              )}
             </li>
           </ul>
         </div>
@@ -259,14 +273,25 @@ const Header = () => {
                     </Link>
                   </li>
                   <li>
-                    <Link
-                      to="login"
-                      className={`dropdown-item d-block TopBar_Link ${
-                        location.pathname == "/login" ? "active" : ""
-                      }`}
-                    >
-                      Login
-                    </Link>
+                    {Object.keys(User).length !== 0 ? (
+                      <Link
+                        className={`dropdown-item d-block TopBar_Link ${
+                          location.pathname == "/login" ? "active" : ""
+                        }`}
+                        onClick={() => dispatch(Logout())}
+                      >
+                        Logout
+                      </Link>
+                    ) : (
+                      <Link
+                        to="login"
+                        className={`dropdown-item d-block TopBar_Link ${
+                          location.pathname == "/login" ? "active" : ""
+                        }`}
+                      >
+                        Login
+                      </Link>
+                    )}
                   </li>
                 </ul>
               </div>

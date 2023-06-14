@@ -18,7 +18,7 @@ const FlashSale = () => {
             {Products.length == 0
               ? ""
               : Products.map((item, index) => {
-                  if (item.isSale) {
+                  if (item.issale) {
                     return <ProductCard item={item} key={index} />;
                   }
                 })}

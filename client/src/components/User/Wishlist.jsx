@@ -10,16 +10,16 @@ import CalcDiscount from "../../helpers/CalcDiscount";
 import { useEffect, useState } from "react";
 import {
   deleteFromWishlist,
-  getWishlist,
+  getUserWishlist,
 } from "../../Store/Slices/wishlistSlice";
+import { getUser } from "../../Store/Slices/userSlice";
 
 const Wishlist = () => {
   let dispatch = useDispatch();
   const Wishitems = useSelector((state) => state.Wishlist.wishitems);
   const Products = useSelector((state) => state.Products.items);
-  // const dispatch = useDispatch();
-  let item = [];
 
+  let item = [];
   const filteration = () => {
     for (const iterator of Wishitems) {
       Products.filter((product) => {
@@ -32,6 +32,7 @@ const Wishlist = () => {
 
   filteration();
   useEffect(() => {
+    dispatch(getUserWishlist());
     return () => {};
   }, []);
 

@@ -24,6 +24,7 @@ exports.getUserOrders = async (req, res) => {
       [req.user.uid]
     );
     if (userOrder.rowCount == 0 || userOrder.rows.length == 0) {
+      success = true;
       return res.send({ success, data: [], message: "Order Not Found" });
     }
     for (const iterator of userOrder.rows) {
@@ -100,7 +101,7 @@ exports.placeOrder = async (req, res) => {
 };
 exports.updateStatus = async (req, res) => {
   // Order Status Should Be:
-  // pending ||  processing || shipping || delivered || cancelled
+  // pending ||  processing || shipping || delivered || returned || cancelled
   try {
     let { status } = req.body;
     const updateStatus = await pool.query(

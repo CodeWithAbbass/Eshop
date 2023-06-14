@@ -4,17 +4,13 @@ const { serverResponse, STATUS_VARIABLES } = require("../utils/status_code");
 
 exports.regenrateAuthToken = async (req, res, next) => {
   try {
-    const webToken = req.cookies.authtoken; // From Web App
-    const mobileToken = req.headers.authtoken; //  From Mobile App
-    // console.log("webToken ===============", webToken);
-    // console.log("mobileToken ===============", mobileToken);
-    if (!webToken && !mobileToken) {
+    const token = req.headers.authtoken;
+    // console.log("token ===============", token);
+
+    if (!token) {
       return serverResponse(res, STATUS_VARIABLES.INVALID_TOKEN);
     }
-    const data = jwt.verify(
-      webToken ? webToken : mobileToken,
-      process.env.JWT_SECRET_PRIVATE
-    );
+    const data = jwt.verify(token, process.env.JWT_SECRET_PRIVATE);
 
     const user = await pool.query(
       `SELECT * FROM users WHERE uid = $1 AND role = $2`,
@@ -29,12 +25,6 @@ exports.regenrateAuthToken = async (req, res, next) => {
       process.env.JWT_SECRET_PRIVATE,
       { expiresIn: "7d", algorithm: "RS256" }
     );
-
-    // For Web Version
-    res.cookie("authtoken", authtoken, {
-      httpOnly: true, // For Localhost
-      secure: true, //it is applicable when we use https method
-    });
 
     req.token = authtoken;
     req.user = user.rows[0];

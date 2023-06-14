@@ -6,7 +6,33 @@ const initialState = {
   error: null,
 };
 
-// create action for user Signup
+export const getUser = createAsyncThunk("getUser", async (data) => {
+  const authtoken = localStorage.getItem("authtoken");
+  if (authtoken == null || authtoken.length < 1) {
+    return {};
+  }
+  try {
+    const URL = "http://localhost:5000/api/auth";
+    const response = await fetch(URL, {
+      method: "GET",
+      headers: {
+        authtoken: `${authtoken}`,
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      localStorage.setItem("authtoken", result.authtoken);
+      return result.user;
+    }
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
 export const Signup = createAsyncThunk("Signup", async (data) => {
   try {
     const URL = "http://localhost:5000/api/auth/signup";
@@ -43,46 +69,71 @@ export const Login = createAsyncThunk("Login", async (data) => {
     });
 
     const result = await response.json();
-
     if (result.success) {
+      localStorage.clear();
+      localStorage.setItem("authtoken", result.authtoken);
       alert(result.message);
       return result.user;
     }
     alert(result.message);
+    return {};
   } catch (error) {
     alert(result.message);
     throw new Error(error);
   }
 });
 
-export const getUser = createAsyncThunk("getUser", async (data) => {
+export const Logout = createAsyncThunk("Logout", async (data) => {
+  localStorage.setItem("authtoken", "");
+  alert("Logout Successfully");
+  return {};
+});
+
+export const updateUser = createAsyncThunk("updateUser", async (data) => {
+  const authtoken = localStorage.getItem("authtoken");
   try {
-    const URL = "http://localhost:5000/api/auth";
+    const URL = "http://localhost:5000/api/auth/update";
     const response = await fetch(URL, {
-      method: "GET",
+      method: "POST",
       headers: {
-        Accept: "application/json",
+        authtoken,
         "Content-Type": "application/json",
       },
       credentials: "include",
+      body: JSON.stringify(data),
     });
 
     const result = await response.json();
     if (result.success) {
-      return result.user;
+      alert(result.message);
+      return result.data;
     }
-    // console.log("User Not Found", result);
+    alert(result.message);
   } catch (error) {
+    alert(result.message);
     throw new Error(error);
   }
 });
-
 const userSlice = createSlice({
   name: "User",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
+      .addCase(getUser.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getUser.fulfilled, (state, action) => {
+        // console.log(action, "from fulfiled");
+        state.loading = false;
+        state.user = { ...state.user, ...action.payload };
+        state.error = null;
+      })
+      .addCase(getUser.rejected, (state, action) => {
+        // console.log(action, "from rejections");
+        state.loading = false;
+        state.error = action.error.message;
+      })
       .addCase(Signup.pending, (state) => {
         state.loading = true;
       })
@@ -113,16 +164,32 @@ const userSlice = createSlice({
         state.loading = false;
         state.error = action.error.message;
       })
-      .addCase(getUser.pending, (state) => {
+      .addCase(Logout.pending, (state) => {
         state.loading = true;
       })
-      .addCase(getUser.fulfilled, (state, action) => {
+      .addCase(Logout.fulfilled, (state, action) => {
         // console.log(action, "from fulfiled");
+
         state.loading = false;
-        state.user = { ...state.user, ...action.payload };
+        state.user = {};
         state.error = null;
       })
-      .addCase(getUser.rejected, (state, action) => {
+      .addCase(Logout.rejected, (state, action) => {
+        // console.log(action, "from rejections");
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(updateUser.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(updateUser.fulfilled, (state, action) => {
+        // console.log(action, "from fulfiled");
+
+        state.loading = false;
+        state.user = action.payload;
+        state.error = null;
+      })
+      .addCase(updateUser.rejected, (state, action) => {
         // console.log(action, "from rejections");
         state.loading = false;
         state.error = action.error.message;

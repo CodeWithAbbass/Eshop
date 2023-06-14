@@ -146,3 +146,30 @@
   -moz-appearance: textfield;
   appearance: none;
 }
+
+/* 
+***************************************************
+              Address Book Modal Css
+*************************************************** */
+
+.AddressBookModal_Header.modal-header {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+}
+.AddressBook_Title {
+  font-size: 12px;
+  font-weight: 500;
+}
+.AddNewAddress_Btn_Input_Btn {
+  width: 80px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  background-color: #f57224;
+  border-color: #f57224;
+  color: #f4f4f4;
+  transition: 0.4s ease-in-out;
+}
+
+.AddNewAddress_Btn_Input_Btn:hover {
+  border-color: #f57224;
+}
