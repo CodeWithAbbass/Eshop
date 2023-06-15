@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 const initialState = {
   orders: [],
   addressbook: [],
+  deliveryaddress: {},
   loading: false,
   error: "",
 };
@@ -68,20 +69,20 @@ export const getUserOrderAddress = createAsyncThunk(
     return JSON.parse(addressbook);
   }
 );
-export const addNewAddress = createAsyncThunk("addNewAddress", (location) => {
-  const oldAddressBook = JSON.parse(localStorage.getItem("addressbook"));
-  if (oldAddressBook == null || !oldAddressBook) {
-    localStorage.setItem(
-      "addressbook",
-      JSON.stringify([{ default: false, location }])
-    );
-    return [{ default: false, location }];
-  }
-
-  const NewAddressBook = [...oldAddressBook, { default: false, location }];
-  localStorage.setItem("addressbook", JSON.stringify(NewAddressBook));
-  return NewAddressBook;
+export const getAddress = createAsyncThunk("getAddress", () => {});
+export const addNewAddress = createAsyncThunk("addNewAddress", (newAddress) => {
+  console.log(newAddress);
 });
+export const editAddress = createAsyncThunk("editAddress", (aid) => {
+  console.log(aid);
+});
+export const defaultAddress = createAsyncThunk("defaultAddress", (aid) => {
+  console.log(aid);
+});
+export const deleteAddress = createAsyncThunk("deleteAddress", (aid) => {
+  console.log(aid);
+});
+
 const orderSlice = createSlice({
   name: "Orders",
   initialState,
@@ -118,6 +119,21 @@ const orderSlice = createSlice({
         state.loading = false;
         state.error = action.error.message;
       })
+      .addCase(getAddress.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getAddress.fulfilled, (state, action) => {
+        // console.log(action, "from fulfiled");
+
+        state.loading = false;
+        state.deliveryaddress = action.payload;
+        state.error = null;
+      })
+      .addCase(getAddress.rejected, (state, action) => {
+        // console.log(action, "from rejections");
+        state.loading = false;
+        state.error = action.error.message;
+      })
       .addCase(addNewAddress.pending, (state) => {
         state.loading = true;
       })
@@ -129,6 +145,51 @@ const orderSlice = createSlice({
         state.error = null;
       })
       .addCase(addNewAddress.rejected, (state, action) => {
+        // console.log(action, "from rejections");
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(editAddress.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(editAddress.fulfilled, (state, action) => {
+        // console.log(action, "from fulfiled");
+
+        state.loading = false;
+        state.addressbook = action.payload;
+        state.error = null;
+      })
+      .addCase(editAddress.rejected, (state, action) => {
+        // console.log(action, "from rejections");
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(defaultAddress.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(defaultAddress.fulfilled, (state, action) => {
+        // console.log(action, "from fulfiled");
+
+        state.loading = false;
+        state.addressbook = action.payload;
+        state.error = null;
+      })
+      .addCase(defaultAddress.rejected, (state, action) => {
+        // console.log(action, "from rejections");
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(deleteAddress.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(deleteAddress.fulfilled, (state, action) => {
+        // console.log(action, "from fulfiled");
+
+        state.loading = false;
+        state.addressbook = action.payload;
+        state.error = null;
+      })
+      .addCase(deleteAddress.rejected, (state, action) => {
         // console.log(action, "from rejections");
         state.loading = false;
         state.error = action.error.message;

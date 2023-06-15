@@ -8,6 +8,7 @@ const user = require("./routes/userRoutes");
 const product = require("./routes/productsRoutes");
 const wishlist = require("./routes/wishlistRoutes");
 const order = require("./routes/orderRoutes");
+const address = require("./routes/addressRoute");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 
@@ -37,6 +38,7 @@ app.use("/api/auth", user);
 app.use("/api/product", product);
 app.use("/api/wishlist", wishlist);
 app.use("/api/order", order);
+app.use("/api/address", address);
 app.get("/", (req, res) => {
   res.send("Ping Successfully :)");
 });

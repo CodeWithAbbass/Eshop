@@ -3,14 +3,22 @@ const crypto = require("crypto");
 
 exports.getAllOrders = async (req, res) => {
   try {
+    let success = false;
     const allOrders = await pool.query("SELECT * FROM orders");
     if (allOrders.rows == 0) {
-      return res.status(404).send("No New Orders Yet!");
+      return res
+        .status(400)
+        .send({ success, data: [], message: "No New Orders Yet!" });
     }
     for (const iterator of allOrders.rows) {
       iterator.products = JSON.parse(iterator.products);
     }
-    res.status(200).send(allOrders.rows);
+    success = true;
+    res.send({
+      success,
+      data: allOrders.rows,
+      message: "All Orders Found Successfully",
+    });
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Internal Server Error");
@@ -30,10 +38,11 @@ exports.getUserOrders = async (req, res) => {
     for (const iterator of userOrder.rows) {
       iterator.products = JSON.parse(iterator.products);
     }
+    success = true;
     res.send({
       success,
       data: userOrder.rows,
-      message: "Order Found Successfully",
+      message: "Orders Found Successfully",
     });
   } catch (error) {
     console.error(error.message);
@@ -52,7 +61,9 @@ exports.placeOrder = async (req, res) => {
       userid = req.user.uid,
       date,
       products,
-      status = "pending",
+      status = req.body.paymentmethod.toLowerCase() == "card"
+        ? "processing"
+        : "pending",
       paymentmethod,
       shipaddress,
       billaddress,
@@ -103,16 +114,22 @@ exports.updateStatus = async (req, res) => {
   // Order Status Should Be:
   // pending ||  processing || shipping || delivered || returned || cancelled
   try {
+    let success = false;
     let { status } = req.body;
     const updateStatus = await pool.query(
       `UPDATE orders SET status = $2 WHERE orderid = $1 RETURNING *`,
       [req.params.id, status.toLowerCase()]
     );
     if (updateStatus.rowCount == 0) {
-      return res.status(400).send("Order Not Found");
+      return res.send({ success, data: [], message: "Order Not Found" });
     }
     updateStatus.rows[0].products = JSON.parse(updateStatus.rows[0].products);
-    res.send(updateStatus.rows[0]);
+    success = true;
+    res.send({
+      success,
+      data: updateStatus.rows,
+      message: "Order Status Updated Successfully",
+    });
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Internal Server Error");
@@ -120,21 +137,29 @@ exports.updateStatus = async (req, res) => {
 };
 exports.deleteOrder = async (req, res) => {
   try {
+    let success = false;
     const orderExist = await pool.query(
       `SELECT * FROM orders WHERE orderid = $1`,
       [req.params.id]
     );
     if (orderExist.rowCount == 0) {
-      return res.status(400).send("Order Not Found");
+      return res.send({ success, data: [], message: "Order Not Found" });
     }
     const deleteOrder = await pool.query(
       `DELETE FROM orders WHERE orderid = $1`,
       [req.params.id]
     );
     if (deleteOrder.rowCount == 0) {
-      return res.status(500).send("Order Deletion Process Failed");
+      return res
+        .status(500)
+        .send({ success, data: [], message: "Order Deletion Process Failed" });
     }
-    res.send("Order Deleted Successfully");
+    success = true;
+    res.send({
+      success,
+      data: deleteOrder.rows,
+      message: "Order Deleted Successfully",
+    });
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Internal Server Error");
