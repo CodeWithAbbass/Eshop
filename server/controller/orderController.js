@@ -57,6 +57,7 @@ exports.placeOrder = async (req, res) => {
       Date.now().toString(36) +
       crypto.randomBytes(5).toString("hex");
     let {
+      deliverto,
       orderid = uid,
       userid = req.user.uid,
       date,
@@ -71,11 +72,22 @@ exports.placeOrder = async (req, res) => {
     if (!billaddress) {
       billaddress = shipaddress;
     }
+    if (
+      !deliverto ||
+      !products ||
+      !paymentmethod ||
+      !shipaddress ||
+      !billaddress
+    ) {
+      return res
+        .status(400)
+        .send({ success, message: "Please Fill the Mandatory Fields." });
+    }
     const StrProducts = JSON.stringify(products);
     date = Date.now().toString();
 
     const placeOrder = await pool.query(
-      `INSERT INTO orders (orderid, userid, date, status, shipaddress, billaddress, paymentmethod, products) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`,
+      `INSERT INTO orders (orderid, userid, date, status, shipaddress, billaddress, paymentmethod, deliverto, products) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`,
       [
         orderid,
         userid,
@@ -84,6 +96,7 @@ exports.placeOrder = async (req, res) => {
         shipaddress,
         billaddress,
         paymentmethod,
+        deliverto,
         StrProducts,
       ]
     );
@@ -101,6 +114,7 @@ exports.placeOrder = async (req, res) => {
       shipaddress,
       billaddress,
       paymentmethod,
+      deliverto,
       products: JSON.parse(placeOrder.rows[0].products),
     };
     success = true;

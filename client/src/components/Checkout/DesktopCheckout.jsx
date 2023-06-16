@@ -1,66 +1,128 @@
-import { Link } from "react-router-dom";
 import "../../Css/Checkout.css";
+import { Link } from "react-router-dom";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import PriceFormat from "../../helpers/PriceFormat";
 import CalcDiscount from "../../helpers/CalcDiscount";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { placeOrder } from "../../Store/Slices/orderSlice";
 const DesktopCheckout = () => {
+  const dispatch = useDispatch();
+
   const Cart = useSelector((state) => state.Cart.items);
-  const User = useSelector((state) => state.User.user);
+  const ShippingFee = useSelector((state) => state.Cart.shippingFee);
+  const PaymentMethod = useSelector((state) => state.Orders.paymentmethod);
+  const AddressBook = useSelector((state) => state.Orders.addressbook);
+  const DefaultAddress = useSelector((state) =>
+    state.Orders.addressbook.filter((item) => item.defaultaddress == true)
+  );
   const totalAmount = useSelector((state) => state.Cart.totalAmount);
-  const DeliveryAddress = useSelector((state) => state.Orders.deliveryaddress);
   let totalAfterDiscount = 0;
 
+  const OrderConfirmation = () => {
+    let products = [];
+    Cart.forEach((element, index) => {
+      const { uid, price, discount, quantity, images, title } = element;
+      const newProduct = {
+        uid,
+        price,
+        discount,
+        quantity,
+        images,
+        title,
+        ShippingFee,
+      };
+      products.push(newProduct);
+    });
+    let confirmOrder = {
+      deliverto: DefaultAddress[0] ? DefaultAddress[0].name : "",
+      products,
+      paymentmethod: PaymentMethod,
+      shipaddress: DefaultAddress[0] ? DefaultAddress[0].address : "",
+      billaddress: DefaultAddress[0] ? DefaultAddress[0].address : "",
+    };
+    dispatch(placeOrder(confirmOrder));
+  };
+  useEffect(() => {
+    return () => {};
+  }, [AddressBook, DefaultAddress]);
   return (
     <div className="DesktopCheckout py-5">
       <div className="Desktop_Checkout_Container container-xl">
         <div className="DC_Content_Container row w-100 m-0 align-items-start flex-wrap-reverse">
           <div className="DCC_Left_Container col-lg-8 px-1 mt-sm-2 mt-lg-0">
             <div className="DCC_Left_Address_Container w-100 m-0 mb-2 px-3 bg-white">
-              {/* <button
-                type="button"
-                className="btn AddNewAddress_Btn w-100 h-100 rounded-0 p-0 d-flex align-items-center justify-content-center"
-                data-bs-toggle="modal"
-                data-bs-target="#AddressBook"
-              >
-                <AddRoundedIcon className="AddNewAddress_Icon h-100" />
-                <span className="AddNewAddress_Txt">
-                  Add New Delivery Address
-                </span>
-              </button> */}
-              <div className="DCC_Left_Address_Wrapper py-3">
-                <p className="DCC_Left_Address_DeliverTo mb-2">
-                  <span className="DCC_Left_Address_Heading">Deliver To:</span>
-                  <span className="DCC_Left_Address_Txt ms-1">{User.name}</span>
-                </p>
-                <p className="DCC_Left_Address_DeliverTo mb-2">
-                  <span className="DCC_Left_Address_Heading">{User.phone}</span>
-                  <span className="DCC_Left_Address_Txt ms-1 border-start ps-2">
-                    {DeliveryAddress.location}
+              {!AddressBook[0] && (
+                <button
+                  type="button"
+                  className="btn AddNewAddress_Btn w-100 h-100 rounded-0 p-0 d-flex align-items-center justify-content-center"
+                  data-bs-toggle="modal"
+                  data-bs-target="#AddressBook"
+                >
+                  <AddRoundedIcon className="AddNewAddress_Icon h-100" />
+                  <span className="AddNewAddress_Txt">
+                    Add New Delivery Address
                   </span>
-                  {/* <span className="DCC_Left_Address_Txt">Change</span> */}
-                  <button
-                    type="button"
-                    className="btn DCC_Left_Address_Change bg-transparent rounded-0 p-0 d-inline ms-2"
-                    data-bs-toggle="modal"
-                    data-bs-target="#AddressBook"
-                  >
-                    Change
-                  </button>
-                </p>
-                <p className="DCC_Left_Address_DeliverTo mb-2">
-                  <span className="DCC_Left_Address_Heading">Payment:</span>
-                  <span className="DCC_Left_Address_Txt ms-1">
-                    Cash On Delivery
+                </button>
+              )}
+              {!DefaultAddress[0] && AddressBook[0] && (
+                <button
+                  type="button"
+                  className="btn AddNewAddress_Btn w-100 h-100 rounded-0 p-0 d-flex align-items-center justify-content-center"
+                  data-bs-toggle="modal"
+                  data-bs-target="#AddressBook"
+                >
+                  <AddRoundedIcon className="AddNewAddress_Icon h-100" />
+                  <span className="AddNewAddress_Txt">
+                    Select Default Address
                   </span>
-                </p>
-                <p className="DCC_Left_Address_DeliverTo mb-0">
-                  <span className="DCC_Left_Address_Heading">Email To:</span>
-                  <span className="DCC_Left_Address_Txt ms-1">
-                    abbas.ali@chaoscorporated.com
-                  </span>
-                </p>
-              </div>
+                </button>
+              )}
+              {AddressBook[0] && DefaultAddress[0] && (
+                <div className="DCC_Left_Address_Wrapper py-3">
+                  <p className="DCC_Left_Address_DeliverTo mb-2">
+                    <span className="DCC_Left_Address_Heading">
+                      Deliver To:
+                    </span>
+                    <span className="DCC_Left_Address_Txt ms-1">
+                      {DefaultAddress[0] ? DefaultAddress[0].name : ""}
+                    </span>
+                  </p>
+                  <p className="DCC_Left_Address_DeliverTo mb-2">
+                    <span className="DCC_Left_Address_Heading">
+                      {DefaultAddress[0] ? DefaultAddress[0].phone : ""}
+                    </span>
+                    <span className="DCC_Left_Address_Txt ms-1 border-start ps-2">
+                      {DefaultAddress[0] ? DefaultAddress[0].address : ""}
+                    </span>
+
+                    <button
+                      type="button"
+                      className="btn DCC_Left_Address_Change bg-transparent rounded-0 p-0 d-inline ms-2"
+                      data-bs-toggle="modal"
+                      data-bs-target="#AddressBook"
+                    >
+                      Change
+                    </button>
+                  </p>
+                  <p className="DCC_Left_Address_DeliverTo mb-2">
+                    <span className="DCC_Left_Address_Heading">Payment:</span>
+                    <span className="DCC_Left_Address_Txt ms-1">
+                      {PaymentMethod == "card"
+                        ? "Credit Card"
+                        : "Cash On Delivery"}
+                    </span>
+                    <button
+                      type="button"
+                      className="btn DCC_Left_Address_Change bg-transparent rounded-0 p-0 d-inline ms-2"
+                      data-bs-toggle="modal"
+                      data-bs-target="#DeliveryMethodModal"
+                    >
+                      Change
+                    </button>
+                  </p>
+                </div>
+              )}
             </div>
             <div className="DCC_Left_Checkout_Products_Wrapper w-100 m-0 p-3 bg-white">
               {Cart &&
@@ -199,7 +261,18 @@ const DesktopCheckout = () => {
                   {PriceFormat(1 + totalAmount)}
                 </span>
               </div>
-              <button className="DCC_Order_Summery_OrderBtn w-100 text-center mt-2">
+
+              <button
+                className={`DCC_Order_Summery_OrderBtn w-100 text-center mt-2 ${
+                  AddressBook[0] && DefaultAddress[0]
+                    ? ""
+                    : "bg-secondary border-secondary"
+                }`}
+                disabled={AddressBook[0] && DefaultAddress[0] ? false : true}
+                onClick={() => {
+                  OrderConfirmation();
+                }}
+              >
                 Place Order
               </button>
             </div>

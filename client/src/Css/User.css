@@ -377,6 +377,9 @@
 /* ************************************************* */
 /*                     Orders                        */
 /* ************************************************* */
+.UOC_Orders_Item_Pic_Link {
+  height: 80px;
+}
 .User_Orders_Nav_Container {
   height: 28px;
   border-bottom: 2px solid #979797;

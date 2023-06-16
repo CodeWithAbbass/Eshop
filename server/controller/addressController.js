@@ -4,7 +4,10 @@ const crypto = require("crypto");
 exports.getAllAddresses = async (req, res) => {
   try {
     let success = false;
-    const allAddresses = await pool.query("SELECT * FROM address");
+    const allAddresses = await pool.query(
+      "SELECT * FROM address WHERE uid = $1",
+      [req.user.uid]
+    );
     if (allAddresses.rows == 0) {
       return res
         .status(400)
@@ -26,17 +29,16 @@ exports.addAddress = async (req, res) => {
     let success = false;
 
     let { name, phone, address } = req.body;
-    if ((!name, !phone, !address)) {
+    if (!name || !phone || !address) {
       return res
         .status(400)
-        .send({ success, message: "Please Fill Mandatory Fields." });
+        .send({ success, data: [], message: "Please Fill Mandatory Fields." });
     }
     const UserAddressBook = await pool.query(
       `SELECT * FROM address WHERE uid = $1`,
       [req.user.uid]
     );
     if (UserAddressBook.rowCount >= 4) {
-      success = true;
       return res.send({
         success,
         data: UserAddressBook.rows,
@@ -57,11 +59,14 @@ exports.addAddress = async (req, res) => {
         .status(500)
         .send({ success, message: "Address Was Not Added" });
     }
-
+    const allAddresses = await pool.query(
+      `SELECT * FROM address WHERE uid = $1`,
+      [req.user.uid]
+    );
     success = true;
     res.send({
       success,
-      data: newAddress.rows,
+      data: allAddresses.rows,
       message: "Address Added Successfully",
     });
   } catch (error) {
@@ -100,10 +105,14 @@ exports.defaultAddress = async (req, res) => {
         .status(400)
         .send({ success, data: [], message: "Address Not Found" });
     }
+    const allAddresses = await pool.query(
+      `SELECT * FROM address WHERE uid = $1`,
+      [req.user.uid]
+    );
     success = true;
     res.send({
       success,
-      data: updatedAddressBook.rows,
+      data: allAddresses.rows,
       message: "Default Address Changed Successfully",
     });
   } catch (error) {
@@ -115,10 +124,10 @@ exports.updateAddress = async (req, res) => {
   try {
     let success = false;
     let { name, phone, address } = req.body;
-    if ((!name, !phone, !address)) {
+    if (!name || !phone || !address) {
       return res
         .status(400)
-        .send({ success, message: "Please Fill Mandatory Fields." });
+        .send({ success, data: [], message: "Please Fill Mandatory Fields." });
     }
     const addressExist = await pool.query(
       `SELECT * FROM address WHERE aid = $1`,
@@ -130,7 +139,7 @@ exports.updateAddress = async (req, res) => {
         .send({ success, data: [], message: "Address Not Found" });
     }
     const newAddress = await pool.query(
-      `UPDATE address SET name = $3, phone = $4, address = $5 WHERE aid = $1 AND uid = $2 RETURNING *`,
+      `UPDATE address SET name = $3, phone = $4, address = $5 WHERE aid = $1 AND uid = $2`,
       [req.params.id, req.user.uid, name, phone, address]
     );
     if (newAddress.rowCount == 0) {
@@ -139,11 +148,14 @@ exports.updateAddress = async (req, res) => {
         .status(500)
         .send({ success, message: "Address Was Not Update" });
     }
-
+    const allAddresses = await pool.query(
+      `SELECT * FROM address WHERE uid = $1`,
+      [req.user.uid]
+    );
     success = true;
     res.send({
       success,
-      data: newAddress.rows,
+      data: allAddresses.rows,
       message: "Address Updated Successfully",
     });
   } catch (error) {
@@ -174,10 +186,14 @@ exports.deleteAddress = async (req, res) => {
         message: "Address Deletion Process Failed",
       });
     }
+    const allAddresses = await pool.query(
+      `SELECT * FROM address WHERE uid = $1`,
+      [req.user.uid]
+    );
     success = true;
     res.send({
       success,
-      data: deleteAddress.rows,
+      data: allAddresses.rows,
       message: "Address Deleted Successfully",
     });
   } catch (error) {

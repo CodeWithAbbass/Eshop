@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 const initialState = {
   orders: [],
   addressbook: [],
-  deliveryaddress: {},
+  paymentmethod: "cod",
   loading: false,
   error: "",
 };
@@ -58,7 +58,6 @@ export const placeOrder = createAsyncThunk("placeOrder", async (data) => {
     throw new Error(error);
   }
 });
-
 export const getUserOrderAddress = createAsyncThunk(
   "getUserOrderAddress",
   (data) => {
@@ -69,24 +68,167 @@ export const getUserOrderAddress = createAsyncThunk(
     return JSON.parse(addressbook);
   }
 );
-export const getAddress = createAsyncThunk("getAddress", () => {});
-export const addNewAddress = createAsyncThunk("addNewAddress", (newAddress) => {
-  console.log(newAddress);
+export const getAddress = createAsyncThunk("getAddress", async () => {
+  const authtoken = localStorage.getItem("authtoken");
+  if (!authtoken) {
+    return [];
+  }
+  try {
+    const URL = `http://localhost:5000/api/address`;
+    const response = await fetch(URL, {
+      method: "GET",
+      headers: {
+        authtoken,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      return result.data;
+    }
+    return [];
+  } catch (error) {
+    throw new Error(error);
+  }
 });
-export const editAddress = createAsyncThunk("editAddress", (aid) => {
-  console.log(aid);
-});
-export const defaultAddress = createAsyncThunk("defaultAddress", (aid) => {
-  console.log(aid);
-});
-export const deleteAddress = createAsyncThunk("deleteAddress", (aid) => {
-  console.log(aid);
+export const addNewAddress = createAsyncThunk(
+  "addNewAddress",
+  async (newAddress) => {
+    const authtoken = localStorage.getItem("authtoken");
+    if (!authtoken) {
+      alert("Please Login Before Adding Address");
+      return [];
+    }
+    try {
+      const URL = `http://localhost:5000/api/address/add`;
+      const response = await fetch(URL, {
+        method: "POST",
+        headers: {
+          authtoken,
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(newAddress),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        alert(result.message);
+        return result.data;
+      }
+      alert(result.message);
+      return result.data;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+);
+export const editAddress = createAsyncThunk(
+  "editAddress",
+  async (updateData) => {
+    const authtoken = localStorage.getItem("authtoken");
+    if (!authtoken) {
+      alert("Please Login Before Adding Address");
+      return [];
+    }
+    try {
+      const URL = `http://localhost:5000/api/address/update/${updateData.aid}`;
+      const response = await fetch(URL, {
+        method: "POST",
+        headers: {
+          authtoken,
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(updateData),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        alert(result.message);
+        return result.data;
+      }
+      alert(result.message);
+      return result.data;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+);
+export const defaultAddress = createAsyncThunk(
+  "defaultAddress",
+  async (aid) => {
+    const authtoken = localStorage.getItem("authtoken");
+    if (!authtoken) {
+      alert("Please Login Before Setting Default Address");
+      return [];
+    }
+    try {
+      const URL = `http://localhost:5000/api/address/da/${aid}`;
+      const response = await fetch(URL, {
+        method: "POST",
+        headers: {
+          authtoken,
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        return result.data;
+      }
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+);
+export const deleteAddress = createAsyncThunk("deleteAddress", async (aid) => {
+  const authtoken = localStorage.getItem("authtoken");
+  if (!authtoken) {
+    alert("Please Login Before Deleting Address");
+    return [];
+  }
+  try {
+    const URL = `http://localhost:5000/api/address/delete/${aid}`;
+    const response = await fetch(URL, {
+      method: "DELETE",
+      headers: {
+        authtoken,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      return result.data;
+    }
+  } catch (error) {
+    throw new Error(error);
+  }
 });
 
 const orderSlice = createSlice({
   name: "Orders",
   initialState,
-  reducers: {},
+  reducers: {
+    changeDeliveryMethod(state, action) {
+      return { ...state, paymentmethod: action.payload };
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getUserOrders.pending, (state) => {
@@ -101,6 +243,20 @@ const orderSlice = createSlice({
       })
       .addCase(getUserOrders.rejected, (state, action) => {
         // console.log(action, "from rejections");
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(placeOrder.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(placeOrder.fulfilled, (state, action) => {
+        // console.log(action, "from fulfiled");
+
+        state.loading = false;
+        state.orders = action.payload;
+        state.error = null;
+      })
+      .addCase(placeOrder.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       })
@@ -126,7 +282,7 @@ const orderSlice = createSlice({
         // console.log(action, "from fulfiled");
 
         state.loading = false;
-        state.deliveryaddress = action.payload;
+        state.addressbook = action.payload;
         state.error = null;
       })
       .addCase(getAddress.rejected, (state, action) => {
@@ -138,9 +294,10 @@ const orderSlice = createSlice({
         state.loading = true;
       })
       .addCase(addNewAddress.fulfilled, (state, action) => {
-        // console.log(action, "from fulfiled");
-
         state.loading = false;
+        if (action.payload.length == 0) {
+          return;
+        }
         state.addressbook = action.payload;
         state.error = null;
       })
@@ -156,6 +313,9 @@ const orderSlice = createSlice({
         // console.log(action, "from fulfiled");
 
         state.loading = false;
+        if (action.payload.length == 0) {
+          return;
+        }
         state.addressbook = action.payload;
         state.error = null;
       })
@@ -183,18 +343,15 @@ const orderSlice = createSlice({
         state.loading = true;
       })
       .addCase(deleteAddress.fulfilled, (state, action) => {
-        // console.log(action, "from fulfiled");
-
         state.loading = false;
         state.addressbook = action.payload;
         state.error = null;
       })
       .addCase(deleteAddress.rejected, (state, action) => {
-        // console.log(action, "from rejections");
         state.loading = false;
         state.error = action.error.message;
       });
   },
 });
-export const { actions } = orderSlice;
+export const { changeDeliveryMethod } = orderSlice.actions;
 export default orderSlice.reducer;
