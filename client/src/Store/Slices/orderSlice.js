@@ -186,6 +186,7 @@ export const defaultAddress = createAsyncThunk(
       const result = await response.json();
 
       if (result.success) {
+        alert(result.message);
         return result.data;
       }
     } catch (error) {

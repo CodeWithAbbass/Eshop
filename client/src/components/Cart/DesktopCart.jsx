@@ -3,6 +3,7 @@ import "../../Css/Cart.css";
 import { Link } from "react-router-dom";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import RemoveRoundedIcon from "@mui/icons-material/RemoveRounded";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import GradeRoundedIcon from "@mui/icons-material/GradeRounded";
@@ -11,14 +12,19 @@ import {
   increment,
   deleteFromCart,
   totalPrice,
+  clearCart,
 } from "../../Store/Slices/cartSlice";
 import PriceFormat from "../../helpers/PriceFormat";
 import CalcDiscount from "../../helpers/CalcDiscount";
-import { addToWishlist } from "../../Store/Slices/wishlistSlice";
+import {
+  addToWishlist,
+  deleteFromWishlist,
+} from "../../Store/Slices/wishlistSlice";
 const DesktopCart = () => {
   const Cart = useSelector((state) => state.Cart.items);
   const totalAmount = useSelector((state) => state.Cart.totalAmount);
   const shippingFee = useSelector((state) => state.Cart.shippingFee);
+
   const dispatch = useDispatch();
   return (
     <div className="Desktop_Cart py-5">
@@ -38,7 +44,10 @@ const DesktopCart = () => {
                 </span>
               </div>
               <div className="DCCL_Header_Delete_Container col-6 p-0 text-end">
-                <button className="btn DCCL_Header_Delete_Btn p-0">
+                <button
+                  className="btn DCCL_Header_Delete_Btn p-0"
+                  onClick={() => dispatch(clearCart())}
+                >
                   <span className="DCCHR_Delete_Icon_Container">
                     <DeleteOutlinedIcon className="DCCHR_Delete_Icon" />
                   </span>
@@ -63,6 +72,9 @@ const DesktopCart = () => {
                         title,
                         isSale,
                       } = item;
+                      const ItemExist = useSelector((state) =>
+                        state.Wishlist.wishitems.filter((item) => item == uid)
+                      );
 
                       return (
                         <div className="DCCL_CartItem" key={index}>
@@ -147,12 +159,25 @@ const DesktopCart = () => {
                                   {discount ? `-${discount}%` : ""}
                                 </p>
                                 <div className="CPPOperations">
-                                  <button
-                                    className="CPPOperation_WishList_Btn btn p-0 m-0 me-1"
-                                    onClick={() => dispatch(addToWishlist(uid))}
-                                  >
-                                    <FavoriteBorderOutlinedIcon className="CPPOperation_WishList_Icon" />
-                                  </button>
+                                  {ItemExist.length == 0 ? (
+                                    <button
+                                      className="CPPOperation_WishList_Btn btn p-0 m-0 me-1"
+                                      onClick={() =>
+                                        dispatch(addToWishlist(uid))
+                                      }
+                                    >
+                                      <FavoriteBorderOutlinedIcon className="CPPOperation_WishList_Icon" />
+                                    </button>
+                                  ) : (
+                                    <button
+                                      className="CPPOperation_WishList_Btn btn p-0 m-0 me-1"
+                                      onClick={() =>
+                                        dispatch(deleteFromWishlist(uid))
+                                      }
+                                    >
+                                      <FavoriteIcon className="CPPOperation_WishList_Icon" />
+                                    </button>
+                                  )}
                                   <button
                                     className="CPPOperation_Delete_Btn btn p-0 m-0 ms-1"
                                     onClick={() =>

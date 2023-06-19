@@ -8,6 +8,7 @@ import { Pagination, Navigation } from "swiper";
 import { useDispatch, useSelector } from "react-redux";
 import GradeRoundedIcon from "@mui/icons-material/GradeRounded";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 
 // Import Swiper styles
 import "swiper/css";
@@ -26,18 +27,23 @@ import {
 import CalcDiscount from "../../helpers/CalcDiscount";
 import PriceFormat from "../../helpers/PriceFormat";
 import { getSingleProduct } from "../../Store/Slices/productSlice";
-import { addToWishlist } from "../../Store/Slices/wishlistSlice";
+import {
+  addToWishlist,
+  deleteFromWishlist,
+} from "../../Store/Slices/wishlistSlice";
 
 const MobileSingleProduct = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
   const SingleProduct = useSelector((state) => state.Products.singleproduct);
+  const ItemExist = useSelector((state) =>
+    state.Wishlist.wishitems.filter((item) => item == id)
+  );
 
   const Cart = useSelector((state) => {
     let res = state.Cart.items.filter((item) => item.uid == id);
     return res;
   });
-
   let Uid,
     Title,
     Price,
@@ -73,7 +79,7 @@ const MobileSingleProduct = () => {
     dispatch(totalPrice());
     dispatch(getSingleProduct(id));
     return () => {};
-  }, []);
+  }, [id]);
   return (
     <div className="Mobile_SingleProduct ">
       <div className="Mobile_SingleProduct_Container container-xl">
@@ -97,12 +103,22 @@ const MobileSingleProduct = () => {
                 })}
           </Swiper>
         </div>
-        <button
-          className=" btn BuyBox_AddToList_btn w-100 text-center"
-          onClick={() => dispatch(addToWishlist(Uid))}
-        >
-          Add To Wishlist
-        </button>
+        {/* {ItemExist.length == 0 ? (
+          <button
+            className=" btn BuyBox_AddToList_btn w-100 text-center"
+            onClick={() => dispatch(addToWishlist(id))}
+          >
+            Add To Wishlist
+          </button>
+        ) : (
+          <button
+            className=" btn BuyBox_AddToList_btn w-100 text-center"
+            onClick={() => dispatch(deleteFromWishlist(id))}
+          >
+            Delete From Wishlist
+          </button>
+        )} */}
+
         <div className="MSP_Info_Container container-xl my-4">
           <h2 className="MSP_Title pb-5 pt-2">{Title}</h2>
           <div className="MSP_Price_Container ">
@@ -164,22 +180,30 @@ const MobileSingleProduct = () => {
                 <p className="MSPF_Link_Txt p-0 m-0">Store</p>
               </Link>
               <span className="MSPF_Separator"></span>
-              <Link className="MSPF_Link h-100" to="/user/wishlist">
-                <FavoriteBorderOutlinedIcon />
-                <p className="MSPF_Link_Txt p-0 m-0">WishList</p>
-              </Link>
+              {ItemExist.length == 0 ? (
+                <Link
+                  className="MSPF_Link h-100"
+                  onClick={() => dispatch(addToWishlist(id))}
+                >
+                  <FavoriteBorderOutlinedIcon />
+                  <p className="MSPF_Link_Txt p-0 m-0">WishList</p>
+                </Link>
+              ) : (
+                <Link
+                  className="MSPF_Link h-100"
+                  onClick={() => dispatch(deleteFromWishlist(id))}
+                >
+                  <FavoriteIcon />
+                  <p className="MSPF_Link_Txt p-0 m-0">WishList</p>
+                </Link>
+              )}
             </div>
           </div>
           <div className="col-8 p-0 h-100 pe-2">
             <div className="MSPF_Container h-100 d-flex align-items-center">
               <div className="MSPF_Shortcut h-100 w-100">
-                {Stock > 0 ? (
-                  <Link
-                    to="/checkout"
-                    className="MSPF_Shortcut_Link d-inline-block h-100 w-100"
-                  >
-                    <span className="MSPF_Shortcut_Txt">Buy Now</span>
-                  </Link>
+                {Stock == 0 ? (
+                  ""
                 ) : (
                   <Link
                     to="/checkout"

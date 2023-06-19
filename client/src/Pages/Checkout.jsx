@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import "../Css/Checkout.css";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import DesktopCheckout from "../components/Checkout/DesktopCheckout";
 import MobileCheckout from "../components/Checkout/MobileCheckout";
@@ -13,11 +14,10 @@ import {
   editAddress,
   getAddress,
 } from "../Store/Slices/orderSlice";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 const Checkout = () => {
   let dispatch = useDispatch();
   const navigation = useNavigate();
-  const CartItems = JSON.parse(localStorage.getItem("items"));
+  const CartItems = localStorage.getItem("items");
 
   const AddressBook = useSelector((state) => state.Orders.addressbook);
   const PaymentMethod = useSelector((state) => state.Orders.paymentmethod);
@@ -45,7 +45,7 @@ const Checkout = () => {
     dispatch(changeDeliveryMethod(method));
   };
   useEffect(() => {
-    if (CartItems.length == 0) {
+    if (!CartItems || CartItems == null) {
       navigation("/");
     }
     dispatch(getAddress());
@@ -113,7 +113,7 @@ const Checkout = () => {
                       Address book
                     </Link>
                   </div>
-                  <div className="UAC_Container bg-white p-3 mt-2">
+                  <div className="UAC_Container bg-white p-sm-3 mt-2">
                     <div className="row m-0 w-100">
                       {AddressBook.length == 0
                         ? ""
@@ -170,7 +170,7 @@ const Checkout = () => {
                                     </div>
                                     {defaultaddress && (
                                       <div className="UAC_AddressBook_Info_MainTag_Container d-flex align-items-center justify-content-start">
-                                        <small className="UAC_AddressBook_Info_MainTag ">
+                                        <small className="UAC_AddressBook_Info_MainTag defaultAddress">
                                           Default Shipping Address
                                         </small>
                                         <small className="UAC_AddressBook_Info_SecondaryTag ">
@@ -181,7 +181,7 @@ const Checkout = () => {
                                     {defaultaddress || (
                                       <div className="UAC_AddressBook_Info_MainTag_Container d-flex align-items-center justify-content-start">
                                         <small
-                                          className="UAC_AddressBook_Info_MainTag defaultAddress"
+                                          className="UAC_AddressBook_Info_MainTag"
                                           onClick={() =>
                                             dispatch(defaultAddress(aid))
                                           }
@@ -200,7 +200,7 @@ const Checkout = () => {
                 </div>
               )}
             </div>
-            <div className="modal-footer w-100 border-0 position-absolute bottom-0 start-0 d-flex align-items-center justify-content-between">
+            <div className="modal-footer AddressBookModal_Footer bg-white w-100 border-0 position-absolute bottom-0 start-0 d-flex align-items-center justify-content-between">
               <button
                 type="button"
                 className="btn AddNewAddress_Btn rounded-0 p-0 d-flex align-items-center justify-content-center"

@@ -15,15 +15,16 @@ export const getCart = createAsyncThunk("getCart", async (data) => {
     return items;
   }
 });
-export const addToCart = createAsyncThunk("addToCart", async (data) => {
+export const addToCart = createAsyncThunk("addToCart", (data) => {
   const items = JSON.parse(localStorage.getItem("items")); // Getting From Local Storage
-  if (items == null || items.length == 0) {
+  if (items == null || items.length == 0 || !items) {
     const NewItem = JSON.stringify([data]);
     localStorage.setItem("items", NewItem);
     return JSON.parse(NewItem);
   }
 
   let avail = items.filter((item) => item.uid == data.uid);
+
   if (avail.length > 0) {
     let updatedItems = items.map((item) => {
       if (item.uid == data.uid) {
@@ -110,6 +111,10 @@ export const deleteFromCart = createAsyncThunk(
     return res;
   }
 );
+export const clearCart = createAsyncThunk("clearCart", async () => {
+  localStorage.removeItem("items");
+  return [];
+});
 export const totalPrice = createAsyncThunk("totalPrice", async (data) => {
   const items = JSON.parse(localStorage.getItem("items")); // Getting From Local Storage
   let totalPrice = items.reduce((initialNumber, curElem) => {
@@ -304,6 +309,19 @@ const cartSlice = createSlice({
         state.error = null;
       })
       .addCase(deleteFromCart.rejected, (state, action) => {
+        // console.log(action, "from rejections");
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(clearCart.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(clearCart.fulfilled, (state, action) => {
+        state.loading = false;
+        state.items = action.payload;
+        state.error = null;
+      })
+      .addCase(clearCart.rejected, (state, action) => {
         // console.log(action, "from rejections");
         state.loading = false;
         state.error = action.error.message;

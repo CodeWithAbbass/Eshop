@@ -397,7 +397,9 @@
 .User_Orders_Nav_Link.active {
   border-bottom: 4px solid #003e52;
 }
-
+.UOC_Orders_Header {
+  background: #f4f4f4;
+}
 .UOC_Orders_Header_Requested_Heading {
   font-size: 14px;
 }

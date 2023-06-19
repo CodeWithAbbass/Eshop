@@ -15,13 +15,19 @@ import CalcDiscount from "../../helpers/CalcDiscount";
 import PriceFormat from "../../helpers/PriceFormat";
 import SubTotal from "./SubTotal";
 import { getSingleProduct } from "../../Store/Slices/productSlice";
-import { addToWishlist } from "../../Store/Slices/wishlistSlice";
+import {
+  addToWishlist,
+  deleteFromWishlist,
+} from "../../Store/Slices/wishlistSlice";
 
 const DesktopSingleProduct = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
   const [ImageURL, setImageURL] = useState(null);
-
+  const ItemExist = useSelector((state) =>
+    state.Wishlist.wishitems.filter((item) => item == id)
+  );
+  const ShippingFee = useSelector((state) => state.Cart.shippingFee);
   const SingleProduct = useSelector((state) => state.Products.singleproduct);
 
   const Cart = useSelector((state) => {
@@ -65,7 +71,7 @@ const DesktopSingleProduct = () => {
     dispatch(totalPrice());
     dispatch(getSingleProduct(id));
     return () => {};
-  }, []);
+  }, [id]);
   const ChangeMainImage = (ImageItem) => {
     setImageURL(ImageItem);
   };
@@ -176,13 +182,16 @@ const DesktopSingleProduct = () => {
                 </span>
               </div>
               <div className="BuyBox_PrimaryMessage">
-                <span className="BuyBox_Message">$14.24 delivery</span>
-                <span className="BuyBox_EST">Tuesday, May 23</span>
+                <div className="BuyBox_Message ">
+                  <span className="">{PriceFormat(ShippingFee)}</span>
+                  <span className="ms-1">delivery</span>
+                </div>
+                <div className="BuyBox_EST">Tuesday, May 23</div>
               </div>
-              <div className="BuyBox_Country">
+              <span className="BuyBox_Country">
                 <PlaceOutlinedIcon className="BuyBox_LocationIcon" />
                 <span className="BuyBox_Country_Txt">Pakistan</span>
-              </div>
+              </span>
               {Stock > 0 ? (
                 <div className="BuyBox_InStock">In Stock</div>
               ) : (
@@ -196,21 +205,36 @@ const DesktopSingleProduct = () => {
                     value={Cart.length > 0 ? Cart[0].quantity : "1"}
                     onChange={(e) => QuantityOnchange(e, Uid)}
                   >
-                    {Array(Stock ? Stock + 1 : 0 + 1)
-                      .fill()
-                      .map((_, i) => {
-                        if (i > 0) {
-                          return (
-                            <option
-                              value={i}
-                              className="Quantity_Option"
-                              key={i}
-                            >
-                              {i}
-                            </option>
-                          );
-                        }
-                      })}
+                    <option value="1" className="Quantity_Option">
+                      1
+                    </option>
+                    <option value="2" className="Quantity_Option">
+                      2
+                    </option>
+                    <option value="3" className="Quantity_Option">
+                      3
+                    </option>
+                    <option value="4" className="Quantity_Option">
+                      4
+                    </option>
+                    <option value="5" className="Quantity_Option">
+                      5
+                    </option>
+                    <option value="6" className="Quantity_Option">
+                      6
+                    </option>
+                    <option value="7" className="Quantity_Option">
+                      7
+                    </option>
+                    <option value="8" className="Quantity_Option">
+                      8
+                    </option>
+                    <option value="9" className="Quantity_Option">
+                      9
+                    </option>
+                    <option value="10" className="Quantity_Option">
+                      10
+                    </option>
                   </select>
                   <span className="BuyBox_Quantity_Txt">Qty:</span>
                 </form>
@@ -227,7 +251,6 @@ const DesktopSingleProduct = () => {
                     <Link
                       className="BuyBox_AddToCart_Link text-white w-100 h-100 d-block p-1"
                       onClick={() => {
-                        // dispatch(AddToCart(AddToCartProduct));
                         dispatch(addToCart(AddToCartProduct));
                         dispatch(totalPrice());
                       }}
@@ -239,7 +262,13 @@ const DesktopSingleProduct = () => {
                 {Stock == 0 ? (
                   ""
                 ) : (
-                  <button className="btn BuyBox_BuyNow w-100 text-light text-center d-block p-0">
+                  <button
+                    className="btn BuyBox_BuyNow w-100 text-light text-center d-block p-0"
+                    onClick={() => {
+                      dispatch(addToCart(AddToCartProduct));
+                      dispatch(totalPrice());
+                    }}
+                  >
                     <Link
                       className="BuyBox_BuyNow_Link text-white w-100 h-100 d-block p-1"
                       to="/checkout"
@@ -280,14 +309,25 @@ const DesktopSingleProduct = () => {
                   </tr>
                 </tbody>
               </table>
-              <div className="BuyBox_AddToList_Container">
-                <button
-                  className=" btn BuyBox_AddToList_btn w-100 text-center"
-                  onClick={() => dispatch(addToWishlist(Uid))}
-                >
-                  Add To Wishlist
-                </button>
-              </div>
+              {ItemExist.length == 0 ? (
+                <div className="BuyBox_AddToList_Container">
+                  <button
+                    className=" btn BuyBox_AddToList_btn w-100 text-center"
+                    onClick={() => dispatch(addToWishlist(Uid))}
+                  >
+                    Add To Wishlist
+                  </button>
+                </div>
+              ) : (
+                <div className="BuyBox_AddToList_Container">
+                  <button
+                    className=" btn BuyBox_AddToList_btn w-100 text-center"
+                    onClick={() => dispatch(deleteFromWishlist(Uid))}
+                  >
+                    Delete From Wishlist
+                  </button>
+                </div>
+              )}
             </div>
 
             <div className="BuyBox_SellOn text-center">

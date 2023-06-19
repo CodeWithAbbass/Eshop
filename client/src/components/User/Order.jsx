@@ -19,14 +19,17 @@ const Order = () => {
         <Link className="User_Orders_Nav_Link">To Recieve</Link>
       </div>
 
-      <div className="UOC_Container bg-white mt-2">
+      <div className="UOC_Container mt-2">
         {Orders &&
           Orders.map((item, index) => {
             let { orderid, status, date, products } = item;
 
             return (
-              <div className="UOC_Orders_Item_Container" key={index}>
-                <div className="UOC_Orders_Header border-bottom py-2 px-3">
+              <div
+                className="UOC_Orders_Item_Container my-3 shadow-sm"
+                key={index}
+              >
+                <div className="UOC_Orders_Header border-bottom border-top py-2 px-3 shadow-sm position-relative">
                   <div className="row m-0 w-100 align-items-center">
                     <div className="col-8 p-0">
                       <p className="UOC_Orders_Header_Requested_Heading mb-0">
@@ -53,7 +56,7 @@ const Order = () => {
                 </div>
                 {products &&
                   products.map((item, index) => {
-                    const { title, images, quantity } = item;
+                    const { title, images, quantity, uid } = item;
                     return (
                       <div
                         className="UOC_Orders_Item_Wrapper bg-white p-3"
@@ -64,7 +67,7 @@ const Order = () => {
                             <div className="UOC_Orders_Item_Pic_Container">
                               <Link
                                 className="UOC_Orders_Item_Pic_Link d-block"
-                                to="/product/1"
+                                to={`/product/${uid}`}
                               >
                                 <img
                                   src={images ? images[0] : ""}
@@ -76,7 +79,7 @@ const Order = () => {
                             <div className="UOC_Orders_Item_Info_Container h-100">
                               <Link
                                 className="UOC_Orders_Item_Info_Title_Link d-block w-100"
-                                to="/product/1"
+                                to={`/product/${uid}`}
                               >
                                 {title}
                               </Link>

@@ -1,14 +1,15 @@
 import "../../Css/Checkout.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import PriceFormat from "../../helpers/PriceFormat";
 import CalcDiscount from "../../helpers/CalcDiscount";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { placeOrder } from "../../Store/Slices/orderSlice";
+import { clearCart } from "../../Store/Slices/cartSlice";
 const DesktopCheckout = () => {
   const dispatch = useDispatch();
-
+  const Navigate = useNavigate();
   const Cart = useSelector((state) => state.Cart.items);
   const ShippingFee = useSelector((state) => state.Cart.shippingFee);
   const PaymentMethod = useSelector((state) => state.Orders.paymentmethod);
@@ -17,7 +18,7 @@ const DesktopCheckout = () => {
     state.Orders.addressbook.filter((item) => item.defaultaddress == true)
   );
   const totalAmount = useSelector((state) => state.Cart.totalAmount);
-  let totalAfterDiscount = 0;
+  let totalPriceWithoutDiscount = 0;
 
   const OrderConfirmation = () => {
     let products = [];
@@ -42,6 +43,7 @@ const DesktopCheckout = () => {
       billaddress: DefaultAddress[0] ? DefaultAddress[0].address : "",
     };
     dispatch(placeOrder(confirmOrder));
+    Navigate("/user/order");
   };
   useEffect(() => {
     return () => {};
@@ -80,15 +82,15 @@ const DesktopCheckout = () => {
               )}
               {AddressBook[0] && DefaultAddress[0] && (
                 <div className="DCC_Left_Address_Wrapper py-3">
-                  <p className="DCC_Left_Address_DeliverTo mb-2">
+                  <div className="DCC_Left_Address_DeliverTo mb-2">
                     <span className="DCC_Left_Address_Heading">
                       Deliver To:
                     </span>
                     <span className="DCC_Left_Address_Txt ms-1">
                       {DefaultAddress[0] ? DefaultAddress[0].name : ""}
                     </span>
-                  </p>
-                  <p className="DCC_Left_Address_DeliverTo mb-2">
+                  </div>
+                  <div className="DCC_Left_Address_DeliverTo mb-2">
                     <span className="DCC_Left_Address_Heading">
                       {DefaultAddress[0] ? DefaultAddress[0].phone : ""}
                     </span>
@@ -104,8 +106,8 @@ const DesktopCheckout = () => {
                     >
                       Change
                     </button>
-                  </p>
-                  <p className="DCC_Left_Address_DeliverTo mb-2">
+                  </div>
+                  <div className="DCC_Left_Address_DeliverTo mb-2">
                     <span className="DCC_Left_Address_Heading">Payment:</span>
                     <span className="DCC_Left_Address_Txt ms-1">
                       {PaymentMethod == "card"
@@ -120,7 +122,7 @@ const DesktopCheckout = () => {
                     >
                       Change
                     </button>
-                  </p>
+                  </div>
                 </div>
               )}
             </div>
@@ -129,7 +131,9 @@ const DesktopCheckout = () => {
                 Cart.map((item, index) => {
                   let { uid, images, title, stock, quantity, price, discount } =
                     item;
-                  totalAfterDiscount = totalAfterDiscount + price;
+                  totalPriceWithoutDiscount =
+                    totalPriceWithoutDiscount + price * quantity;
+
                   return (
                     <div
                       className="DCC_Left_Checkout_Product_Container"
@@ -140,7 +144,7 @@ const DesktopCheckout = () => {
                           <div className="DCC_Checkout_Product_Link_Container">
                             <Link
                               className="DCC_Checkout_Product_Link d-block"
-                              to={`/product/2`}
+                              to={`/product/${uid}`}
                             >
                               <img
                                 src={images[0] || ""}
@@ -201,7 +205,7 @@ const DesktopCheckout = () => {
                           <div className="Checkout_Product_Price">
                             {discount
                               ? PriceFormat(CalcDiscount(discount, price))
-                              : PriceFormat(459)}
+                              : PriceFormat(price)}
                           </div>
                         </div>
                       </div>
@@ -222,7 +226,7 @@ const DesktopCheckout = () => {
               <div className="DCC_Left_Checkout_Saved text-muted">
                 <span className="DCC_Left_Checkout_Saved_Heading">Saved:</span>
                 <span className="DCC_Left_Checkout_Saved_Txt ms-1">
-                  {PriceFormat(totalAfterDiscount - totalAmount)}
+                  {PriceFormat(totalPriceWithoutDiscount - totalAmount)}
                 </span>
               </div>
             </div>
@@ -242,14 +246,16 @@ const DesktopCheckout = () => {
                 <span className="DCC_Order_Summery_LeftHeading">
                   Delivery Fee:
                 </span>
-                <span className="DCC_Order_Summery_Txt">{PriceFormat(1)}</span>
+                <span className="DCC_Order_Summery_Txt">
+                  {PriceFormat(ShippingFee)}
+                </span>
               </div>
               <div className="DCC_Order_Summery_Discount d-flex align-items-center justify-content-between">
                 <span className="DCC_Order_Summery_LeftHeading">
                   Total Discount:
                 </span>
                 <span className="DCC_Order_Summery_Txt">
-                  {PriceFormat(totalAfterDiscount - totalAmount)}
+                  {PriceFormat(totalPriceWithoutDiscount - totalAmount)}
                 </span>
               </div>
               <hr />
@@ -258,7 +264,7 @@ const DesktopCheckout = () => {
                   Total Payment:
                 </span>
                 <span className="DCC_Order_Summery_Txt">
-                  {PriceFormat(1 + totalAmount)}
+                  {PriceFormat(ShippingFee + totalAmount)}
                 </span>
               </div>
 
@@ -271,6 +277,7 @@ const DesktopCheckout = () => {
                 disabled={AddressBook[0] && DefaultAddress[0] ? false : true}
                 onClick={() => {
                   OrderConfirmation();
+                  // dispatch(clearCart())
                 }}
               >
                 Place Order

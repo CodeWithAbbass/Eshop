@@ -1,10 +1,61 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../../Css/Checkout.css";
 import CalcDiscount from "../../helpers/CalcDiscount";
 import PriceFormat from "../../helpers/PriceFormat";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { placeOrder } from "../../Store/Slices/orderSlice";
 
 const MobileCheckout = () => {
+  const dispatch = useDispatch();
+  const Navigate = useNavigate();
+  const Cart = useSelector((state) => state.Cart.items);
+  const ShippingFee = useSelector((state) => state.Cart.shippingFee);
+  const PaymentMethod = useSelector((state) => state.Orders.paymentmethod);
+  const AddressBook = useSelector((state) => state.Orders.addressbook);
+  const DefaultAddress = useSelector((state) =>
+    state.Orders.addressbook.filter((item) => item.defaultaddress == true)
+  );
+  const totalAmount = useSelector((state) => state.Cart.totalAmount);
+
+  let totalPriceWithoutDiscount = (arr) => {
+    let total = 0;
+    for (const iterator of arr) {
+      total = total + iterator.price * iterator.quantity;
+    }
+    return total;
+  };
+
+  const OrderConfirmation = () => {
+    let products = [];
+    Cart.forEach((element, index) => {
+      const { uid, price, discount, quantity, images, title } = element;
+      const newProduct = {
+        uid,
+        price,
+        discount,
+        quantity,
+        images,
+        title,
+        ShippingFee,
+      };
+      products.push(newProduct);
+    });
+    let confirmOrder = {
+      deliverto: DefaultAddress[0] ? DefaultAddress[0].name : "",
+      products,
+      paymentmethod: PaymentMethod,
+      shipaddress: DefaultAddress[0] ? DefaultAddress[0].address : "",
+      billaddress: DefaultAddress[0] ? DefaultAddress[0].address : "",
+    };
+    dispatch(placeOrder(confirmOrder));
+    Navigate("/user/order");
+  };
+  useEffect(() => {
+    return () => {};
+  }, [AddressBook, DefaultAddress]);
+
   return (
     <div className="MobileCheckout">
       <div className="Mobile_Checkout_Container container-xl">
@@ -17,21 +68,23 @@ const MobileCheckout = () => {
                   Items Total:
                 </span>
                 <span className="DCC_Order_Summery_Txt">
-                  {PriceFormat(CalcDiscount(30, 459))}
+                  {PriceFormat(totalAmount)}
                 </span>
               </div>
               <div className="DCC_Order_Summery_Delivery d-flex align-items-center justify-content-between">
                 <span className="DCC_Order_Summery_LeftHeading">
                   Delivery Fee:
                 </span>
-                <span className="DCC_Order_Summery_Txt">{PriceFormat(1)}</span>
+                <span className="DCC_Order_Summery_Txt">
+                  {PriceFormat(ShippingFee)}
+                </span>
               </div>
               <div className="DCC_Order_Summery_Discount d-flex align-items-center justify-content-between">
                 <span className="DCC_Order_Summery_LeftHeading">
                   Total Discount:
                 </span>
                 <span className="DCC_Order_Summery_Txt">
-                  {PriceFormat(459 - CalcDiscount(30, 459))}
+                  {PriceFormat(totalPriceWithoutDiscount(Cart) - totalAmount)}
                 </span>
               </div>
               <hr />
@@ -40,10 +93,21 @@ const MobileCheckout = () => {
                   Total Payment:
                 </span>
                 <span className="DCC_Order_Summery_Txt">
-                  {PriceFormat(1 + CalcDiscount(30, 459))}
+                  {PriceFormat(ShippingFee + totalAmount)}
                 </span>
               </div>
-              <button className="DCC_Order_Summery_OrderBtn w-100 text-center mt-2">
+              <button
+                className={`DCC_Order_Summery_OrderBtn w-100 text-center mt-2 ${
+                  AddressBook[0] && DefaultAddress[0]
+                    ? ""
+                    : "bg-secondary border-secondary"
+                }`}
+                disabled={AddressBook[0] && DefaultAddress[0] ? false : true}
+                onClick={() => {
+                  OrderConfirmation();
+                  // dispatch(clearCart())
+                }}
+              >
                 Place Order
               </button>
             </div>
@@ -51,138 +115,183 @@ const MobileCheckout = () => {
 
           <div className="DCC_Left_Container col-lg-8 mt-sm-2 mt-lg-0">
             <div className="DCC_Left_Address_Container w-100 m-0 my-2 px-3 bg-white">
-              <button
-                type="button"
-                className="btn btn AddNewAddress_Btn w-100 h-100 rounded-0 p-0 d-flex align-items-center justify-content-center"
-                data-bs-toggle="modal"
-                data-bs-target="#MobileModal"
-              >
-                <AddRoundedIcon className="AddNewAddress_Icon h-100" />
-                <span className="AddNewAddress_Txt">
-                  Add New Delivery Address
-                </span>
-              </button>
-              <div className="DCC_Left_Address_Wrapper py-3">
-                <p className="DCC_Left_Address_DeliverTo mb-2">
-                  <span className="DCC_Left_Address_Heading">Deliver To:</span>
-                  <span className="DCC_Left_Address_Txt ms-1">Abbas Ali</span>
-                  <button
-                    type="button"
-                    className="btn DCC_Left_Address_Change bg-transparent rounded-0 p-0 d-inline ms-2 float-end"
-                    data-bs-toggle="modal"
-                    data-bs-target="#MobileModal"
-                  >
-                    Change
-                  </button>
-                </p>
-                <p className="DCC_Left_Address_DeliverTo mb-2">
-                  <span className="DCC_Left_Address_Heading">03016083148 </span>
-                  <span className="DCC_Left_Address_Txt ms-1 border-start ps-2">
-                    Lahore, Block A, Lahore - EME, Punjab
+              {!AddressBook[0] && (
+                <button
+                  type="button"
+                  className="btn AddNewAddress_Btn w-100 h-100 rounded-0 p-0 d-flex align-items-center justify-content-center"
+                  data-bs-toggle="modal"
+                  data-bs-target="#AddressBook"
+                >
+                  <AddRoundedIcon className="AddNewAddress_Icon h-100" />
+                  <span className="AddNewAddress_Txt">
+                    Add New Delivery Address
                   </span>
-                  <span className="DCC_Left_Address_Txt">Change</span>
-                </p>
-                <p className="DCC_Left_Address_DeliverTo mb-2">
-                  <span className="DCC_Left_Address_Heading">Payment:</span>
-                  <span className="DCC_Left_Address_Txt ms-1">
-                    Cash On Delivery
+                </button>
+              )}
+              {!DefaultAddress[0] && AddressBook[0] && (
+                <button
+                  type="button"
+                  className="btn AddNewAddress_Btn w-100 h-100 rounded-0 p-0 d-flex align-items-center justify-content-center"
+                  data-bs-toggle="modal"
+                  data-bs-target="#AddressBook"
+                >
+                  <AddRoundedIcon className="AddNewAddress_Icon h-100" />
+                  <span className="AddNewAddress_Txt">
+                    Select Default Address
                   </span>
-                </p>
-                <p className="DCC_Left_Address_DeliverTo mb-0">
-                  <span className="DCC_Left_Address_Heading">Email To:</span>
-                  <span className="DCC_Left_Address_Txt ms-1">
-                    abbas.ali@chaoscorporated.com
-                  </span>
-                </p>
-              </div>
-            </div>
-            <div className="DCC_Left_Checkout_Products_Wrapper w-100 m-0 p-3 bg-white">
-              <div className="DCC_Left_Checkout_Product_Container">
-                <div className="row w-100 m-0 justify-content-between">
-                  <div className="col-12 p-0 d-flex align-items-start justify-content-between mb-2">
-                    <div className="DCC_Checkout_Product_Link_Container w-25">
-                      <Link
-                        className="DCC_Checkout_Product_Link d-block"
-                        to={`/product/2`}
-                      >
-                        <img
-                          src="https://static-01.daraz.pk/p/f0e37ef93e8bfbcb674752fc897b68f1.jpg"
-                          alt="Product"
-                          className=""
-                        />
-                      </Link>
+                </button>
+              )}
+              {AddressBook[0] && DefaultAddress[0] && (
+                <div className="DCC_Left_Address_Wrapper py-3">
+                  <div className="DCC_Left_Address_DeliverTo mb-2">
+                    <span className="DCC_Left_Address_Heading">
+                      Deliver To:
+                    </span>
+                    <span className="DCC_Left_Address_Txt ms-1">
+                      {DefaultAddress[0] ? DefaultAddress[0].name : ""}
+                    </span>
+                  </div>
+                  <div className="DCC_Left_Address_DeliverTo mb-2">
+                    <div className="DCC_Left_Address_Heading">
+                      {DefaultAddress[0] ? DefaultAddress[0].phone : ""}
                     </div>
-                    <div className="DCC_Checkout_Product_Info_Container w-75 h-100 ps-2 position-relative">
-                      <Link
-                        to={`/product/2`}
-                        className="DCC_Checkout_Product_Info_Title"
+                    <div className="DCC_Left_Address_Txt mt-2">
+                      {DefaultAddress[0] ? DefaultAddress[0].address : ""}
+                      <button
+                        type="button"
+                        className="btn DCC_Left_Address_Change bg-transparent rounded-0 p-0 d-inline ms-2"
+                        data-bs-toggle="modal"
+                        data-bs-target="#AddressBook"
                       >
-                        LouisWill Men Watch True Three Eyes Wristwatch Quartz
-                        Chronograph Watch Stainless Steel Mesh Belt Watch
-                        Luxurious Business Fashion Watch Waterproof Watch with
-                        Calendar Luminous Pointer Watches for Men
-                      </Link>
-                      <span className="DCC_Checkout_Product_Info_Information">
-                        <span className="DCC_Checkout_Product_Info_Information_Heading text-muted fst-italic">
-                          Style:
-                        </span>
-                        <span className="DCC_Checkout_Product_Info_Information_Txt fw-normal ms-1">
-                          Wifi
-                        </span>
-                      </span>
-                      <span className="DCC_Checkout_Product_Info_Information ms-3">
-                        <span className="DCC_Checkout_Product_Info_Information_Heading text-muted fst-italic">
-                          Color:
-                        </span>
-                        <span className="DCC_Checkout_Product_Info_Information_Txt fw-normal ms-1">
-                          Wifi
-                        </span>
-                      </span>
-                      <p className="CPLeftStock_Txt mb-0 ">
-                        Only 7 left in stock
-                      </p>
-                      <div className="MCC_Checkout_Product_Footer d-flex align-items-center justify-content-between w-100 position-absolute bottom-0">
-                        <span className="DCC_Left_Checkout_Product_Quantity d-flex align-items-center">
-                          <span className="DCC_Left_Checkout_Product_Quantity_Heading">
-                            Qty:
-                          </span>
-                          <span className="DCC_Left_Checkout_Product_Quantity_Txt ms-1">
-                            2
-                          </span>
-                        </span>
-                        <span className="DCC_Left_Checkout_Product_Price d-inline-flex align-items-center justify-content-end w-100">
-                          <span className="Checkout_Product_OldPrice_Discount">
-                            <small className="Checkout_Product_OldPrice text-muted text-decoration-line-through">
-                              {PriceFormat(459)}
-                            </small>
-                            <small className="Checkout_Product_Discount text-muted ms-1">
-                              -30%
-                            </small>
-                          </span>
-                          <span className="Checkout_Product_Price">
-                            {PriceFormat(CalcDiscount(30, 459))}
-                          </span>
-                        </span>
-                      </div>
+                        Change
+                      </button>
                     </div>
                   </div>
+                  <p className="DCC_Left_Address_DeliverTo mb-2">
+                    <span className="DCC_Left_Address_Heading">Payment:</span>
+                    <span className="DCC_Left_Address_Txt ms-1">
+                      {PaymentMethod == "card"
+                        ? "Credit Card"
+                        : "Cash On Delivery"}
+                    </span>
+                    <button
+                      type="button"
+                      className="btn DCC_Left_Address_Change bg-transparent rounded-0 p-0 d-inline ms-2"
+                      data-bs-toggle="modal"
+                      data-bs-target="#DeliveryMethodModal"
+                    >
+                      Change
+                    </button>
+                  </p>
                 </div>
-                <hr className="DCCL_Separator" />
-              </div>
+              )}
             </div>
-            <div className="DCC_Left_Checkout_Subtotal_Container w-100 m-0 px-3 pb-3 bg-white text-end">
+            <div className="DCC_Left_Checkout_Products_Wrapper w-100 m-0 p-3 bg-white">
+              {Cart &&
+                Cart.map((item, index) => {
+                  let { uid, images, title, stock, quantity, price, discount } =
+                    item;
+                  // totalPriceWithoutDiscount =
+                  //   totalPriceWithoutDiscount + price * quantity;
+                  return (
+                    <div
+                      className="DCC_Left_Checkout_Product_Container"
+                      key={index}
+                    >
+                      <div className="row w-100 m-0 justify-content-between">
+                        <div className="col-12 p-0 d-flex align-items-start justify-content-between mb-2">
+                          <div className="DCC_Checkout_Product_Link_Container w-25">
+                            <Link
+                              className="DCC_Checkout_Product_Link d-block"
+                              to={`/product/${uid}`}
+                            >
+                              <img
+                                src={images[0] || ""}
+                                alt="Product"
+                                className=""
+                              />
+                            </Link>
+                          </div>
+                          <div className="DCC_Checkout_Product_Info_Container w-75 h-100 ps-2 position-relative">
+                            <Link
+                              to={`/product/${uid}`}
+                              className="DCC_Checkout_Product_Info_Title"
+                            >
+                              {title}
+                            </Link>
+                            <span className="DCC_Checkout_Product_Info_Information">
+                              <span className="DCC_Checkout_Product_Info_Information_Heading text-muted fst-italic">
+                                Style:
+                              </span>
+                              <span className="DCC_Checkout_Product_Info_Information_Txt fw-normal ms-1">
+                                Wifi
+                              </span>
+                            </span>
+                            <span className="DCC_Checkout_Product_Info_Information ms-3">
+                              <span className="DCC_Checkout_Product_Info_Information_Heading text-muted fst-italic">
+                                Color:
+                              </span>
+                              <span className="DCC_Checkout_Product_Info_Information_Txt fw-normal ms-1">
+                                Wifi
+                              </span>
+                            </span>
+                            <p className="CPLeftStock_Txt mb-0 ">
+                              Only {stock} left in stock
+                            </p>
+                            <div className="MCC_Checkout_Product_Footer d-flex align-items-center justify-content-between w-100 position-absolute bottom-0">
+                              <span className="DCC_Left_Checkout_Product_Quantity d-flex align-items-center">
+                                <span className="DCC_Left_Checkout_Product_Quantity_Heading">
+                                  Qty:
+                                </span>
+                                <span className="DCC_Left_Checkout_Product_Quantity_Txt ms-1">
+                                  {quantity}
+                                </span>
+                              </span>
+                              <span className="DCC_Left_Checkout_Product_Price d-inline-flex align-items-center justify-content-end w-100">
+                                {!discount ? (
+                                  <span className="Checkout_Product_Price">
+                                    {PriceFormat(CalcDiscount(discount, price))}
+                                  </span>
+                                ) : (
+                                  <span className="d-flex align-items-center">
+                                    <span className="Checkout_Product_OldPrice_Discount">
+                                      <small className="Checkout_Product_OldPrice text-muted text-decoration-line-through">
+                                        {PriceFormat(price)}
+                                      </small>
+                                      <small className="Checkout_Product_Discount text-muted ms-1">
+                                        -{discount}%
+                                      </small>
+                                    </span>
+                                    <span className="Checkout_Product_Price">
+                                      {PriceFormat(
+                                        CalcDiscount(discount, price)
+                                      )}
+                                    </span>
+                                  </span>
+                                )}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <hr className="DCCL_Separator" />
+                    </div>
+                  );
+                })}
+            </div>
+            <div className="DCC_Left_Checkout_Subtotal_Container w-100 m-0 px-3 py-3 bg-white text-end mt-2">
               <div className="DCC_Left_Checkout_Subtotal">
                 <span className="DCC_Left_Checkout_Subtotal_items">
-                  1 Items. Subtotal:
+                  {Cart.length} Items. Subtotal:
                 </span>
                 <span className="DCC_Left_Checkout_Subtotal_Price text-danger ms-1">
-                  {PriceFormat(CalcDiscount(30, 459))}
+                  {PriceFormat(totalAmount)}
                 </span>
               </div>
               <div className="DCC_Left_Checkout_Saved text-muted">
                 <span className="DCC_Left_Checkout_Saved_Heading">Saved:</span>
                 <span className="DCC_Left_Checkout_Saved_Txt ms-1">
-                  {PriceFormat(459 - CalcDiscount(30, 459))}
+                  {PriceFormat(totalPriceWithoutDiscount(Cart) - totalAmount)}
                 </span>
               </div>
             </div>
@@ -190,7 +299,7 @@ const MobileCheckout = () => {
         </div>
 
         {/* Modal */}
-        <div
+        {/* <div
           className="modal fade my-2 MobileModal"
           id="MobileModal"
           tabIndex="-3"
@@ -282,7 +391,7 @@ const MobileCheckout = () => {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

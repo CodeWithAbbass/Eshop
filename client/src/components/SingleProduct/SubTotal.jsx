@@ -77,23 +77,36 @@ const SubTotal = () => {
                       dispatch(totalPrice());
                     }}
                   >
-                    {Array(
-                      item.stock > 0 || Cart.length > 0 ? item.stock + 1 : 1
-                    )
-                      .fill()
-                      .map((_, i) => {
-                        if (i > 0) {
-                          return (
-                            <option
-                              value={i}
-                              className="Quantity_Option"
-                              key={i}
-                            >
-                              {i}
-                            </option>
-                          );
-                        }
-                      })}
+                    <option value="1" className="Quantity_Option">
+                      1
+                    </option>
+                    <option value="2" className="Quantity_Option">
+                      2
+                    </option>
+                    <option value="3" className="Quantity_Option">
+                      3
+                    </option>
+                    <option value="4" className="Quantity_Option">
+                      4
+                    </option>
+                    <option value="5" className="Quantity_Option">
+                      5
+                    </option>
+                    <option value="6" className="Quantity_Option">
+                      6
+                    </option>
+                    <option value="7" className="Quantity_Option">
+                      7
+                    </option>
+                    <option value="8" className="Quantity_Option">
+                      8
+                    </option>
+                    <option value="9" className="Quantity_Option">
+                      9
+                    </option>
+                    <option value="10" className="Quantity_Option">
+                      10
+                    </option>
                   </select>
                   <Link
                     className="SP_Subtotal_Delete_Link"

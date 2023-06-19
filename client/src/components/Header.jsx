@@ -50,6 +50,7 @@ const Header = () => {
       MobileHeader.classList.remove("Mobile_StickyBg");
     }
   };
+
   const Layout = useSelector((state) => state.Products.layout);
   const { Grid3x, Grid4x, Grid6x } = Layout;
   window.addEventListener("scroll", myScrollFunc);
@@ -94,7 +95,7 @@ const Header = () => {
                     : ""
                 }`}
               >
-                Account
+                {User.name ? `${User.name}  Account` : "Account"}
               </Link>
             </li>
             <li className="d-inline p-0">

@@ -2,6 +2,7 @@ import "../../Css/Cart.css";
 import { Link } from "react-router-dom";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import RemoveRoundedIcon from "@mui/icons-material/RemoveRounded";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import GradeRoundedIcon from "@mui/icons-material/GradeRounded";
@@ -15,7 +16,10 @@ import {
 import { useEffect } from "react";
 import PriceFormat from "../../helpers/PriceFormat";
 import CalcDiscount from "../../helpers/CalcDiscount";
-import { addToWishlist } from "../../Store/Slices/wishlistSlice";
+import {
+  addToWishlist,
+  deleteFromWishlist,
+} from "../../Store/Slices/wishlistSlice";
 
 const MobileCart = () => {
   const Cart = useSelector((state) => state.Cart.items);
@@ -58,6 +62,10 @@ const MobileCart = () => {
                     title,
                     isSale,
                   } = item;
+                  const ItemExist = useSelector((state) =>
+                    state.Wishlist.wishitems.filter((item) => item == uid)
+                  );
+
                   return (
                     <div className="Mobile_CartItem" key={index}>
                       <hr className="DCCL_Separator" />
@@ -175,12 +183,23 @@ const MobileCart = () => {
                                 </span>
                               </div>
                               <div className="CPPOperations align-self-end">
-                                <button
-                                  className="CPPOperation_WishList_Btn btn p-0 m-0 me-1"
-                                  onClick={() => dispatch(addToWishlist(uid))}
-                                >
-                                  <FavoriteBorderOutlinedIcon className="CPPOperation_WishList_Icon" />
-                                </button>
+                                {ItemExist.length == 0 ? (
+                                  <button
+                                    className="CPPOperation_WishList_Btn btn p-0 m-0 me-1"
+                                    onClick={() => dispatch(addToWishlist(uid))}
+                                  >
+                                    <FavoriteBorderOutlinedIcon className="CPPOperation_WishList_Icon" />
+                                  </button>
+                                ) : (
+                                  <button
+                                    className="CPPOperation_WishList_Btn btn p-0 m-0 me-1"
+                                    onClick={() =>
+                                      dispatch(deleteFromWishlist(uid))
+                                    }
+                                  >
+                                    <FavoriteIcon className="CPPOperation_WishList_Icon" />
+                                  </button>
+                                )}
                                 <button
                                   className="CPPOperation_Delete_Btn btn p-0 m-0 ms-1"
                                   onClick={() => dispatch(deleteFromCart(uid))}

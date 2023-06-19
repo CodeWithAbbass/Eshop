@@ -106,19 +106,19 @@ exports.placeOrder = async (req, res) => {
         .send({ success, message: "Order Confirmation Failed" });
     }
 
-    const newOrder = {
-      orderid,
-      userid,
-      date,
-      status,
-      shipaddress,
-      billaddress,
-      paymentmethod,
-      deliverto,
-      products: JSON.parse(placeOrder.rows[0].products),
-    };
+    const allOrders = await pool.query(
+      `SELECT * FROM orders WHERE userid = $1`,
+      [req.user.uid]
+    );
+    for (const iterator of allOrders.rows) {
+      iterator.products = JSON.parse(iterator.products);
+    }
     success = true;
-    res.send({ success, data: newOrder, message: "Order Placed Successfully" });
+    res.send({
+      success,
+      data: allOrders.rows,
+      message: "Order Placed Successfully",
+    });
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Internal Server Error");
