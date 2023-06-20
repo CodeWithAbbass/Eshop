@@ -3,7 +3,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 // create action for user Signup
 export const getProduct = createAsyncThunk("getProduct", async (data) => {
   try {
-    const URL = "http://localhost:5000/api/product/allproducts";
+    const URL = `${import.meta.env.VITE_API_KEY}/product/allproducts`;
     const response = await fetch(URL, {
       method: "GET",
       headers: {
@@ -24,7 +24,7 @@ export const getSingleProduct = createAsyncThunk(
   "getSingleProduct",
   async (uid) => {
     try {
-      const URL = `http://localhost:5000/api/product/${uid}`;
+      const URL = `${import.meta.env.VITE_API_KEY}/product/${uid}`;
       const response = await fetch(URL, {
         method: "GET",
         headers: {

@@ -19,10 +19,13 @@ import {
   addToWishlist,
   deleteFromWishlist,
 } from "../../Store/Slices/wishlistSlice";
+import { useLazyFetchOneQuery } from "../../services/modules/users";
 
 const DesktopSingleProduct = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
+  // const [fetchOne, { data, isSuccess, isLoading, isError, error, status }] =
+  // useLazyFetchOneQuery();
   const [ImageURL, setImageURL] = useState(null);
   const ItemExist = useSelector((state) =>
     state.Wishlist.wishitems.filter((item) => item == id)
@@ -66,15 +69,18 @@ const DesktopSingleProduct = () => {
       ? Cart[0].quantity * CalcDiscount(Cart[0].discount, Cart[0].price)
       : CalcDiscount(Discount, Price);
   const AddToCartProduct = { ...SingleProduct, quantity: 1 };
-  // console.log(object);
+
   useEffect(() => {
     dispatch(totalPrice());
+    // fetchOne(id);
     dispatch(getSingleProduct(id));
     return () => {};
   }, [id]);
   const ChangeMainImage = (ImageItem) => {
     setImageURL(ImageItem);
   };
+
+  // console.log(data, isSuccess, isLoading, isError, error, status);
 
   return (
     <div className="Desktop_SingleProduct">

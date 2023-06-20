@@ -121,6 +121,7 @@
 /* ************************************************* */
 /*                   AddressBook                     */
 /* ************************************************* */
+
 .User_Container_Right_Btn {
   color: #1a1a1a;
   font-size: 12px;
@@ -132,7 +133,8 @@
 }
 .UAC_Container,
 .UPC_Container {
-  height: 500px;
+  min-height: 500px;
+  height: 100%;
 }
 .UAC_AddressBook {
   font-size: 12px;
@@ -385,6 +387,11 @@
   border-bottom: 2px solid #979797;
   margin-bottom: 13px;
 }
+.UOC_Container {
+  overflow-y: scroll;
+  height: 100vh;
+  padding-bottom: 10rem;
+}
 .User_Orders_Nav_Link {
   display: inline-block;
   font-size: 13px;
@@ -455,6 +462,12 @@
   }
 }
 
+/* ************************************************* */
+/*                  Order Details                   */
+/* ************************************************* */
+.User_OrderDetails_OrderHeader {
+  min-height: 50px;
+}
 /* ************************************************* */
 /*                  Cancellations                    */
 /* ************************************************* */

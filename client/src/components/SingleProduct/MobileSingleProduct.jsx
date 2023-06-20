@@ -20,9 +20,6 @@ import {
   selectIncDec,
   totalPrice,
   addToCart,
-  PlusIncrement,
-  MinusDecrement,
-  DeleteFromCart,
 } from "../../Store/Slices/cartSlice";
 import CalcDiscount from "../../helpers/CalcDiscount";
 import PriceFormat from "../../helpers/PriceFormat";

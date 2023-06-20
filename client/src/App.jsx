@@ -1,6 +1,6 @@
 import "./App.css";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Home from "./Pages/Home";
@@ -25,6 +25,20 @@ import { getUserWishlist } from "./Store/Slices/wishlistSlice";
 import { totalPrice, getCart } from "./Store/Slices/cartSlice";
 import { getUserOrderAddress, getUserOrders } from "./Store/Slices/orderSlice";
 
+import {
+  addNewAddress,
+  changeDeliveryMethod,
+  defaultAddress,
+  deleteAddress,
+  editAddress,
+  getAddress,
+} from "./Store/Slices/orderSlice";
+import UserAddressBook from "./components/Modals/UserAddressBook";
+import EditAddress from "./components/Modals/EditAddress";
+import AddAddress from "./components/Modals/AddAddress";
+import DeliveryMethod from "./components/Modals/DeliveryMethod";
+import OrderDetails from "./components/User/OrderDetails";
+
 const App = () => {
   const dispatch = useDispatch();
   let userLoading = useSelector((state) => state.User.loading);
@@ -32,7 +46,6 @@ const App = () => {
   let cartLoading = useSelector((state) => state.Cart.loading);
   let wishlistLoading = useSelector((state) => state.Wishlist.loading);
   let orderLoading = useSelector((state) => state.Orders.loading);
-
   useEffect(() => {
     // return () => {}
     dispatch(getProduct());
@@ -40,9 +53,11 @@ const App = () => {
     dispatch(getCart());
     dispatch(getUserWishlist());
     dispatch(getUserOrders());
+    dispatch(getAddress());
     dispatch(getUserOrderAddress());
     dispatch(totalPrice());
   }, []);
+
   return (
     <div className="App">
       <BrowserRouter>
@@ -72,6 +87,7 @@ const App = () => {
             <Route path="payment" element={<Payment />} />
             <Route path="wishlist" element={<Wishlist />} />
             <Route path="order" element={<Order />} />
+            <Route path="orderdetails/:id" element={<OrderDetails />} />
             <Route path="returns" element={<Returns />} />
             <Route path="cancellations" element={<Cancellations />} />
           </Route>
@@ -100,6 +116,10 @@ const App = () => {
             />
           </div>
         )}
+        <UserAddressBook />
+        <EditAddress />
+        <AddAddress />
+        <DeliveryMethod />
       </BrowserRouter>
     </div>
   );

@@ -10,7 +10,7 @@ export const getUserWishlist = createAsyncThunk(
   async (data) => {
     const authtoken = localStorage.getItem("authtoken");
     try {
-      const URL = "http://localhost:5000/api/wishlist/get";
+      const URL = `${import.meta.env.VITE_API_KEY}/wishlist/get`;
       const response = await fetch(URL, {
         method: "GET",
         headers: {
@@ -33,7 +33,7 @@ export const getUserWishlist = createAsyncThunk(
 export const addToWishlist = createAsyncThunk("addToWishlist", async (data) => {
   const authtoken = localStorage.getItem("authtoken");
   try {
-    const URL = `http://localhost:5000/api/wishlist/add/${data}`;
+    const URL = `${import.meta.env.VITE_API_KEY}/wishlist/add/${data}`;
     const response = await fetch(URL, {
       method: "POST",
       headers: {
@@ -59,7 +59,7 @@ export const deleteFromWishlist = createAsyncThunk(
   async (data) => {
     const authtoken = localStorage.getItem("authtoken");
     try {
-      const URL = `http://localhost:5000/api/wishlist/delete/${data}`;
+      const URL = `${import.meta.env.VITE_API_KEY}/wishlist/delete/${data}`;
       const response = await fetch(URL, {
         method: "DELETE",
         headers: {

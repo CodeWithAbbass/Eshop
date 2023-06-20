@@ -23,12 +23,13 @@ import {
 
 const MobileCart = () => {
   const Cart = useSelector((state) => state.Cart.items);
+  const Wishlist = useSelector((state) => state.Wishlist.wishitems);
   const totalAmount = useSelector((state) => state.Cart.totalAmount);
   const shippingFee = useSelector((state) => state.Cart.shippingFee);
   const dispatch = useDispatch();
   useEffect(() => {
     return () => {};
-  }, []);
+  }, [Cart]);
   return (
     <div className="Mobile_Cart">
       <div className="Mobile_Cart_Container container-xl py-5 mt-sm-5">
@@ -62,9 +63,7 @@ const MobileCart = () => {
                     title,
                     isSale,
                   } = item;
-                  const ItemExist = useSelector((state) =>
-                    state.Wishlist.wishitems.filter((item) => item == uid)
-                  );
+                  const ItemExist = Wishlist.filter((item) => item == uid);
 
                   return (
                     <div className="Mobile_CartItem" key={index}>
@@ -191,18 +190,21 @@ const MobileCart = () => {
                                     <FavoriteBorderOutlinedIcon className="CPPOperation_WishList_Icon" />
                                   </button>
                                 ) : (
-                                  <button
+                                  <Link
                                     className="CPPOperation_WishList_Btn btn p-0 m-0 me-1"
-                                    onClick={() =>
-                                      dispatch(deleteFromWishlist(uid))
-                                    }
+                                    onClick={() => {
+                                      dispatch(deleteFromWishlist(uid));
+                                    }}
                                   >
                                     <FavoriteIcon className="CPPOperation_WishList_Icon" />
-                                  </button>
+                                  </Link>
                                 )}
                                 <button
                                   className="CPPOperation_Delete_Btn btn p-0 m-0 ms-1"
-                                  onClick={() => dispatch(deleteFromCart(uid))}
+                                  onClick={() => {
+                                    dispatch(deleteFromCart(uid));
+                                    dispatch(totalPrice());
+                                  }}
                                 >
                                   <DeleteOutlinedIcon className="CPPOperation_Delete_Icon" />
                                 </button>

@@ -20,12 +20,17 @@ import {
   addToWishlist,
   deleteFromWishlist,
 } from "../../Store/Slices/wishlistSlice";
+import { useEffect } from "react";
 const DesktopCart = () => {
+  const dispatch = useDispatch();
   const Cart = useSelector((state) => state.Cart.items);
+  const Wishlist = useSelector((state) => state.Wishlist.wishitems);
   const totalAmount = useSelector((state) => state.Cart.totalAmount);
   const shippingFee = useSelector((state) => state.Cart.shippingFee);
 
-  const dispatch = useDispatch();
+  useEffect(() => {
+    return () => {};
+  }, [Cart]);
   return (
     <div className="Desktop_Cart py-5">
       <div className="Desktop_Cart_Container container-xl">
@@ -40,7 +45,7 @@ const DesktopCart = () => {
                   className="DCCHL_CheckAll_Input me-3"
                 />
                 <span className="DCCHL_CheckAll_Count">
-                  SELECT ALL ({Cart.length} ITEM(S))
+                  SELECT ALL ({Cart.length || ""} ITEM(S))
                 </span>
               </div>
               <div className="DCCL_Header_Delete_Container col-6 p-0 text-end">
@@ -70,12 +75,9 @@ const DesktopCart = () => {
                         rating,
                         stock,
                         title,
-                        isSale,
+                        issale,
                       } = item;
-                      const ItemExist = useSelector((state) =>
-                        state.Wishlist.wishitems.filter((item) => item == uid)
-                      );
-
+                      const ItemExist = Wishlist.filter((item) => item == uid);
                       return (
                         <div className="DCCL_CartItem" key={index}>
                           <hr className="DCCL_Separator" />
@@ -180,9 +182,10 @@ const DesktopCart = () => {
                                   )}
                                   <button
                                     className="CPPOperation_Delete_Btn btn p-0 m-0 ms-1"
-                                    onClick={() =>
-                                      dispatch(deleteFromCart(uid))
-                                    }
+                                    onClick={() => {
+                                      dispatch(deleteFromCart(uid));
+                                      dispatch(totalPrice());
+                                    }}
                                   >
                                     <DeleteOutlinedIcon className="CPPOperation_Delete_Icon" />
                                   </button>

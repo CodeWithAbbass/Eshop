@@ -39,7 +39,7 @@ const User = () => {
       <DesktopUser />
       <MobileUser />
 
-      {/* Modal */}
+      {/* Edit Profile Modal */}
       <div
         className="modal fade my-2"
         id="UserMadal"

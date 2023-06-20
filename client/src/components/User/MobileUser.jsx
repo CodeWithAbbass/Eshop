@@ -10,7 +10,9 @@ import Inventory2OutlinedIcon from "@mui/icons-material/Inventory2Outlined";
 import ReplayOutlinedIcon from "@mui/icons-material/ReplayOutlined";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import { Link, Outlet } from "react-router-dom";
+import { useSelector } from "react-redux";
 const MobileUser = () => {
+  let User = useSelector((state) => state.User.user);
   const TogglePage = (Page) => {
     const SidePage = document.querySelector(
       ".Mobile_User_Fixed_Page_Container"
@@ -40,7 +42,10 @@ const MobileUser = () => {
       </div>
       <div className="Mobile_User_Header_Bottom container-xl">
         <Link className="MUHB_Login_Member_Link">
-          <p className="MUHB_Login_Member mb-0"> Hello, abbas.ali</p>
+          <p className="MUHB_Login_Member mb-0">
+            {" "}
+            Hello, {User.name || "Guest"}
+          </p>
         </Link>
       </div>
 

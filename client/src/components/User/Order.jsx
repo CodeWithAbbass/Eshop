@@ -29,7 +29,7 @@ const Order = () => {
                 className="UOC_Orders_Item_Container my-3 shadow-sm"
                 key={index}
               >
-                <div className="UOC_Orders_Header border-bottom border-top py-2 px-3 shadow-sm position-relative">
+                <div className="UOC_Orders_Header border-bottom py-2 px-3 shadow-sm position-relative">
                   <div className="row m-0 w-100 align-items-center">
                     <div className="col-8 p-0">
                       <p className="UOC_Orders_Header_Requested_Heading mb-0">
@@ -42,13 +42,19 @@ const Order = () => {
                       </p>
                       <div className="UOC_Orders_Header_Order">
                         <span>Order</span>
-                        <span className="UOC_Orders_Header_Order_Number ms-1">
+                        <Link
+                          className="UOC_Orders_Header_Order_Number ms-1"
+                          to={`/user/orderdetails/${orderid}`}
+                        >
                           #{orderid}
-                        </span>
+                        </Link>
                       </div>
                     </div>
                     <div className="col-4 p-0 text-end">
-                      <Link className="UOC_Orders_Header_ManageBtn">
+                      <Link
+                        className="UOC_Orders_Header_ManageBtn"
+                        to={`/user/orderdetails/${orderid}`}
+                      >
                         Manage
                       </Link>
                     </div>

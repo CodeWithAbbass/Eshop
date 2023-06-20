@@ -106,6 +106,10 @@ export const deleteFromCart = createAsyncThunk(
   async (uid) => {
     const items = JSON.parse(localStorage.getItem("items")); // Getting From Local Storage
     const res = items.filter((item) => item.uid !== uid);
+    if (res.length == 0) {
+      localStorage.removeItem("items");
+      return [];
+    }
     const Newitem = JSON.stringify(res);
     localStorage.setItem("items", Newitem);
     return res;
@@ -246,8 +250,6 @@ const cartSlice = createSlice({
         state.loading = true;
       })
       .addCase(addToCart.fulfilled, (state, action) => {
-        // console.log(action, "from fulfiled");
-
         state.loading = false;
         state.items = action.payload;
         state.error = null;
@@ -347,9 +349,9 @@ const cartSlice = createSlice({
 // Action creators are generated for each case reducer function
 export const {
   // AddToCart,
-  PlusIncrement,
-  MinusDecrement,
-  DeleteFromCart,
+  // PlusIncrement,
+  // MinusDecrement,
+  // DeleteFromCart,
   // SelectIncrementDecrement,
   // TotalPrice,
 } = cartSlice.actions;

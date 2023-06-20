@@ -12,7 +12,7 @@ export const getUser = createAsyncThunk("getUser", async (data) => {
     return {};
   }
   try {
-    const URL = "http://localhost:5000/api/auth";
+    const URL = `${import.meta.env.VITE_API_KEY}/auth`;
     const response = await fetch(URL, {
       method: "GET",
       headers: {
@@ -35,7 +35,7 @@ export const getUser = createAsyncThunk("getUser", async (data) => {
 
 export const Signup = createAsyncThunk("Signup", async (data) => {
   try {
-    const URL = "http://localhost:5000/api/auth/signup";
+    const URL = `${import.meta.env.VITE_API_KEY}/auth/signup`;
     const response = await fetch(URL, {
       method: "POST",
       headers: {
@@ -58,7 +58,7 @@ export const Signup = createAsyncThunk("Signup", async (data) => {
 
 export const Login = createAsyncThunk("Login", async (data) => {
   try {
-    const URL = "http://localhost:5000/api/auth/login";
+    const URL = `${import.meta.env.VITE_API_KEY}/auth/login`;
     const response = await fetch(URL, {
       method: "POST",
       headers: {
@@ -92,7 +92,7 @@ export const Logout = createAsyncThunk("Logout", async (data) => {
 export const updateUser = createAsyncThunk("updateUser", async (data) => {
   const authtoken = localStorage.getItem("authtoken");
   try {
-    const URL = "http://localhost:5000/api/auth/update";
+    const URL = `${import.meta.env.VITE_API_KEY}/auth/update`;
     const response = await fetch(URL, {
       method: "POST",
       headers: {

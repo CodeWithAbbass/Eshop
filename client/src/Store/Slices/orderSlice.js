@@ -3,6 +3,7 @@ const initialState = {
   orders: [],
   addressbook: [],
   paymentmethod: "cod",
+  editaddress: {},
   loading: false,
   error: "",
 };
@@ -10,7 +11,7 @@ const initialState = {
 export const getUserOrders = createAsyncThunk("getUserOrders", async (data) => {
   const authtoken = localStorage.getItem("authtoken");
   try {
-    const URL = "http://localhost:5000/api/order/user";
+    const URL = `${import.meta.env.VITE_API_KEY}/order/user`;
     const response = await fetch(URL, {
       method: "GET",
       headers: {
@@ -36,7 +37,7 @@ export const placeOrder = createAsyncThunk("placeOrder", async (data) => {
     return [];
   }
   try {
-    const URL = `http://localhost:5000/api/order/confirm`;
+    const URL = `${import.meta.env.VITE_API_KEY}/order/confirm`;
     const response = await fetch(URL, {
       method: "POST",
       headers: {
@@ -74,7 +75,7 @@ export const getAddress = createAsyncThunk("getAddress", async () => {
     return [];
   }
   try {
-    const URL = `http://localhost:5000/api/address`;
+    const URL = `${import.meta.env.VITE_API_KEY}/address`;
     const response = await fetch(URL, {
       method: "GET",
       headers: {
@@ -104,7 +105,7 @@ export const addNewAddress = createAsyncThunk(
       return [];
     }
     try {
-      const URL = `http://localhost:5000/api/address/add`;
+      const URL = `${import.meta.env.VITE_API_KEY}/address/add`;
       const response = await fetch(URL, {
         method: "POST",
         headers: {
@@ -138,7 +139,9 @@ export const editAddress = createAsyncThunk(
       return [];
     }
     try {
-      const URL = `http://localhost:5000/api/address/update/${updateData.aid}`;
+      const URL = `${import.meta.env.VITE_API_KEY}/address/update/${
+        updateData.aid
+      }`;
       const response = await fetch(URL, {
         method: "POST",
         headers: {
@@ -172,7 +175,7 @@ export const defaultAddress = createAsyncThunk(
       return [];
     }
     try {
-      const URL = `http://localhost:5000/api/address/da/${aid}`;
+      const URL = `${import.meta.env.VITE_API_KEY}/address/da/${aid}`;
       const response = await fetch(URL, {
         method: "POST",
         headers: {
@@ -200,8 +203,15 @@ export const deleteAddress = createAsyncThunk("deleteAddress", async (aid) => {
     alert("Please Login Before Deleting Address");
     return [];
   }
+  const res = window.confirm(
+    "Are You Sure? You Want To Delete This Address Permanantly?"
+  );
+  if (!res) {
+    return [];
+  }
+
   try {
-    const URL = `http://localhost:5000/api/address/delete/${aid}`;
+    const URL = `${import.meta.env.VITE_API_KEY}/address/delete/${aid}`;
     const response = await fetch(URL, {
       method: "DELETE",
       headers: {
@@ -228,6 +238,9 @@ const orderSlice = createSlice({
   reducers: {
     changeDeliveryMethod(state, action) {
       return { ...state, paymentmethod: action.payload };
+    },
+    editAddressState(state, action) {
+      return { ...state, editaddress: action.payload };
     },
   },
   extraReducers: (builder) => {
@@ -345,7 +358,11 @@ const orderSlice = createSlice({
       })
       .addCase(deleteAddress.fulfilled, (state, action) => {
         state.loading = false;
-        state.addressbook = action.payload;
+        if (action.payload.length > 0) {
+          state.addressbook = action.payload;
+        } else {
+          return;
+        }
         state.error = null;
       })
       .addCase(deleteAddress.rejected, (state, action) => {
@@ -354,5 +371,5 @@ const orderSlice = createSlice({
       });
   },
 });
-export const { changeDeliveryMethod } = orderSlice.actions;
+export const { changeDeliveryMethod, editAddressState } = orderSlice.actions;
 export default orderSlice.reducer;
