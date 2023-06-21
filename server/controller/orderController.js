@@ -49,15 +49,49 @@ exports.getUserOrders = async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 };
+exports.getOrderDetails = async (req, res) => {
+  try {
+    let success = false;
+    const orderExist = await pool.query(
+      `SELECT * FROM orders WHERE orderid = $1`,
+      [req.params.id]
+    );
+    if (orderExist.rowCount == 0) {
+      return res.send({ success, data: [], message: "Order Not Found" });
+    }
+    const orderDetails = await pool.query(
+      `SELECT * FROM orders WHERE userid = $1 AND orderid = $2`,
+      [req.user.uid, req.params.id]
+    );
+    if (orderDetails.rowCount == 0 || orderDetails.rows.length == 0) {
+      success = true;
+      return res.send({ success, data: [], message: "Order Not Found" });
+    }
+    for (const iterator of orderDetails.rows) {
+      iterator.products = JSON.parse(iterator.products);
+    }
+    success = true;
+    res.send({
+      success,
+      data: orderDetails.rows,
+      message: "Orders Details Found Successfully",
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Internal Server Error");
+  }
+};
 exports.placeOrder = async (req, res) => {
   try {
     let success = false;
+
     let uid =
       crypto.randomBytes(5).toString("hex") +
-      Date.now().toString(36) +
+      Date.now().toString(5) +
       crypto.randomBytes(5).toString("hex");
     let {
       deliverto,
+      phone,
       orderid = uid,
       userid = req.user.uid,
       date,
@@ -87,7 +121,7 @@ exports.placeOrder = async (req, res) => {
     date = Date.now().toString();
 
     const placeOrder = await pool.query(
-      `INSERT INTO orders (orderid, userid, date, status, shipaddress, billaddress, paymentmethod, deliverto, products) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`,
+      `INSERT INTO orders (orderid, userid, date, status, shipaddress, billaddress, paymentmethod, deliverto, phone, products) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *`,
       [
         orderid,
         userid,
@@ -97,6 +131,7 @@ exports.placeOrder = async (req, res) => {
         billaddress,
         paymentmethod,
         deliverto,
+        phone,
         StrProducts,
       ]
     );
@@ -126,16 +161,26 @@ exports.placeOrder = async (req, res) => {
 };
 exports.updateStatus = async (req, res) => {
   // Order Status Should Be:
-  // pending ||  processing || shipping || delivered || returned || cancelled
+  // pending ||  processing || shipped || delivered || returned || cancelled
   try {
     let success = false;
     let { status } = req.body;
+    const orderExist = await pool.query(`SELECT * FROM WHERE orderid = $1`, [
+      req.params.id,
+    ]);
+    if (orderExist.rowCount == 0) {
+      return res.send({ success, data: [], message: "Order Not Found" });
+    }
     const updateStatus = await pool.query(
       `UPDATE orders SET status = $2 WHERE orderid = $1 RETURNING *`,
       [req.params.id, status.toLowerCase()]
     );
     if (updateStatus.rowCount == 0) {
-      return res.send({ success, data: [], message: "Order Not Found" });
+      return res.send({
+        success,
+        data: [],
+        message: "Order Status Not Updated",
+      });
     }
     updateStatus.rows[0].products = JSON.parse(updateStatus.rows[0].products);
     success = true;
@@ -143,6 +188,39 @@ exports.updateStatus = async (req, res) => {
       success,
       data: updateStatus.rows,
       message: "Order Status Updated Successfully",
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Internal Server Error");
+  }
+};
+exports.cancelOrder = async (req, res) => {
+  try {
+    let success = false;
+    const orderExist = await pool.query(
+      `SELECT * FROM orders WHERE orderid = $1`,
+      [req.params.id]
+    );
+    if (orderExist.rowCount == 0) {
+      return res.send({ success, data: [], message: "Order Not Found" });
+    }
+    const cancelOrder = await pool.query(
+      `UPDATE orders SET status = $2 WHERE orderid = $1 RETURNING *`,
+      [req.params.id, "cancelled"]
+    );
+    if (cancelOrder.rowCount == 0) {
+      return res.send({
+        success,
+        data: [],
+        message: "Order Was Not Cancelled",
+      });
+    }
+    cancelOrder.rows[0].products = JSON.parse(cancelOrder.rows[0].products);
+    success = true;
+    res.send({
+      success,
+      data: cancelOrder.rows,
+      message: "Order Cancelled Successfully",
     });
   } catch (error) {
     console.error(error.message);

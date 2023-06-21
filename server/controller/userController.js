@@ -54,7 +54,7 @@ exports.signup = async (req, res) => {
     }
     const uid =
       crypto.randomBytes(5).toString("hex") +
-      Date.now().toString(36) +
+      Date.now().toString(5) +
       crypto.randomBytes(5).toString("hex");
 
     // Here We Hashing

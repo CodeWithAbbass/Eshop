@@ -47,7 +47,7 @@ exports.addAddress = async (req, res) => {
     }
     let aid =
       crypto.randomBytes(5).toString("hex") +
-      Date.now().toString(36) +
+      Date.now().toString(5) +
       crypto.randomBytes(5).toString("hex");
     const newAddress = await pool.query(
       `INSERT INTO address (aid, uid, name, phone, address) VALUES ($1, $2, $3, $4, $5) RETURNING *`,

@@ -8,7 +8,6 @@ const crypto = require("crypto");
 exports.getWishlist = async (req, res) => {
   try {
     let success = false;
-    let UserWishList = [];
     // Getting User Wishitems
     const user = await pool.query(`SELECT * FROM wishlist WHERE userid = $1`, [
       req.user.uid,
@@ -19,26 +18,6 @@ exports.getWishlist = async (req, res) => {
     }
 
     const WishItemsArr = JSON.parse(user.rows[0].wishitem);
-    // let ProductFound;
-    // for (const iterator of WishItemsArr) {
-    //   console.log(iterator, "========", WishItemsArr);
-    //   ProductFound = await pool.query(
-    //     "SELECT * FROM products WHERE uid = $1",
-    //     [iterator] // uid of product
-    //   );
-    //   if (ProductFound.rowCount == 0) {
-    //     return res.send({ success, data: null, message: "Wishlist is Empty!" });
-    //   }
-    //   if (ProductFound.rowCount > 0) {
-    //     UserWishList = ProductFound.rows;
-    //   }
-    // }
-    // console.log(ProductFound);
-    // console.log(UserWishList);
-    // for (const iterator of UserWishList) {
-    //   // console.log(iterator);
-    //   iterator.images = JSON.parse(iterator.images);
-    // }
 
     success = true;
     res.send({
@@ -57,7 +36,7 @@ exports.addToWishlist = async (req, res) => {
     let success = false;
     const uid =
       crypto.randomBytes(5).toString("hex") +
-      Date.now().toString(36) +
+      Date.now().toString(5) +
       crypto.randomBytes(5).toString("hex");
 
     const ProductExist = await pool.query(

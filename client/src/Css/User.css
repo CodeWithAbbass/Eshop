@@ -388,7 +388,7 @@
   margin-bottom: 13px;
 }
 .UOC_Container {
-  overflow-y: scroll;
+  overflow-y: auto;
   height: 100vh;
   padding-bottom: 10rem;
 }
@@ -465,8 +465,140 @@
 /* ************************************************* */
 /*                  Order Details                   */
 /* ************************************************* */
-.User_OrderDetails_OrderHeader {
+.User_OrderDetails {
+  overflow-y: auto;
+  height: 100%;
+  padding-bottom: 6rem;
+}
+.User_OrderDetails_OrderHeader_Container {
   min-height: 50px;
+}
+.UOC_Orders_Header_OrderId {
+  font-size: 14px;
+}
+.UOC_Orders_txt {
+  font-size: 14px;
+}
+.UOC_Orders_Header_Requested {
+  color: #9e9e9e;
+  font-size: 12px;
+}
+.User_OrderDetails_Header_SoldBy {
+  font-size: 12px;
+}
+.User_OrderDetails_OrderBody_Header_GetBy {
+  color: #4caf50;
+  font-size: 14px;
+}
+.User_OrderDetails_OrderBody_Header_Right {
+  font-size: 12px;
+}
+
+.User_OrderDetails_OrderBody_Progress {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  border: none;
+}
+.OrderBody_ProgressInfo_Step_Item {
+  flex: 1;
+  vertical-align: top;
+  display: inline-block;
+  text-align: center;
+  position: relative;
+}
+
+.OrderBody_ProgressInfo_Step_Item_Tail {
+  position: absolute;
+  width: calc(100% - 16px);
+  height: auto;
+  left: calc(50% + 8px);
+  top: 7px !important;
+}
+.OrderBody_ProgressInfo_Step_Item_Tail.Item_Last_Tail {
+  left: calc(-50% + 8px);
+}
+
+.OrderBody_ProgressInfo_Step_Item_Tail_Underlay {
+  background-color: #dadada;
+  height: 4px;
+  position: relative;
+  transition: all 0.4s ease;
+}
+.OrderBody_ProgressInfo_Step_Item_Tail_Underlay.active {
+  background-color: #f57224;
+}
+.OrderBody_ProgressInfo_Step_Item_Node {
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  line-height: 16px;
+  color: #dadada;
+  background: #dadada;
+  border-color: transparent;
+  border-radius: 50%;
+  position: relative;
+  display: inline-block;
+  text-align: center;
+  cursor: pointer;
+}
+.OrderBody_ProgressInfo_Step_Item_Node.active {
+  color: #4caf50;
+  background-color: #fff;
+}
+.OrderBody_ProgressInfo_Step_Item_Node.complete {
+  color: #f57224;
+  background: #fff;
+}
+.OrderBody_ProgressInfo_Step_Item_Node_Dot {
+  position: absolute;
+  top: 50%;
+  margin-top: -8px;
+  left: 50%;
+  margin-left: -8px;
+  display: block;
+  width: 16px;
+  height: 16px;
+  border: 4px solid;
+  border-radius: 50%;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+.OrderBody_ProgressInfo_Step_Item_Txt {
+  font-size: 12px;
+}
+
+.UODOBP_Quantity {
+  font-size: 14px;
+  color: #dadada;
+}
+.UODOBP_CancelBtn {
+  font-size: 14px;
+  transition: 0.4s ease-in-out;
+}
+.UODOBP_CancelBtn:hover {
+  background-color: #f5f5f5 !important;
+  color: #c9c9c9 !important;
+}
+
+.UODOBA_AddressInfo_Txt,
+.UODOBA_Summery_Txt {
+  font-size: 14px;
+}
+.user_OrderDetails_OrderBody_ProductInfo_Mobile {
+  display: none;
+}
+@media (max-width: 991px) {
+  .user_OrderDetails_OrderBody_ProductInfo_Desktop {
+    display: none;
+  }
+
+  .user_OrderDetails_OrderBody_ProductInfo_Mobile {
+    display: block;
+  }
+  .UODOBA_ShipAddress_Container,
+  .UODOBA_BillAddress_Container {
+    border-bottom: 1px solid #ccc;
+  }
 }
 /* ************************************************* */
 /*                  Cancellations                    */

@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 const initialState = {
   orders: [],
+  orderDetails: [],
   addressbook: [],
   paymentmethod: "cod",
   editaddress: {},
@@ -10,6 +11,9 @@ const initialState = {
 
 export const getUserOrders = createAsyncThunk("getUserOrders", async (data) => {
   const authtoken = localStorage.getItem("authtoken");
+  if (!authtoken) {
+    return [];
+  }
   try {
     const URL = `${import.meta.env.VITE_API_KEY}/order/user`;
     const response = await fetch(URL, {
@@ -30,6 +34,35 @@ export const getUserOrders = createAsyncThunk("getUserOrders", async (data) => {
     throw new Error(error);
   }
 });
+export const getOrderDetails = createAsyncThunk(
+  "getOrderDetails",
+  async (orderid) => {
+    const authtoken = localStorage.getItem("authtoken");
+    if (!authtoken) {
+      return [];
+    }
+    try {
+      const URL = `${import.meta.env.VITE_API_KEY}/order/details/${orderid}`;
+      const response = await fetch(URL, {
+        method: "GET",
+        headers: {
+          authtoken,
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        return result.data;
+      }
+      return result.data;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+);
 export const placeOrder = createAsyncThunk("placeOrder", async (data) => {
   const authtoken = localStorage.getItem("authtoken");
   if (!authtoken) {
@@ -47,6 +80,38 @@ export const placeOrder = createAsyncThunk("placeOrder", async (data) => {
       },
       credentials: "include",
       body: JSON.stringify(data),
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      alert(result.message);
+      return result.data;
+    }
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+export const cancelOrder = createAsyncThunk("cancelOrder", async (orderid) => {
+  const authtoken = localStorage.getItem("authtoken");
+  if (!authtoken) {
+    alert("Please Login Before Place Order");
+    return [];
+  }
+  const res = window.confirm("Are You Sure? You Want To Cancel This Order?");
+  if (!res) {
+    return [];
+  }
+  try {
+    const URL = `${import.meta.env.VITE_API_KEY}/order/cancel/${orderid}`;
+    const response = await fetch(URL, {
+      method: "POST",
+      headers: {
+        authtoken,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
     });
 
     const result = await response.json();
@@ -260,6 +325,18 @@ const orderSlice = createSlice({
         state.loading = false;
         state.error = action.error.message;
       })
+      .addCase(getOrderDetails.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getOrderDetails.fulfilled, (state, action) => {
+        state.loading = false;
+        state.orderDetails = action.payload;
+        state.error = null;
+      })
+      .addCase(getOrderDetails.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
       .addCase(placeOrder.pending, (state) => {
         state.loading = true;
       })
@@ -271,6 +348,23 @@ const orderSlice = createSlice({
         state.error = null;
       })
       .addCase(placeOrder.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(cancelOrder.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(cancelOrder.fulfilled, (state, action) => {
+        state.loading = false;
+        if (action.payload.length > 0) {
+          state.orderDetails = action.payload;
+        } else {
+          return;
+        }
+        state.orderDetails = action.payload;
+        state.error = null;
+      })
+      .addCase(cancelOrder.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       })

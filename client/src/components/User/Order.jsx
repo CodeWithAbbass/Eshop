@@ -7,23 +7,38 @@ const Order = () => {
   const Orders = useSelector((state) => state.Orders.orders);
   return (
     <div className="User_Orders_Container">
-      <div className="User_Orders_Header">
-        <Link to="#" className="User_Container_Heading">
-          My Orders
-        </Link>
-      </div>
-      <div className="User_Orders_Nav_Container">
-        <Link className="User_Orders_Nav_Link active">All</Link>
-        <Link className="User_Orders_Nav_Link">To Pay</Link>
-        <Link className="User_Orders_Nav_Link">To Ship</Link>
-        <Link className="User_Orders_Nav_Link">To Recieve</Link>
-      </div>
-
+      {Orders.length == 0 && (
+        <div className="User_Returns_No_Returns_Container text-center mt-5">
+          <div className="User_Returns_No_Returns_Heading mb-3">
+            There are no orders yet.
+          </div>
+          <Link
+            className="User_Returns_No_Rturns_Btn d-block text-center"
+            to="/"
+          >
+            Continue Shopping
+          </Link>
+        </div>
+      )}
+      {Orders.length > 0 && (
+        <div>
+          <div className="User_Orders_Header">
+            <Link to="#" className="User_Container_Heading">
+              My Orders
+            </Link>
+          </div>
+          <div className="User_Orders_Nav_Container">
+            <Link className="User_Orders_Nav_Link active">All</Link>
+            <Link className="User_Orders_Nav_Link">To Pay</Link>
+            <Link className="User_Orders_Nav_Link">To Ship</Link>
+            <Link className="User_Orders_Nav_Link">To Recieve</Link>
+          </div>
+        </div>
+      )}
       <div className="UOC_Container mt-2">
         {Orders &&
           Orders.map((item, index) => {
             let { orderid, status, date, products } = item;
-
             return (
               <div
                 className="UOC_Orders_Item_Container my-3 shadow-sm"

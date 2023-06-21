@@ -44,6 +44,7 @@ const MobileCheckout = () => {
     });
     let confirmOrder = {
       deliverto: DefaultAddress[0] ? DefaultAddress[0].name : "",
+      phone: DefaultAddress[0] ? DefaultAddress[0].phone : "",
       products,
       paymentmethod: PaymentMethod,
       shipaddress: DefaultAddress[0] ? DefaultAddress[0].address : "",
