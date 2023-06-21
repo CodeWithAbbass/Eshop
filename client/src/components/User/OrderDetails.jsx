@@ -7,6 +7,7 @@ import RedeemIcon from "@mui/icons-material/Redeem";
 import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
 import PriceFormat from "../../helpers/PriceFormat";
 import { cancelOrder, getOrderDetails } from "../../Store/Slices/orderSlice";
+import JustForYou from "../Home/JustForYou";
 
 const OrderDetails = () => {
   const { id } = useParams();
@@ -279,7 +280,6 @@ const OrderDetails = () => {
           </div>
         </div>
       </div>
-
       <div className="User_OrderDetails_OrderFooter my-3">
         <div className="User_OrderDetails_OrderFooter_AddressInfo">
           <div className="row m-0 w-100 justify-content-between">
@@ -298,7 +298,7 @@ const OrderDetails = () => {
                   {phone || ""}
                 </p>
               </div>
-              <div className="UODOBA_BillAddress_Container bg-white p-3">
+              <div className="UODOBA_BillAddress_Container bg-white p-3 mt-md-3">
                 <p className="UODOBA_AddressInfo_Heading mb-2">Bill Address</p>
                 <p className="UODOBA_AddressInfo_Txt UODOBA_AddressInfo_Username mb-0">
                   {deliverto || ""}
@@ -333,6 +333,9 @@ const OrderDetails = () => {
             </div>
           </div>
         </div>
+      </div>
+      <div className="User_OrderDetails_Just_For_You">
+        <JustForYou />
       </div>
     </div>
   );
