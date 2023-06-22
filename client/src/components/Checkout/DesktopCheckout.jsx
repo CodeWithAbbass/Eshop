@@ -220,7 +220,7 @@ const DesktopCheckout = () => {
                 <span className="DCC_Left_Checkout_Subtotal_items">
                   {Cart.length} Items. Subtotal:
                 </span>
-                <span className="DCC_Left_Checkout_Subtotal_Price text-danger ms-1">
+                <span className="DCC_Left_Checkout_Subtotal_Price Text_Primary_Color ms-1">
                   {PriceFormat(totalAmount)}
                 </span>
               </div>

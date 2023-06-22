@@ -31,24 +31,27 @@ exports.signup = async (req, res) => {
     if (!password) {
       return res.status(400).send({
         message: "Please Fill The Password Fields",
+        data: {},
         success,
       });
     }
     if (password.length < 8) {
       return res.status(400).send({
         message: "The password must be at least 8 characters.",
+        data: {},
         success,
       });
     }
 
     const allUsers = await pool.query(
       "SELECT * FROM users WHERE phone = $1 OR email = $2",
-      [phone, email]
+      [phone, email.toLowerCase()]
     );
 
     if (allUsers.rowCount > 0) {
       return res.status(400).send({
         message: "User Already Exist! Check Your Email And Phone Again.",
+        data: {},
         success,
       });
     }
@@ -81,22 +84,36 @@ exports.login = async (req, res) => {
     let success = false;
     const { phone, password } = req.body;
     if (!phone || !password) {
-      return res.status.send({
+      return res.status(400).send({
         success,
-        message: "Please Fill The Form.",
+        data: {},
+        message: "Please Fill The Login Form.",
       });
     }
+
     if (phone.length < 11) {
       return res.status(400).send({
         success,
-        message: "The phone must be at least 11 characters.",
+        data: {},
+        message: "The phone must be 11 characters.",
+      });
+    }
+    if (phone.length > 11) {
+      return res.status(400).send({
+        success,
+        data: {},
+        message: "The phone must be 11 characters.",
       });
     }
     const userExist = await pool.query(
       `SELECT * FROM users WHERE phone = '${phone}'`
     );
     if (userExist.rowCount == 0) {
-      return res.status(404).send({ success, message: "User Not Found" });
+      return res.status(404).send({
+        success,
+        data: {},
+        message: "Try Again With Correct Credentials",
+      });
     }
     const user = userExist.rows[0];
     const verifyPass = await bcrypt.compare(password, user.password);

@@ -24,7 +24,7 @@
   font-weight: 500;
 }
 .UserLink_Heading.active {
-  color: #1a9cb7;
+  color: #086c75;
 }
 
 .UserLink {
@@ -41,7 +41,7 @@
   color: #1a9cb7;
 }
 .UserLink.active {
-  color: #1a9cb7;
+  color: #086c75;
   font-weight: 500 !important;
 }
 .User_Container_Heading {
@@ -90,7 +90,7 @@
   color: #16849b;
 }
 .MMA_Profile_Edit_Btn {
-  background-color: #1a9cb7;
+  background-color: #086c75;
   margin: 0;
   height: 48px;
   padding: 0 36px;
@@ -129,7 +129,7 @@
 .UC_Right_Btn_Icon {
   width: 20px !important;
   height: 20px !important;
-  color: #f57224;
+  color: #40cdbd;
 }
 .UAC_Container,
 .UPC_Container {
@@ -296,7 +296,7 @@
 }
 
 .User_Wishlist_Item_NewPrice {
-  color: #f57224;
+  color: #40cdbd;
   font-size: 16px;
 }
 .User_Wishlist_Item_Discount,
@@ -309,11 +309,11 @@
   transition: 0.4s ease-in-out;
 }
 .User_Wishlist_Item_Delete_Link:hover {
-  color: #f57224;
+  color: #40cdbd;
 }
 
 .User_Wishlist_To_Cart_Link {
-  background-color: #f57224;
+  background-color: #40cdbd;
   height: 35px;
   width: 75px;
   line-height: 33px;
@@ -321,7 +321,7 @@
   transition: 0.4s ease-in-out;
 }
 .User_Wishlist_To_Cart_Link:hover {
-  background-color: #ec5700;
+  background-color: #086c75;
 }
 .Mobile_User_Wishlist_Item_Wrapper {
   display: none;
@@ -526,7 +526,7 @@
   transition: all 0.4s ease;
 }
 .OrderBody_ProgressInfo_Step_Item_Tail_Underlay.active {
-  background-color: #f57224;
+  background-color: #40cdbd;
 }
 .OrderBody_ProgressInfo_Step_Item_Node {
   width: 16px;
@@ -543,11 +543,11 @@
   cursor: pointer;
 }
 .OrderBody_ProgressInfo_Step_Item_Node.active {
-  color: #4caf50;
+  color: #05b8ff;
   background-color: #fff;
 }
 .OrderBody_ProgressInfo_Step_Item_Node.complete {
-  color: #f57224;
+  color: #40cdbd;
   background: #fff;
 }
 .OrderBody_ProgressInfo_Step_Item_Node_Dot {
@@ -668,9 +668,9 @@
   width: 180px;
   font-weight: 400;
   font-size: 14px;
-  border: 1px solid #f57224;
+  border: 1px solid #40cdbd;
   border-radius: 2px;
-  color: #f57224;
+  color: #40cdbd;
   height: 35px;
   line-height: 34px;
   padding-left: 10px;
@@ -684,15 +684,15 @@
 /* ************************************************* */
 .Mobile_User_Header {
   font-size: 12px;
-  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05), 0 0.5px 0 rgba(0, 0, 0, 0.09);
   height: 48px;
   line-height: 48px;
   background: -webkit-linear-gradient(
     292.66deg,
-    #f85606 60.36%,
-    #f87a06 94.93%
+    #40cdbd 60.36%,
+    #25a5d8 94.93%
   );
-  background: linear-gradient(157.34deg, #f85606 60.36%, #f87a06 94.93%);
+  background: linear-gradient(to right, #40cdbd 0, #25a5d8 100%);
+
   color: #fff;
 }
 .MUH_Back_Link {
@@ -735,14 +735,18 @@
   white-space: nowrap;
   overflow: hidden;
 }
-.Mobile_User_Fixed_Page_Container {
+.Mobile_User_Fixed_Page_ContainerLeft,
+.Mobile_User_Fixed_Page_ContainerRight {
   position: fixed;
   right: 0;
   top: 0px;
   height: 100vh;
+  overflow: hidden;
   width: 0;
   transition: 0.4s ease-in-out;
 }
-.Mobile_User_Fixed_Page_Container.active {
+
+.Mobile_User_Fixed_Page_ContainerLeft.active,
+.Mobile_User_Fixed_Page_ContainerRight.active {
   width: 100%;
 }

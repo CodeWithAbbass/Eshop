@@ -52,13 +52,13 @@ const Countdown = ({ Expire }) => {
       <div className="HSC_Counter_Content d-inline-block">
         <span className="HSC_CC_Heading me-2">Ending in</span>
         <div className="HSC_CC_Count_Item_Container d-inline-block">
-          <span className="HSC_CC_Count_Item Count_days ">{0}</span>
+          <span className="HSC_CC_Count_Item Bg_Primary Count_days ">{0}</span>
           <span className="HSC_CC_Count_Colon">:</span>
-          <span className="HSC_CC_Count_Item Count_hours ">{0}</span>
+          <span className="HSC_CC_Count_Item Bg_Primary Count_hours ">{0}</span>
           <span className="HSC_CC_Count_Colon">:</span>
-          <span className="HSC_CC_Count_Item Count_minutes">{0}</span>
+          <span className="HSC_CC_Count_Item Bg_Primary Count_minutes">{0}</span>
           <span className="HSC_CC_Count_Colon">:</span>
-          <span className="HSC_CC_Count_Item Count_seconds">{0}</span>
+          <span className="HSC_CC_Count_Item Bg_Primary Count_seconds">{0}</span>
         </div>
       </div>
       <Link className="HSC_ShopNow_Link text-center d-block bg-transparent">

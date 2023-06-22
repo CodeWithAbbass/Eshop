@@ -214,7 +214,7 @@
   background-color: transparent;
   cursor: pointer;
   transition: 0.4s ease-in-out;
-  border: 1px solid #e1e1e1;
+  border: 1px solid #086c75;
   box-shadow: 0 2px 5px 0 rgba(228, 228, 228, 0.5);
 }
 #BuyBox_Quantity_Info_Select:focus-visible {
@@ -240,8 +240,8 @@
 
 .BuyBox_AddToCart,
 .BuyBox_BuyNow {
-  background: #f57224;
-  border-color: #f57224;
+  background: #40cdbd;
+  border-color: #40cdbd;
   border-radius: 99px;
   margin: 5px 0;
   transition: 0.4s ease-in-out;
@@ -256,8 +256,8 @@
   border-color: #25a5d8;
 }
 .BuyBox_AddToCart:hover {
-  background: #ff8e4d;
-  border-color: #ff8e4d;
+  background: #05b8ff;
+  border-color: #05b8ff;
 }
 .BuyBox_BuyNow:hover {
   background: #05b8ff;
@@ -339,8 +339,8 @@
 .SP_Subtotal_Delete_Link:hover,
 .SP_Subtotal_Delete_Link:focus {
   background-color: #f8f1f100;
-  box-shadow: 0 0 0 3px #f57224, 0 0 0 2px #e8aa42;
-  border-color: #f8f1f1;
+  box-shadow: 0 0 0 3px #40cdbd, 0 0 0 2px #05b8ff;
+  border-color: #40cdbd;
 }
 
 @media (max-width: 1200px) {
@@ -459,8 +459,8 @@
 .SP_Subtotal_Quantity_Select:focus-within {
   outline: none;
   background-color: #f8f1f100;
-  box-shadow: 0 0 0 3px #f57224, 0 0 0 2px #e8aa42;
-  border-color: #f8f1f1;
+  box-shadow: 0 0 0 3px #40cdbd, 0 0 0 2px #05b8ff;
+  border-color: #40cdbd;
 }
 .SP_Subtotal_Delete_Link {
   color: #0f1111;
@@ -581,12 +581,12 @@
   width: 50%;
   line-height: 20px;
   font-size: 18px;
-  color: #ef7e33;
+  color: #40cdbd;
   padding: 4px 8px;
 }
 .MSPF_Separator {
   height: 35px;
-  border: 1px solid #e4e4e4;
+  border: 1px solid #40cdbd;
   border-radius: 10px;
 }
 .MSPF_Link_Txt {
@@ -602,10 +602,10 @@
   text-align: center;
 }
 .MSPF_Shortcut:nth-child(1) {
-  background: -webkit-linear-gradient(left, #48cfef, #16a4da);
+  background: linear-gradient(to right, #40cdbd 0, #25a5d8 100%);
 }
 .MSPF_Shortcut:nth-child(2) {
-  background: -webkit-linear-gradient(left, #ff9f36, #ff6700);
+  background: linear-gradient(to right, #25a5d8 0, #40cdbd 100%);
 }
 .MSPF_Shortcut_Link {
   transform: skewX(20deg);

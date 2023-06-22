@@ -1,6 +1,7 @@
 .UserForm {
   background-color: #eff0f5;
-  padding: 3rem 0rem;
+  height: 100%;
+  padding: 3rem 0;
 }
 .UserForm_Container {
   width: 810px;
@@ -41,9 +42,12 @@
 }
 .UserForm_Btn {
   line-height: 40px;
-  background-color: #f72;
-  border-color: #f72;
+  background-color: #40cdbd;
+  border-color: #40cdbd;
   color: #fff;
+}
+.UserForm_SubmitBtn {
+  font-size: 14px;
 }
 .UserForm_Validation {
   font-size: 12px;
@@ -66,11 +70,16 @@
 }
 @media (max-width: 768px) {
   .UserForm {
-    padding-top: 7rem;
+    height: 100vh;
+    padding: 0;
   }
   .UserForm_Header {
     justify-content: center !important;
     flex-wrap: wrap;
+  }
+  .UserForm_Header > .row > .UserForm_Header_Heading_Container,
+  .UserForm_Header > .row > .UserForm_Header_Btn_Container {
+    text-align: center !important;
   }
 }
 @media (max-width: 425px) {

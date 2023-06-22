@@ -51,7 +51,7 @@ const User = () => {
           <div className="modal-content rounded-0">
             <div className="modal-header">
               <h5 className="modal-title" id="exampleModalLabel">
-                Shipping Address:
+                {User.name + "'s" + " Profile" || "Account"}:
               </h5>
               <button
                 type="button"

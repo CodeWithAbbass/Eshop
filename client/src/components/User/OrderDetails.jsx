@@ -259,15 +259,23 @@ const OrderDetails = () => {
                       className="row m-0 my-3 py-3 w-100 border-bottom"
                       key={index}
                     >
-                      <div className="col-2 text-center">
+                      <Link
+                        className="col-2 text-center"
+                        to={`/product/${uid}`}
+                      >
                         <img
                           src={images[0] || ""}
                           alt=""
                           className=""
                           style={{ width: "60px", height: "60px" }}
                         />
-                      </div>
-                      <div className="col-6 UOC_Orders_txt">{title}</div>
+                      </Link>
+                      <Link
+                        to={`/product/${uid}`}
+                        className="col-6 UOC_Orders_txt"
+                      >
+                        {title}
+                      </Link>
                       <div className="col-4 UODOBP_Quantity text-end">
                         <span className="UODOBP_Quantity_Heading">Qty:</span>
                         <span className="ms-1 text-dark">{quantity}</span>

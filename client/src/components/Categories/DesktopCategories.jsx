@@ -1,5 +1,5 @@
-import { Link } from "react-router-dom";
 import "../../Css/Categories.css";
+import { Link } from "react-router-dom";
 import { useState } from "react";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import StarIcon from "@mui/icons-material/Star";
@@ -239,7 +239,7 @@ const DesktopCategories = () => {
                   maxLength={10}
                   max={10}
                 />
-                <button className="btn Categories_Price_Btn btn-primary">
+                <button className="btn Categories_Price_Btn Bg_Primary text-white">
                   <PlayArrowIcon />
                 </button>
               </div>

@@ -196,7 +196,7 @@ const MobileCategories = () => {
         </div>
 
         <div className="Categories_Layout_Item_Container mt-5 px-3">
-          <div className="card-deck row w-100 m-0 align-items-stretch">
+          <div className="card-deck row w-100 m-0 align-items-stretch pb-5">
             {Products.length == 0
               ? ""
               : Products.map((item, index) => {

@@ -208,41 +208,44 @@ const DesktopSingleProduct = () => {
                   <select
                     name="Quantity"
                     id="BuyBox_Quantity_Info_Select"
+                    className="text-white"
                     value={Cart.length > 0 ? Cart[0].quantity : "1"}
                     onChange={(e) => QuantityOnchange(e, Uid)}
                   >
-                    <option value="1" className="Quantity_Option">
+                    <option value="1" className="Quantity_Option Bg_Other2">
                       1
                     </option>
-                    <option value="2" className="Quantity_Option">
+                    <option value="2" className="Quantity_Option Bg_Other2">
                       2
                     </option>
-                    <option value="3" className="Quantity_Option">
+                    <option value="3" className="Quantity_Option Bg_Other2">
                       3
                     </option>
-                    <option value="4" className="Quantity_Option">
+                    <option value="4" className="Quantity_Option Bg_Other2">
                       4
                     </option>
-                    <option value="5" className="Quantity_Option">
+                    <option value="5" className="Quantity_Option Bg_Other2">
                       5
                     </option>
-                    <option value="6" className="Quantity_Option">
+                    <option value="6" className="Quantity_Option Bg_Other2">
                       6
                     </option>
-                    <option value="7" className="Quantity_Option">
+                    <option value="7" className="Quantity_Option Bg_Other2">
                       7
                     </option>
-                    <option value="8" className="Quantity_Option">
+                    <option value="8" className="Quantity_Option Bg_Other2">
                       8
                     </option>
-                    <option value="9" className="Quantity_Option">
+                    <option value="9" className="Quantity_Option Bg_Other2">
                       9
                     </option>
-                    <option value="10" className="Quantity_Option">
+                    <option value="10" className="Quantity_Option Bg_Other2">
                       10
                     </option>
                   </select>
-                  <span className="BuyBox_Quantity_Txt">Qty:</span>
+                  <span className="BuyBox_Quantity_Txt Bg_Other1 text-white">
+                    Qty:
+                  </span>
                 </form>
               </div>
               <div className="BuyBox_MainBtn">

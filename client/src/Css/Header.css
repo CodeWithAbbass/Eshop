@@ -30,15 +30,14 @@
   cursor: pointer;
   color: #212121;
   -webkit-transition: color 0.4s;
-  transition: color 0.4s;
+  transition: 0.4s ease-in-out;
   padding: 0 16px;
   text-transform: uppercase;
-  /* background: #fff; */
 }
 .TopBar_Link.active,
 .TopBar_Link:hover {
-  color: #f85606;
-  background: #f4f4f4;
+  color: #fff;
+  background-color: #40cdbd;
   text-decoration: underline;
   opacity: 0.8;
 }
@@ -123,7 +122,7 @@
 }
 .MainHeader_Cart_Counter {
   position: absolute;
-  background: #f85606;
+  background: #40cdbd;
   color: #fff;
   top: -6px;
   font-weight: 400;
@@ -215,7 +214,7 @@
 }
 .MH_LayoutHandler_Icon:hover,
 .MH_LayoutHandler_Icon.active {
-  color: #f57224;
+  color: #40cdbd;
 }
 /* **************************************************** */
 /*              Mobile Main Header Css                 */
@@ -230,7 +229,7 @@
   transition: 0.4s ease-in-out;
 }
 .Mobile_StickyBg {
-  background: linear-gradient(to right, #442e93 0, #25a5d8 100%);
+  background: linear-gradient(to right, #40cdbd 0, #25a5d8 100%);
 }
 .Mobile_MainHeader_Content {
   height: 100%;
@@ -261,6 +260,9 @@
   color: #bfbfbf;
   padding-left: 4rem;
   padding-right: 1rem;
+}
+.Mobile_SearchBox_Input::placeholder {
+  color: #40cdbd;
 }
 
 .Mobile_SearchBox_Input:focus,

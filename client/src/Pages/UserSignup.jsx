@@ -18,7 +18,7 @@ const UserSignup = () => {
     setCredentials({ ...credentials, [name]: value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     const PassValidation = document.querySelector(".UserForm_Validation");
     if (credentials.password !== credentials.cpassword) {
@@ -26,9 +26,10 @@ const UserSignup = () => {
       PassValidation.classList.add("invalid");
       return;
     }
+
     PassValidation.classList.remove("invalid");
     PassValidation.classList.add("valid");
-
+    setCredentials({ ...credentials, email: credentials.email.toLowerCase() });
     // let formData = new FormData();
     // formData.append("name", credentials.name);
     // formData.append("email", credentials.email.toLowerCase());
@@ -39,20 +40,26 @@ const UserSignup = () => {
     dispatch(Signup(credentials));
   };
   return (
-    <div className="UserForm">
+    <div className="UserForm d-flex flex-column justify-content-center">
       <div className="container-xl">
         <div className="UserForm_Container m-auto">
-          <div className="UserForm_Header d-flex justify-content-between align-items-center mb-4">
-            <h3 className="UserForm_Heading mb-0">
-              Create Your E-Shop Account
-            </h3>
-            <span className="UserForm_LoginBtn_Container">
-              <span>Already member?</span>
-              <Link to="/login" className="UserSignupForm_LoginBtn mx-1">
-                Login
-              </Link>
-              <span>here</span>
-            </span>
+          <div className="UserForm_Header mb-4">
+            <div className="row m-0 w-100 text-center">
+              <div className="UserForm_Header_Heading_Container col-12 col-md-8 text-start">
+                <h3 className="UserForm_Heading mb-0">
+                  Create Your E-Shop Account
+                </h3>
+              </div>
+              <div className="UserForm_Header_Btn_Container col-12 col-md-4 text-end">
+                <span className="UserForm_LoginBtn_Container">
+                  <span>Already member?</span>
+                  <Link to="/login" className="UserSignupForm_LoginBtn mx-1">
+                    Login
+                  </Link>
+                  <span>here</span>
+                </span>
+              </div>
+            </div>
           </div>
           <form
             action=""
@@ -138,11 +145,11 @@ const UserSignup = () => {
               <span className="UserForm_Label d-flex align-items-center UserForm_Promotion">
                 <input type="checkbox" />
                 <span className="ms-1">
-                  I'd like to receive exclusive offers and promotions via SMS
+                  I'd like to receive exclusive offers via SMS
                 </span>
               </span>
               <Link
-                className="UserForm_Input w-100 d-block UserForm_Btn text-center"
+                className="UserForm_SubmitBtn w-100 d-block UserForm_Btn mt-3 mt-sm-0 text-center"
                 onClick={handleSubmit}
               >
                 SIGN UP

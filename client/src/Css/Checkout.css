@@ -24,7 +24,7 @@
 .DCC_Left_Address_Change {
   font-size: 12px;
   font-weight: 400;
-  color: #f57224;
+  color: #40cdbd;
   text-decoration: underline;
 }
 .DCC_Checkout_Product_Info_Container {
@@ -87,11 +87,11 @@
   font-weight: 500;
 }
 .DCC_Order_Summery_OrderBtn {
-  background: #f85606;
+  background: #40cdbd;
   color: #fff;
   border-radius: 4px;
   height: 40px;
-  border: 1px solid #f85606;
+  border: 1px solid #40cdbd;
 }
 @media (max-width: 768px) {
   .DesktopCheckout {
@@ -154,7 +154,7 @@
 .AddNewAddress_Btn {
   line-height: 40px;
   font-size: 12px;
-  color: #f57224;
+  color: #40cdbd;
   transition: 0.4s ease-in-out;
 }
 .AddNewAddress_Icon {
@@ -165,14 +165,14 @@
   font-size: 12px;
   font-weight: 500;
   text-transform: uppercase;
-  background-color: #f57224;
-  border-color: #f57224;
+  background-color: #40cdbd;
+  border-color: #40cdbd;
   color: #f4f4f4;
   transition: 0.4s ease-in-out;
 }
 
 .AddNewAddress_Btn_Input_Btn:hover {
-  border-color: #f57224;
+  border-color: #40cdbd;
 }
 .UAC_AddressBook_Info_MainTag {
   transition: 0.4s ease-in-out;
@@ -186,7 +186,7 @@
 .UAC_AddressBook_Info_MainTag.defaultAddress {
   padding: 2px 6px;
   line-height: 14px;
-  background: rgb(255 119 34);
+  background: #40cdbd;
   border-radius: 2px;
   margin-right: 8px;
   color: white;
@@ -194,11 +194,11 @@
   transition: 0.4s ease-in-out;
 }
 .UAC_AddressBook_Info_MainTag.defaultAddress:hover {
-  box-shadow: 0px 1px 3px 0px rgb(255 119 34 / 80%);
+  box-shadow: 0px 1px 3px 0px #40cdbd;
 }
 
 .MMA_Profile_Edit_Btn.active {
-  background-color: #ff7744 !important;
+  background-color: #40cdbd !important;
   color: #fff;
 }
 .AddressBookModal_Body {

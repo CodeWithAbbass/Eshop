@@ -1,17 +1,13 @@
 import "../Css/Home.css";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
-
 import HeroSlider from "../components/Home/HeroSlider";
 import AdsBanner from "../components/Home/AdsBanner";
 import FlashSale from "../components/Home/FlashSale";
 import CategoriesCard from "../components/Home/CategoriesCard";
 import JustForYou from "../components/Home/JustForYou";
 const Home = () => {
-  const Products = useSelector((state) => {
-    return state.Products.items;
-  });
+
 
   useEffect(() => {
     document.body.style.backgroundColor = "#f5f5f5";

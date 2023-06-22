@@ -3,7 +3,7 @@ const FormValidator = async (req, res, next) => {
   const validationRule = {
     name: "required|string|min:3",
     email: "required|string|email",
-    phone: "required|string|min:11",
+    phone: "required|string|min:11|max:11",
   };
 
   await validator(req.body, validationRule, {}, (err, status) => {

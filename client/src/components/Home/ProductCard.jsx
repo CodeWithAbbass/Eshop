@@ -33,8 +33,8 @@ const ProductCard = ({ item }) => {
           />
           <div className="card-body p-2">
             <h5 className="card-title">{title}</h5>
-            <div className="card-text H_Product_Price">
-              <span className="H_Product_Price">
+            <div className="card-text H_Product_Price Text_Primary_Color">
+              <span className="H_Product_Price Text_Primary_Color">
                 {PriceFormat(CalcDiscount(discount, price))}
               </span>
             </div>

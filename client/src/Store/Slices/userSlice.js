@@ -47,9 +47,17 @@ export const Signup = createAsyncThunk("Signup", async (data) => {
     const result = await response.json();
     if (result.success) {
       alert(result.message);
-      return;
+      return result.data;
     }
-    alert(result.message);
+    if (response.status == 412) {
+      for (const key in result.data.errors) {
+        alert(result.data.errors[key]);
+      }
+      return {};
+    } else {
+      alert(result.message);
+      return result.data;
+    }
   } catch (error) {
     alert(result.message);
     throw new Error(error);
@@ -76,6 +84,7 @@ export const Login = createAsyncThunk("Login", async (data) => {
       return result.user;
     }
     alert(result.message);
+    console.log(result);
     return {};
   } catch (error) {
     alert(result.message);
@@ -138,10 +147,12 @@ const userSlice = createSlice({
         state.loading = true;
       })
       .addCase(Signup.fulfilled, (state, action) => {
-        // console.log(action, "from fulfiled");
-
         state.loading = false;
-        state.user = action.payload;
+        if (Object.hasOwnProperty(action.payload).length > 0) {
+          state.user = action.payload;
+        } else {
+          state.user = state.user;
+        }
         state.error = null;
       })
       .addCase(Signup.rejected, (state, action) => {
@@ -153,10 +164,12 @@ const userSlice = createSlice({
         state.loading = true;
       })
       .addCase(Login.fulfilled, (state, action) => {
-        // console.log(action, "from fulfiled");
-
         state.loading = false;
-        state.user = action.payload;
+        if (Object.hasOwnProperty(action.payload).length > 0) {
+          state.user = action.payload;
+        } else {
+          state.user = state.user;
+        }
         state.error = null;
       })
       .addCase(Login.rejected, (state, action) => {

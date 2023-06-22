@@ -41,7 +41,6 @@
 }
 .Categories_Service_Item_Input {
   cursor: pointer;
-  accent-color: green;
   border-color: #757575;
   transition: 0.4s ease-in-out;
 }
@@ -131,7 +130,7 @@
 .Categories_SortBar_Selection_Container > .dropdown > .dropdown-menu {
   width: 180px;
   border-radius: 3px;
-  box-shadow: 0 2px 3px #000;
+  box-shadow: 0px 1px 10px 0px #40cdbd;
 }
 .Categories_SortBar_Selection_Container
   > .dropdown
@@ -158,8 +157,15 @@
   line-height: 38px;
   color: #dadada;
 }
+
+.Categories_Layout_Selection_Icon {
+  cursor: pointer;
+  transition: 0.4s ease-in-out;
+}
+.Categories_Layout_Selection_Icon:hover,
 .Categories_Layout_Selection_Icon.active {
-  color: #212121;
+  transition: 0.4s ease-in-out;
+  color: #40cdbd;
 }
 
 /* Desktop Layout Header Bottom */
@@ -200,7 +206,7 @@
 .MobileCategories_MainHeader {
   height: 60px;
   line-height: 58px;
-  background-color: #f57442;
+  background: linear-gradient(to right, #40cdbd 0, #25a5d8 100%);
 }
 .MobileCategories_MainHeader_Search_Icon {
   left: 14px;
@@ -298,13 +304,13 @@
 .MobileCategories_SortByWith_Footer_Btn:focus,
 .MobileCategories_SortByWith_Footer_Btn:focus-visible,
 .MobileCategories_SortByWith_Footer_Btn:focus-within {
-  border-color: #f57442;
+  border-color: #40cdbd;
   color: #a7a5a5;
 }
 .MobileCategories_SortByWith_Footer_DoneBtn {
-  background-image: linear-gradient(90deg, #ff8763, #ff330c);
+  background-image: linear-gradient(90deg, #40cdbd, #05b8ff);
   color: #fff;
-  border-color: #f57442;
+  border-color: #40cdbd;
 }
 
 .MobileCategories_SortByWith_Footer_DoneBtn:hover,

@@ -3,10 +3,10 @@
 }
 .swiper-button-next,
 .swiper-button-prev {
-  color: #f57224 !important;
+  color: #40cdbd !important;
 }
 .swiper-pagination-bullet-active {
-  background: #f57224 !important;
+  background: #40cdbd !important;
 }
 .MobileSlideImg {
   display: none;

@@ -15,7 +15,7 @@ const Footer = () => {
   return (
     <div className="Footer w-100">
       <div className="Desktop_Footer">
-        <div className="DesktopFooter_First_Container  text-white ">
+        <div className="DesktopFooter_First_Container Bg_Primary text-white ">
           <div className="DesktopFooter_First container-xxl  text-center">
             <div className="DesktopFooter_First_Column_Container row w-100 m-0">
               <div className="col-3 text-start">
@@ -224,7 +224,7 @@ const Footer = () => {
             </div>
           </div>
         </div>
-        <div className="DesktopFooter_Copyright_Container text-center">
+        <div className="DesktopFooter_Copyright_Container text-center Bg_Primary">
           <h3 className="DesktopFooter_Copyright m-0 ">© E-Shop 2023</h3>
         </div>
       </div>
@@ -265,7 +265,7 @@ const Footer = () => {
                 <ShoppingCartIcon className="MobileFooter_Link_Icon" />
               </div>
               <span className="MobileFooter_Link_Txt">Cart</span>
-              <span className="MF_Counter position-absolute">
+              <span className="MF_Counter Bg_Primary position-absolute">
                 {Cart.length}
               </span>
             </Link>

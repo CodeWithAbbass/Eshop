@@ -74,7 +74,7 @@ const Header = () => {
             <li className="d-inline p-0">
               <Link
                 className={`TopBar_Link ${
-                  location.pathname == "/" ? "active" : ""
+                  location.pathname == "/" ? "active  Bg_Primary" : ""
                 }`}
                 to="/"
               >
@@ -91,7 +91,7 @@ const Header = () => {
                   location.pathname == "/user/payment" ||
                   location.pathname == "/user/returns" ||
                   location.pathname == "/user/cancellations"
-                    ? "active"
+                    ? "active  Bg_Primary"
                     : ""
                 }`}
               >
@@ -101,7 +101,9 @@ const Header = () => {
             <li className="d-inline p-0">
               <Link
                 className={`TopBar_Link ${
-                  location.pathname == "/user/order" ? "active" : ""
+                  location.pathname == "/user/order"
+                    ? "active  Bg_Primary"
+                    : ""
                 }`}
                 to="/user/order"
               >
@@ -111,7 +113,9 @@ const Header = () => {
             <li className="d-inline p-0">
               <Link
                 className={`TopBar_Link ${
-                  location.pathname == "/categories" ? "active" : ""
+                  location.pathname == "/categories"
+                    ? "active  Bg_Primary"
+                    : ""
                 }`}
                 to="/categories"
               >
@@ -122,7 +126,7 @@ const Header = () => {
               {Object.keys(User).length !== 0 ? (
                 <Link
                   className={`TopBar_Link ${
-                    location.pathname == "/login" ? "active" : ""
+                    location.pathname == "/login" ? "active  Bg_Primary" : ""
                   }`}
                   onClick={() => dispatch(Logout())}
                 >
@@ -131,7 +135,7 @@ const Header = () => {
               ) : (
                 <Link
                   className={`TopBar_Link ${
-                    location.pathname == "/login" ? "active" : ""
+                    location.pathname == "/login" ? "active  Bg_Primary" : ""
                   }`}
                   to="/login"
                 >
@@ -168,7 +172,7 @@ const Header = () => {
                   tabIndex="1"
                   // value=""
                 />
-                <button className="MainHeader_SearchBox_Icon_Container position-absolute top-0 border-0">
+                <button className="MainHeader_SearchBox_Icon_Container Bg_Primary position-absolute top-0 border-0">
                   <SearchIcon className="MainHeader_SearchBox_Icon d-block w-100 text-white" />
                 </button>
               </form>
@@ -181,7 +185,9 @@ const Header = () => {
               >
                 <ShoppingCartOutlinedIcon className="MainHeader_Cart_Icon" />
                 {Cart.length > 0 ? (
-                  <span className="MainHeader_Cart_Counter">{Cart.length}</span>
+                  <span className="MainHeader_Cart_Counter Bg_Primary">
+                    {Cart.length}
+                  </span>
                 ) : (
                   ""
                 )}
@@ -229,7 +235,7 @@ const Header = () => {
                     <Link
                       to="/"
                       className={`dropdown-item d-block TopBar_Link bg-white ${
-                        location.pathname == "/" ? "active" : ""
+                        location.pathname == "/" ? "active  Bg_Primary" : ""
                       }`}
                     >
                       Home
@@ -246,7 +252,7 @@ const Header = () => {
                         location.pathname == "/user/payment" ||
                         location.pathname == "/user/returns" ||
                         location.pathname == "/user/cancellations"
-                          ? "active"
+                          ? "active  Bg_Primary"
                           : ""
                       }`}
                     >
@@ -257,7 +263,9 @@ const Header = () => {
                     <Link
                       to="/user/order"
                       className={`dropdown-item d-block TopBar_Link ${
-                        location.pathname == "/user/order" ? "active" : ""
+                        location.pathname == "/user/order"
+                          ? "active  Bg_Primary"
+                          : ""
                       }`}
                     >
                       Order
@@ -267,7 +275,9 @@ const Header = () => {
                     <Link
                       to="/categories"
                       className={`dropdown-item d-block TopBar_Link ${
-                        location.pathname == "/categories" ? "active" : ""
+                        location.pathname == "/categories"
+                          ? "active  Bg_Primary"
+                          : ""
                       }`}
                     >
                       Categories
@@ -277,7 +287,9 @@ const Header = () => {
                     {Object.keys(User).length !== 0 ? (
                       <Link
                         className={`dropdown-item d-block TopBar_Link ${
-                          location.pathname == "/login" ? "active" : ""
+                          location.pathname == "/login"
+                            ? "active  Bg_Primary"
+                            : ""
                         }`}
                         onClick={() => dispatch(Logout())}
                       >
@@ -287,7 +299,9 @@ const Header = () => {
                       <Link
                         to="login"
                         className={`dropdown-item d-block TopBar_Link ${
-                          location.pathname == "/login" ? "active" : ""
+                          location.pathname == "/login"
+                            ? "active  Bg_Primary"
+                            : ""
                         }`}
                       >
                         Login
@@ -303,19 +317,25 @@ const Header = () => {
               }`}
             >
               <AppsRoundedIcon
-                className={`MH_LayoutHandler_Icon ${Grid6x ? "active" : ""} `}
+                className={`MH_LayoutHandler_Icon ${
+                  Grid6x ? "Text_Primary_Color" : ""
+                } `}
                 onClick={() => {
                   dispatch(changeLayout("Grid6x"));
                 }}
               />
               <GridViewRoundedIcon
-                className={`MH_LayoutHandler_Icon ${Grid4x ? "active" : ""} `}
+                className={`MH_LayoutHandler_Icon ${
+                  Grid4x ? "Text_Primary_Color" : ""
+                } `}
                 onClick={() => {
                   dispatch(changeLayout("Grid4x"));
                 }}
               />
               <SquareRoundedIcon
-                className={`MH_LayoutHandler_Icon ${Grid3x ? "active" : ""} `}
+                className={`MH_LayoutHandler_Icon ${
+                  Grid3x ? "Text_Primary_Color" : ""
+                } `}
                 onClick={() => {
                   dispatch(changeLayout("Grid3x"));
                 }}
@@ -327,13 +347,13 @@ const Header = () => {
       <div className="Mobile_MainHeader">
         <div className="Mobile_MainHeader_Content">
           <Link className="MH_SearchBox_Link">
-            <span className="MH_Search_Icon_Container">
+            <span className="MH_Search_Icon_Container Text_Primary_Color">
               <SearchIcon className="MH_Search_Icon" />
             </span>
           </Link>
           <input
             type="search"
-            className="Mobile_SearchBox_Input w-100 border-0"
+            className="Mobile_SearchBox_Input Text_Primary_Color w-100 border-0"
             placeholder="Search in Daraz"
             id="gsearch"
             name="gsearch"

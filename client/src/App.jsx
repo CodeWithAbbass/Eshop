@@ -1,4 +1,5 @@
 import "./App.css";
+import "./index.css";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Header from "./components/Header";
@@ -25,14 +26,7 @@ import { getUserWishlist } from "./Store/Slices/wishlistSlice";
 import { totalPrice, getCart } from "./Store/Slices/cartSlice";
 import { getUserOrderAddress, getUserOrders } from "./Store/Slices/orderSlice";
 
-import {
-  addNewAddress,
-  changeDeliveryMethod,
-  defaultAddress,
-  deleteAddress,
-  editAddress,
-  getAddress,
-} from "./Store/Slices/orderSlice";
+import { getAddress } from "./Store/Slices/orderSlice";
 import UserAddressBook from "./components/Modals/UserAddressBook";
 import EditAddress from "./components/Modals/EditAddress";
 import AddAddress from "./components/Modals/AddAddress";
