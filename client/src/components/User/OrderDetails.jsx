@@ -235,15 +235,15 @@ const OrderDetails = () => {
                       key={index}
                     >
                       <div className="col-1 text-center">
-                        <img src={images[0] || ""} alt="" />
+                        <img src={images[0] || ""} alt="Product Picture" />
                       </div>
                       <div className="col-5 UOC_Orders_txt">{title}</div>
                       <div className="col-3 UOC_Orders_txt text-end p-0">
-                        {price}
+                        {price || ""}
                       </div>
                       <div className="col-3 UODOBP_Quantity text-end">
                         <span className="UODOBP_Quantity_Heading">Qty:</span>
-                        <span className="ms-1 text-dark">{quantity}</span>
+                        <span className="ms-1 text-dark">{quantity || ""}</span>
                       </div>
                     </div>
                   );

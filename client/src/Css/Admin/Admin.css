@@ -1,0 +1,140 @@
+.Admin_Header_Container {
+  height: 60px;
+  position: fixed;
+  top: 0;
+  background: #fafbfc;
+  box-shadow: 0 0.46875rem 2.1875rem rgba(4, 9, 20, 0.03),
+    0 0.9375rem 1.40625rem rgba(4, 9, 20, 0.03),
+    0 0.25rem 0.53125rem rgba(4, 9, 20, 0.05),
+    0 0.125rem 0.1875rem rgba(4, 9, 20, 0.03);
+  transition: 0.4s ease-in-out;
+  z-index: 10;
+}
+
+.Admin_Header_Mobile {
+  display: none;
+}
+@media (max-width: 991px) {
+  .Admin_Header_Desktop {
+    display: none;
+  }
+  .Admin_Header_Mobile {
+    display: block;
+  }
+}
+
+.Admin_Header_Left_Logo_Menu_Container {
+  width: 200px;
+}
+.Admin_Header_Left_Logo_Container {
+  width: 100px;
+  height: 100%;
+  transition: 0.4s ease-in-out;
+}
+.Admin_Header_Left_Logo_Container.hide {
+  width: 0;
+  margin-right: 0 !important;
+}
+.Admin_Header_Left_Hamburger_Container {
+  cursor: pointer;
+  color: #3f6ad8;
+}
+.Admin_Header_Left_Hamburger_Icon {
+  display: none;
+  visibility: hidden;
+  opacity: 0;
+  transform: rotate(-360deg);
+  transition: visibility 0.4s ease-in-out, opacity 0.4s ease-in-out,
+    transform 0.4s ease-in-out;
+}
+.Admin_Header_Left_Hamburger_Icon.active {
+  display: inline-block;
+  visibility: visible;
+  opacity: 1;
+  transform: rotate(0deg);
+  transition: visibility 0.4s ease-in-out, opacity 0.4s ease-in-out,
+    transform 0.4s ease-in-out;
+}
+
+.Admin_Header_Left_Search_Container {
+  color: #3f6ad8;
+  background-color: #0000000f;
+  border-radius: 50px;
+  width: 45px;
+  transition: width 0.4s ease-in-out;
+  height: 45px;
+}
+
+.Admin_Header_Left_Search_Container.show {
+  width: 250px;
+  background-color: #0000000f;
+  border-radius: 50px;
+  color: #3f6ad8;
+  transition: width 0.4s ease-in-out;
+}
+.Admin_Header_Left_Search_Icon_Container {
+  padding: 10px;
+  border-radius: 50px;
+  width: 45px;
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: #0000000f;
+}
+
+.Admin_Header_Left_Close_Icon_Container {
+  position: absolute;
+  top: 11px;
+  right: 0;
+  transform: rotate(-360deg);
+  color: #3f6ad8;
+  transition: visibility 0.8s ease-in-out, opacity 0.8s ease-in-out,
+    transform 0.8s ease-in-out;
+  overflow: hidden;
+  visibility: hidden;
+  opacity: 0;
+  cursor: pointer;
+}
+.Admin_Header_Left_Close_Icon_Container.show {
+  right: -30px;
+  transform: rotate(0deg);
+  visibility: visible;
+  opacity: 1;
+  transition: visibility 0.8s ease-in-out, opacity 0.8s ease-in-out,
+    transform 0.8s ease-in-out;
+  /* transition-delay: 0.5s; */
+}
+
+.Admin_Header_Left_Search_Input {
+  width: 100%;
+  padding: 0 10px 0 40px;
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: 0 0;
+  box-sizing: border-box;
+  border: 0;
+  outline: none;
+  transform: translate(0, 60px);
+  transition: all 0.4s cubic-bezier(0, 0.105, 0.035, 1.57);
+  transition-delay: 0.4s;
+  font-size: 0.88rem;
+  color: #000;
+  z-index: 1;
+}
+.Admin_Header_Left_Search_Input.show {
+  transform: translate(0, 12px);
+  opacity: 1;
+  transition: all 0.4s cubic-bezier(0, 0.105, 0.035, 1.57);
+  transition-delay: 0.4s;
+  z-index: 1;
+}
+.Admin_Header_Left_Search_Input:active,
+.Admin_Header_Left_Search_Input:focus,
+.Admin_Header_Left_Search_Input:focus-visible,
+.Admin_Header_Left_Search_Input:focus-within {
+  outline: none;
+  border: 0;
+}

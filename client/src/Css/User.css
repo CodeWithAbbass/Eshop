@@ -267,9 +267,11 @@
   width: 15%;
   height: 70px;
 }
-.User_Wishlist_Item_Pic_Link {
+.User_Wishlist_Item_Pic_Link,
+.UCC_Cancellations_Item_Pic_Link {
   height: 100px;
   padding: 10px;
+  padding-top: 0;
 }
 .User_Wishlist_Item_Info {
   width: 83%;

@@ -1,5 +1,15 @@
 import "./App.css";
 import "./index.css";
+// Admin Imports
+import Admin from "./Pages/Admin";
+import DProducts from "./components/Admin/Products/DProducts";
+import DAllProducts from "./components/Admin/Products/DAllProducts";
+import DAddProduct from "./components/Admin/Products/DAddProduct";
+import DCategories from "./components/Admin/Products/DCategories";
+import DReviews from "./components/Admin/Products/DReviews";
+
+import DOrders from "./components/Admin/Orders/DOrders";
+import DAnalytics from "./components/Admin/Analytics/DAnalytics";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Header from "./components/Header";
@@ -19,6 +29,7 @@ import Order from "./components/User/Order";
 import Categories from "./Pages/Categories";
 import UserSignup from "./Pages/UserSignup";
 import UserLogin from "./Pages/UserLogin";
+
 import { getUser } from "./Store/Slices/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { getProduct } from "./Store/Slices/productSlice";
@@ -32,6 +43,7 @@ import EditAddress from "./components/Modals/EditAddress";
 import AddAddress from "./components/Modals/AddAddress";
 import DeliveryMethod from "./components/Modals/DeliveryMethod";
 import OrderDetails from "./components/User/OrderDetails";
+import DHeader from "./components/Admin/DHeader";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -55,7 +67,7 @@ const App = () => {
   return (
     <div className="App">
       <BrowserRouter>
-        <div className="Top_Header_Wrapper bg-white">
+        {/* <div className="Top_Header_Wrapper bg-white">
           <div className={`Top_Header w-100 container-xl`}>
             <Link className="Top_Header_AdsLink w-100" to="/">
               <img
@@ -65,8 +77,8 @@ const App = () => {
               />
             </Link>
           </div>
-        </div>
-        <Header />
+        </div> */}
+        {/* <Header /> */}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/product/:id" element={<SingleProduct />} />
@@ -85,10 +97,25 @@ const App = () => {
             <Route path="returns" element={<Returns />} />
             <Route path="cancellations" element={<Cancellations />} />
           </Route>
+          <Route path="/admin" element={<Admin />}>
+            <Route path="products" element={<DProducts />}>
+              <Route path="allproducts" element={<DAllProducts />} />
+              <Route path="addproduct" element={<DAddProduct />} />
+              <Route path="categories" element={<DCategories />} />
+              <Route path="reviews" element={<DReviews />} />
+            </Route>
+            <Route path="orders" element={<DOrders />}>
+              <Route path="allproducts" element={<DAllProducts />} />
+              <Route path="addproduct" element={<DAddProduct />} />
+              <Route path="categories" element={<DCategories />} />
+              <Route path="reviews" element={<DReviews />} />
+            </Route>
+            <Route path="analytic" element={<DAnalytics />} />
+          </Route>
           <Route path="*" element={<h1>404 Not Found</h1>} />
         </Routes>
 
-        <Footer />
+        {/* <Footer /> */}
         {(userLoading ||
           productLoading ||
           cartLoading ||
