@@ -1,0 +1,9 @@
+.DAddProduct_Heading {
+  min-height: 60px;
+  height: 60px;
+  background: #fff;
+}
+.DAddProduct_Heading_txt {
+  font-weight: 600;
+  font-size: 14px;
+}

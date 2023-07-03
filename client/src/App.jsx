@@ -5,11 +5,18 @@ import Admin from "./Pages/Admin";
 import DProducts from "./components/Admin/Products/DProducts";
 import DAllProducts from "./components/Admin/Products/DAllProducts";
 import DAddProduct from "./components/Admin/Products/DAddProduct";
+import DUpdateProduct from "./components/Admin/Products/DUpdateProduct";
+import DDeleteProduct from "./components/Admin/Products/DDeleteProduct";
 import DCategories from "./components/Admin/Products/DCategories";
 import DReviews from "./components/Admin/Products/DReviews";
 
+import DAllOrders from "./components/Admin/Orders/DAllOrders";
+import DAddOrder from "./components/Admin/Orders/DAddOrder";
+import DDeleteOrder from "./components/Admin/Orders/DDeleteOrder";
+import DUpdateOrder from "./components/Admin/Orders/DUpdateOrder";
 import DOrders from "./components/Admin/Orders/DOrders";
 import DAnalytics from "./components/Admin/Analytics/DAnalytics";
+
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Header from "./components/Header";
@@ -101,14 +108,16 @@ const App = () => {
             <Route path="products" element={<DProducts />}>
               <Route path="allproducts" element={<DAllProducts />} />
               <Route path="addproduct" element={<DAddProduct />} />
+              <Route path="updateproduct" element={<DUpdateProduct />} />
+              <Route path="deleteproduct" element={<DDeleteProduct />} />
               <Route path="categories" element={<DCategories />} />
               <Route path="reviews" element={<DReviews />} />
             </Route>
             <Route path="orders" element={<DOrders />}>
-              <Route path="allproducts" element={<DAllProducts />} />
-              <Route path="addproduct" element={<DAddProduct />} />
-              <Route path="categories" element={<DCategories />} />
-              <Route path="reviews" element={<DReviews />} />
+              <Route path="allorders" element={<DAllOrders />} />
+              <Route path="addorder" element={<DAddOrder />} />
+              <Route path="deleteorder" element={<DDeleteOrder />} />
+              <Route path="status" element={<DUpdateOrder />} />
             </Route>
             <Route path="analytic" element={<DAnalytics />} />
           </Route>
