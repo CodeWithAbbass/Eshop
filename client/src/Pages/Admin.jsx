@@ -162,6 +162,8 @@ const Admin = () => {
                     </div>
                     <input
                       type="text"
+                      id="DesktopSearch"
+                      name="DesktopSearch"
                       placeholder="Search by EShop"
                       className="Admin_Header_Left_Search_Input ps-3 pe-5"
                     />
@@ -253,7 +255,7 @@ const Admin = () => {
             </div>
           </div>
         </div>
-        <div className="Admin_Body_Layout_Container d-flex w-100">
+        <div className="Admin_Body_Layout d-flex w-100">
           <div className="position-relative Admin_Sidebar_Layout me-0 me-lg-4">
             {/* Left Sidebar */}
             <div className="Admin_LeftSidebar position-fixed top-0 start-0">
@@ -389,7 +391,7 @@ const Admin = () => {
               </div>
             </div>
           </div>
-          <div className="Admin_Content_Layout border py-2">
+          <div className="Admin_Content_Layout py-2">
             <Outlet />
           </div>
         </div>

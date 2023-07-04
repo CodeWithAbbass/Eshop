@@ -1,9 +1,145 @@
 .DAddProduct_Heading {
   min-height: 60px;
   height: 60px;
-  background: #fff;
 }
 .DAddProduct_Heading_txt {
-  font-weight: 600;
+  font-weight: 500;
   font-size: 14px;
+  line-height: 60px;
+}
+.DALC_Forms_Container {
+  width: 200px;
+  flex: 1;
+}
+.DALC_Cards_Container {
+  float: right;
+  width: 280px;
+  min-width: 280px;
+}
+
+.DAddProduct .form-control {
+  font-size: 14px;
+}
+
+.DALCF_Product_Description_Heading {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1d2327;
+  line-height: 1.4;
+  padding: 8px 12px;
+}
+@media (max-width: 991px) {
+  .DAddProduct_Layout_Container {
+    flex-wrap: wrap;
+  }
+  .DALC_Forms_Container {
+    margin: 0 !important;
+  }
+  .DALC_Cards_Container {
+    width: 100%;
+  }
+}
+
+/* Cards Css  */
+.DALC_Cards_Item_Heading {
+  color: #343a40;
+  white-space: nowrap;
+  font-size: 14px;
+}
+
+.DALC_Cards_Item .accordion-button.collapsed {
+  border-bottom: 0 !important;
+}
+.DALC_Cards_Container {
+  padding-top: 2rem;
+}
+.DALC_Cards_Item_Product_Cat_Item,
+.DALC_Cards_Item_Product_Cat_Btn,
+.DALC_Cat_AddNewCat_Link {
+  margin: 0;
+  padding: 0;
+  line-height: 1.69230769;
+  word-wrap: break-word;
+  font-size: 13px;
+}
+.DALC_Cards_Item_Product_Cat_Item_Input {
+  border: 1px solid #8c8f94;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-block;
+  line-height: 0;
+  margin: -0.25rem 0.25rem 0 0;
+  padding: 0 !important;
+  vertical-align: middle;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+  transition: 0.05s border-color ease-in-out;
+}
+
+.DALC_Cards_Item_Product_Cat_Btn {
+  color: #2271b1;
+  outline: none;
+  margin-bottom: -1px;
+  padding: 3px 5px 6px;
+  z-index: 2;
+}
+.DALC_Cards_Item_Product_Cat_Btn.active {
+  border: 1px solid #dcdcde;
+  border-bottom-color: #fff;
+  background-color: #fff;
+  color: #2c3338;
+}
+.DALC_Cards_Item_Product_Cat {
+  min-height: 42px;
+  max-height: 200px;
+  overflow: auto;
+  border: solid 1px #dcdcde;
+  background-color: #fff;
+  visibility: hidden;
+  opacity: 0;
+  display: none;
+  transition: opacity 0.8s ease-in-out, visibility 0.8s ease-in-out,
+    display 0.8s ease-in-out;
+}
+.DALC_Cards_Item_Product_Cat.active {
+  visibility: visible;
+  opacity: 1;
+  display: block;
+  transition: opacity 0.8s ease-in-out, visibility 0.8s ease-in-out,
+    display 0.8s ease-in-out;
+}
+.DALC_Cat_AddNew_Item {
+  height: 0px;
+  overflow: hidden;
+  transition: all 0.4s ease-in-out;
+}
+.DALC_Cat_AddNew_Item.active {
+  height: 25px;
+  transition: all 0.4s ease-in-out;
+}
+.DALC_Cat_AddNewCat_Btn {
+  font-size: 13px;
+  height: 100%;
+  width: 50px;
+  transition: 0.4s ease-in-out;
+}
+.DALC_Cat_AddNew_Item_Input {
+  border: 1px solid #8c8f94;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 10px;
+  height: 100%;
+  padding: 10px;
+  flex: 1;
+  margin-right: 1rem;
+}
+.DALC_Cat_AddNew_Item_Input:active,
+.DALC_Cat_AddNew_Item_Input:hover,
+.DALC_Cat_AddNew_Item_Input:focus,
+.DALC_Cat_AddNew_Item_Input:focus-within,
+.DALC_Cat_AddNew_Item_Input:focus-visible,
+.DALC_Cat_AddNewCat_Btn:hover {
+  border: 1px solid #dadada !important;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1) !important;
+  transition: 0.4s border-color ease-in-out;
 }

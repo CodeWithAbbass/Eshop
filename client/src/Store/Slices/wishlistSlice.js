@@ -23,8 +23,10 @@ export const getUserWishlist = createAsyncThunk(
 
       const result = await response.json();
       if (result.success) {
+        console.log("Inner", result);
         return result.data;
       }
+      return [];
     } catch (error) {
       throw new Error(error);
     }
@@ -92,10 +94,12 @@ const wishlistSlice = createSlice({
         state.loading = true;
       })
       .addCase(getUserWishlist.fulfilled, (state, action) => {
-        // console.log(action, "from fulfiled");
-
         state.loading = false;
-        state.wishitems = action.payload;
+        if (action.payload.length > 0) {
+          state.wishitems = action.payload;
+        } else {
+          return;
+        }
         state.error = null;
       })
       .addCase(getUserWishlist.rejected, (state, action) => {

@@ -19,7 +19,6 @@ import {
   addToWishlist,
   deleteFromWishlist,
 } from "../../Store/Slices/wishlistSlice";
-import { useLazyFetchOneQuery } from "../../services/modules/users";
 
 const DesktopSingleProduct = () => {
   const dispatch = useDispatch();
