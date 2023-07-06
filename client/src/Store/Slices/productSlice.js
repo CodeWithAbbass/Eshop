@@ -42,7 +42,23 @@ export const getSingleProduct = createAsyncThunk(
     }
   }
 );
-
+export const addProduct = createAsyncThunk("addProduct", async (formData) => {
+  try {
+    const URL = `${import.meta.env.VITE_API_KEY}/product/add`;
+    const response = await fetch(URL, {
+      method: "POST",
+      body: formData,
+      credentials: "include",
+      headers: {
+        // "Content-Type": "multipart/form-data",
+      },
+    });
+    const res = await response.json();
+    console.log(res);
+  } catch (error) {
+    throw new Error(error);
+  }
+});
 export const productSlice = createSlice({
   name: "Products",
   initialState: {

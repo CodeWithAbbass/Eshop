@@ -49,15 +49,22 @@ exports.addProduct = async (req, res) => {
     let success = false;
     let {
       title,
+      sku,
       rating,
       price,
       discount,
-      stock,
-      images,
       brand,
-      issale,
+      saleprice,
+      saleschedule,
+      stockmanagement,
+      maxquantity,
+      allowbackorder,
+      stock,
+      stockstatus,
+      attributes,
       category,
       description,
+      images,
     } = req.body;
     if (req.files) {
       let path = [];
@@ -66,25 +73,52 @@ exports.addProduct = async (req, res) => {
       });
       images = [...path];
     }
+
     const uid =
       crypto.randomBytes(5).toString("hex") +
       Date.now().toString(5) +
       crypto.randomBytes(5).toString("hex");
     images = JSON.stringify(images);
+
     const addProduct = await pool.query(
-      `INSERT INTO products (uid, title, rating, price, discount, stock, images, brand, issale, category, description) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING *`,
+      `INSERT INTO products (
+      uid, 
+      rating,
+      price,
+      discount,
+      stock,
+      saleprice,
+      maxquantity,
+      title,
+      sku,
+      brand,
+      saleschedule,
+      stockmanagement,
+      allowbackorder,
+      stockstatus,
+      attributes,
+      category,
+      description,
+      images) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18) RETURNING *`,
       [
         uid,
-        title,
         parseFloat(rating),
         parseFloat(price),
         parseFloat(discount),
         parseFloat(stock),
-        images,
+        parseFloat(saleprice),
+        parseFloat(maxquantity),
+        title,
+        sku,
         brand,
-        issale,
+        saleschedule,
+        stockmanagement,
+        allowbackorder,
+        stockstatus,
+        attributes,
         category,
         description,
+        images,
       ]
     );
     if (addProduct.rowCount == 0) {
@@ -94,6 +128,10 @@ exports.addProduct = async (req, res) => {
     }
 
     const OriginalImageArr = JSON.parse(addProduct.rows[0].images);
+    const OriginalSaleScheduleArr = JSON.parse(addProduct.rows[0].saleschedule);
+    const OriginalAttributsArr = JSON.parse(addProduct.rows[0].attributes);
+    const OriginalCategoryArr = JSON.parse(addProduct.rows[0].category);
+    const OriginalDescriptionArr = JSON.parse(addProduct.rows[0].description);
     let NewProduct = addProduct.rows[0];
     NewProduct.images = OriginalImageArr;
     success = true;

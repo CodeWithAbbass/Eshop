@@ -10,7 +10,7 @@ let Storage = multer.diskStorage({
   filename: (req, file, cb) => {
     // let ext = path.extname(file.originalname);
     // cb(null, Date.now() + ext);      // For Random Name.
-
+    console.log("Filename");
     cb(null, file.originalname); // For Original Name.
   },
 });

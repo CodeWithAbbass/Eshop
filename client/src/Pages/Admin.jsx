@@ -124,6 +124,7 @@ const Admin = () => {
       ],
     },
   ];
+
   useEffect(() => {
     return () => {};
   }, [location]);
@@ -268,7 +269,14 @@ const Admin = () => {
                   : MenuList.map((item, index) => {
                       const { icon: Icon, category, subcategories } = item;
                       const PageURL = category.toLowerCase();
-
+                      let LocationURL = subcategories[0].subheading;
+                      subcategories.forEach((element) => {
+                        const arr = location.pathname.split("/admin/");
+                        if (element.link == arr[1]) {
+                          LocationURL = arr[1];
+                          return;
+                        }
+                      });
                       return (
                         <div
                           className="accordion accordion-flush"
@@ -305,6 +313,7 @@ const Admin = () => {
                                     ? ""
                                     : subcategories.map((item, index) => {
                                         const { subheading, link } = item;
+
                                         return (
                                           <li
                                             className="list-group-item Admin_PageNav_Link_Container p-0 border-0"
@@ -312,7 +321,11 @@ const Admin = () => {
                                           >
                                             <Link
                                               to={link}
-                                              className="Admin_PageNav_Link"
+                                              className={`Admin_PageNav_Link ${
+                                                LocationURL == link
+                                                  ? "active"
+                                                  : ""
+                                              } `}
                                             >
                                               {subheading}
                                             </Link>

@@ -31,7 +31,7 @@ const DesktopSingleProduct = () => {
   );
   const ShippingFee = useSelector((state) => state.Cart.shippingFee);
   const SingleProduct = useSelector((state) => state.Products.singleproduct);
-
+  console.log(SingleProduct);
   const Cart = useSelector((state) => {
     let res = state.Cart.items.filter((item) => item.uid == id);
     return res;
@@ -48,7 +48,7 @@ const DesktopSingleProduct = () => {
     Rating,
     MainImage,
     SideImage,
-    Quantity,
+    MaxQuantity,
     Discount,
     Stock,
     isSale,
@@ -71,7 +71,6 @@ const DesktopSingleProduct = () => {
 
   useEffect(() => {
     dispatch(totalPrice());
-    // fetchOne(id);
     dispatch(getSingleProduct(id));
     return () => {};
   }, [id]);
@@ -111,12 +110,13 @@ const DesktopSingleProduct = () => {
                     imageClassName: "SP_MainImage_Image",
 
                     smallImage: {
-                      alt: "Wristwatch by Ted Baker London",
+                      alt: "Product Picture",
                       isFluidWidth: true,
                       src: ImageURL == null ? `${MainImage}` : `${ImageURL}`,
                       height: 400,
                     },
                     largeImage: {
+                      alt: "Product Picture",
                       src: ImageURL == null ? `${MainImage}` : `${ImageURL}`,
                       width: 1200,
                       height: 1200,

@@ -6,23 +6,48 @@ import PermMediaIcon from "@mui/icons-material/PermMedia";
 import StyleIcon from "@mui/icons-material/Style";
 import BuildIcon from "@mui/icons-material/Build";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
+import HelpIcon from "@mui/icons-material/Help";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addProduct } from "../../../Store/Slices/productSlice";
 const DAddProduct = () => {
-  // const [descriptionData, setDescriptionData] = useState("Initial");
+  const dispatch = useDispatch();
   const [allCat, setAllCat] = useState(1);
   const [addNewCat, setAddNewCat] = useState({ NewCat: "" });
+  const [content, setContent] = useState("");
+  const [productData, setProductData] = useState({
+    title: "",
+    description: "",
+    price: "",
+    sku: "",
+    discount: "",
+    saleprice: "",
+    saleschedule: { start: "", end: "" },
+    stockmanagement: false,
+    maxquantity: "",
+    allowbackorder: false,
+    stock: 0,
+    stockstatus: "",
+    attributes: { size: "", weight: "", length: "", width: "", height: "" },
+    images: "",
+    category: [],
+  });
 
-  const onChangeEditor = (content) => {
-    console.log(content);
-    // setDescriptionData(content);
-  };
   const toggleCodeView = (isCodeView) => {
     console.log(isCodeView);
   };
   const toggleCatTabs = (tab) => {
     setAllCat(tab);
     console.log(tab, allCat);
+  };
+  const ToggleQuantityANDOrderANDStock = () => {
+    const QuantityOption = document.querySelector(".DALCFPDIRI_Quantity");
+    const AllowOrderOption = document.querySelector(".DALCFPDIRI_AlowOrder");
+    const StockStatusOption = document.querySelector(".DALCFPDIRI_StockStatus");
+    QuantityOption.classList.toggle("active");
+    AllowOrderOption.classList.toggle("active");
+    StockStatusOption.classList.toggle("hide");
   };
   const addNewOnChange = (e) => {
     console.log(addNewCat);
@@ -55,6 +80,98 @@ const DAddProduct = () => {
     );
     ScheduleInputContainer.classList.toggle("active");
   };
+  const CancelSale = (e) => {
+    setProductData({ ...productData, saleschedule: { start: "", end: "" } });
+  };
+  const onChangeSaleSchedule = (e) => {
+    const { name, value } = e.target;
+    setProductData({
+      ...productData,
+      saleschedule: { ...productData.saleschedule, [name]: value },
+    });
+  };
+  const onChangeStockManagement = (e) => {
+    const { name, value, checked } = e.target;
+    setProductData({
+      ...productData,
+      stockmanagement: checked,
+    });
+    ToggleQuantityANDOrderANDStock();
+  };
+  const onChangeAllowOrder = (bool) => {
+    setProductData({
+      ...productData,
+      allowbackorder: bool,
+    });
+  };
+  const onChangeStockStatus = (status) => {
+    setProductData({
+      ...productData,
+      stockstatus: status,
+    });
+  };
+  const onChangeAttributes = (e) => {
+    const { name, value } = e.target;
+
+    setProductData({
+      ...productData,
+      attributes: { ...productData.attributes, [name]: value },
+    });
+  };
+  const onChangeCategory = (e) => {
+    const { name, value, checked } = e.target;
+    if (checked) {
+      setProductData({
+        ...productData,
+        category: [...productData.category, value],
+      });
+    } else {
+      const NewCategory = productData.category.filter((item) => item != value);
+      setProductData({
+        ...productData,
+        category: NewCategory,
+      });
+    }
+  };
+  const onChangeFile = (e) => {
+    const { files } = e.target;
+    setProductData({ ...productData, images: files });
+  };
+  const onChangeAddProduct = (e) => {
+    const { name, value } = e.target;
+    setProductData({
+      ...productData,
+      [name]: value,
+      description: content,
+    });
+  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    let formData = new FormData();
+    for (const iterator of productData.images) {
+      formData.append("images", iterator, productData.images.name);
+    }
+
+    formData.append("title", productData.title);
+    formData.append("description", JSON.stringify(productData.description));
+    formData.append("price", productData.price);
+    formData.append("discount", productData.discount);
+    formData.append("saleprice", productData.saleprice);
+    formData.append("saleschedule", JSON.stringify(productData.saleschedule));
+    formData.append("stockmanagement", productData.stockmanagement);
+    formData.append("maxquantity", productData.maxquantity);
+    formData.append("allowbackorder", productData.allowbackorder);
+    formData.append("stock", productData.stock);
+    formData.append("stockstatus", productData.stockstatus);
+    formData.append("attributes", JSON.stringify(productData.attributes));
+    formData.append("category", JSON.stringify(productData.category));
+    dispatch(addProduct(formData));
+    console.log(productData);
+    // // Inspect FormData
+    // for (var pair of formData.entries()) {
+    //   console.log(pair[0] + ", " + pair[1]);
+    // }
+  };
   useEffect(() => {
     return () => {};
   }, [allCat]);
@@ -62,7 +179,10 @@ const DAddProduct = () => {
     <div className="DAddProduct">
       <div className="DAddProduct_Container">
         <div className="DAddProduct_Heading px-2 bg-white mb-4 d-flex align-items-center justify-content-between">
-          <button className="btn btn-outline-primary DAddProduct_AddBtn rounded-0">
+          <button
+            className="btn btn-outline-primary DAddProduct_AddBtn rounded-0"
+            onClick={handleSubmit}
+          >
             Save Product
           </button>
         </div>
@@ -80,7 +200,9 @@ const DAddProduct = () => {
                   type="text"
                   className="form-control rounded-0 shadow-none"
                   id="ProductName"
-                  name="ProductName"
+                  name="title"
+                  value={productData.title || ""}
+                  onChange={onChangeAddProduct}
                   placeholder="Product Name"
                 />
               </div>
@@ -96,10 +218,11 @@ const DAddProduct = () => {
 
                 <div className="DALCF_Text_Editor_Container w-100">
                   <SunEditor
-                    name="Description"
+                    name="description"
+                    value={productData.description || ""}
                     autoFocus={true}
                     placeholder="Type..."
-                    onChange={onChangeEditor}
+                    onChange={(contents) => setContent(contents)}
                     width="100%"
                     height="300"
                     toolbarContainer="#toolbar_container"
@@ -151,10 +274,10 @@ const DAddProduct = () => {
                           "showBlocks",
                           "codeView",
                         ],
-                        ["preview", "print", "save"],
+                        ["preview", "print"],
                       ],
                       callBackSave: function (contents, isChanged) {
-                        console.log(contents);
+                        setContent(contents);
                       },
                     }}
                   />
@@ -224,7 +347,7 @@ const DAddProduct = () => {
                               </li>
                             </ul>
                           </div>
-                          <div className="DALCF_Product_Data_Item_Right position-relative ">
+                          <div className="DALCF_Product_Data_Item_Right position-relative">
                             <div className="DALCFPDIR_Item DALCF_Product_Data_Item_Right_General h-100 w-100 active p-3">
                               <div className="DALCF_Product_Data_Item_Right_General_Container">
                                 <div className="DALCF_Product_Data_Item_Right_General_PriceDiscount_Container d-flex flex-wrap align-items-center gap-3">
@@ -240,6 +363,8 @@ const DAddProduct = () => {
                                       name="price"
                                       id="productPrice"
                                       className="form-control shadow-none d-inline w-auto border-2 DALCFPDIR_Input"
+                                      value={productData.price || ""}
+                                      onChange={onChangeAddProduct}
                                     />
                                   </div>
 
@@ -255,6 +380,8 @@ const DAddProduct = () => {
                                       name="discount"
                                       id="productDiscount"
                                       className="form-control shadow-none d-inline w-auto border-2 DALCFPDIR_Input"
+                                      value={productData.discount || ""}
+                                      onChange={onChangeAddProduct}
                                     />
                                   </div>
                                 </div>
@@ -267,55 +394,66 @@ const DAddProduct = () => {
                                   </label>
                                   <input
                                     type="number"
-                                    name="discount"
+                                    name="saleprice"
                                     id="productSale"
                                     className="form-control shadow-none d-inline w-auto border-2 DALCFPDIR_Input"
+                                    value={productData.saleprice || ""}
+                                    onChange={onChangeAddProduct}
                                   />
                                 </div>
-                                <div className="DALCFPDIRG_Sale_Schedule h-100">
-                                  <div className="DALC_Cat_AddNew_Container h-100">
-                                    <Link
-                                      className="DALC_Cat_AddNewCat_Link text-primary text-decoration-underline"
-                                      onClick={() => ShowScheduleOption()}
-                                    >
-                                      Schedule
-                                    </Link>
-                                    <div className="DALCFPDIRG_Sale_Schedule_Input_Container my-2 d-flex flex-wrap align-items-center gap-3 p-0">
-                                      <div className="DALCFPDIRG_Sale_Schedule_From_Container d-flex align-items-center gap-2">
-                                        <label
-                                          htmlFor="fromSale"
-                                          className="DALCFPDIR_Label w-auto"
-                                        >
-                                          From:
-                                        </label>
-                                        <input
-                                          type="date"
-                                          name="fromsale"
-                                          id="fromSale"
-                                          className="form-control DALC_Cat_AddNew_Item_Input rounded-0 p-0 px-2"
-                                        />
-                                      </div>
-                                      <div className="DALCFPDIRG_Sale_Schedule_From_Container d-flex align-items-center gap-2">
-                                        <label
-                                          htmlFor="toSale"
-                                          className="DALCFPDIR_Label w-auto"
-                                        >
-                                          To:
-                                        </label>
-                                        <input
-                                          type="date"
-                                          name="tosale"
-                                          id="toSale"
-                                          className="form-control DALC_Cat_AddNew_Item_Input rounded-0 p-0 px-2"
-                                        />
-                                      </div>
-                                      <button
-                                        className="btn shadow-none border rounded-0 p-0 DALCF_CancelBtn"
-                                        onClick={() => ShowScheduleOption()}
+                                <div className="DALCFPDIRG_Sale_Schedule mt-3 h-100">
+                                  <Link
+                                    className="DALC_Cat_AddNewCat_Link text-primary text-decoration-underline"
+                                    onClick={() => ShowScheduleOption()}
+                                  >
+                                    Schedule
+                                  </Link>
+                                  <div className="DALCFPDIRG_Sale_Schedule_Input_Container my-2 d-flex flex-wrap align-items-center gap-3 p-0">
+                                    <div className="DALCFPDIRG_Sale_Schedule_From_Container d-flex align-items-center gap-2">
+                                      <label
+                                        htmlFor="fromSale"
+                                        className="DALCFPDIR_Label w-auto"
                                       >
-                                        Cancel
-                                      </button>
+                                        From:
+                                      </label>
+                                      <input
+                                        type="date"
+                                        name="start"
+                                        id="fromSale"
+                                        className="form-control DALC_Cat_AddNew_Item_Input rounded-0 p-0 px-2"
+                                        value={
+                                          productData.saleschedule.start || ""
+                                        }
+                                        placeholder={
+                                          productData.saleschedule.start || ""
+                                        }
+                                        onChange={onChangeSaleSchedule}
+                                      />
                                     </div>
+                                    <div className="DALCFPDIRG_Sale_Schedule_From_Container d-flex align-items-center gap-2">
+                                      <label
+                                        htmlFor="toSale"
+                                        className="DALCFPDIR_Label w-auto"
+                                      >
+                                        To:
+                                      </label>
+                                      <input
+                                        type="date"
+                                        name="end"
+                                        id="toSale"
+                                        className="form-control DALC_Cat_AddNew_Item_Input rounded-0 p-0 px-2"
+                                        value={
+                                          productData.saleschedule.end || ""
+                                        }
+                                        onChange={onChangeSaleSchedule}
+                                      />
+                                    </div>
+                                    <button
+                                      className="btn shadow-none border rounded-0 p-0 DALCF_CancelBtn"
+                                      onClick={() => CancelSale()}
+                                    >
+                                      Cancel
+                                    </button>
                                   </div>
                                 </div>
                               </div>
@@ -334,6 +472,8 @@ const DAddProduct = () => {
                                     name="sku"
                                     id="productSku"
                                     className="form-control DALCFPDIR_Input_Inventory shadow-none d-inline w-auto border-2 DALCFPDIR_Input"
+                                    value={productData.sku || ""}
+                                    onChange={onChangeAddProduct}
                                   />
                                 </div>
                                 <div className="DALCFPDIRI_Stock_Management mt-3 d-flex align-items-center ">
@@ -345,15 +485,19 @@ const DAddProduct = () => {
                                   </label>
 
                                   <input
-                                    class="form-check-input shadow-none d-inline DALCFPDIR_Input DALCFPDIR_Input_Inventory"
+                                    className="form-check-input shadow-none d-inline DALCFPDIR_Input DALCFPDIR_Input_Inventory"
                                     type="checkbox"
-                                    value=""
                                     name="stockmanagement"
                                     id="stockManagement"
+                                    onChange={onChangeStockManagement}
                                   />
-                                  <span className="ms-2">
+
+                                  <label
+                                    htmlFor="stockManagement"
+                                    className="ms-2"
+                                  >
                                     Track stock quantity for this product
-                                  </span>
+                                  </label>
                                 </div>
 
                                 <div className="DALCFPDIRI_Quantity mt-3">
@@ -365,10 +509,19 @@ const DAddProduct = () => {
                                   </label>
                                   <input
                                     type="number"
-                                    name="quantity"
+                                    name="maxquantity"
                                     id="productQuantity"
                                     className="form-control shadow-none d-inline w-auto border-2 DALCFPDIR_Input DALCFPDIR_Input_Inventory"
+                                    value={productData.maxquantity || ""}
+                                    onChange={onChangeAddProduct}
                                   />
+                                  <span
+                                    data-bs-toggle="tooltip"
+                                    data-bs-placement="bottom"
+                                    title="Max Quantity Per Order"
+                                  >
+                                    <HelpIcon className="DALCF_Product_Data_Item_Icon ms-2" />
+                                  </span>
                                 </div>
 
                                 <div className="DALCFPDIRI_AlowOrder d-flex  mt-3">
@@ -379,54 +532,116 @@ const DAddProduct = () => {
                                     Allow Backorders?
                                   </label>
                                   <div className="DALCFPDIR_Input">
-                                    <div>
+                                    <div className="form-check">
                                       <input
-                                        class="form-check-input shadow-none DALCFPDIR_Input DALCFPDIR_Input_Inventory"
-                                        type="checkbox"
-                                        value="allow"
-                                        name="alloworder"
-                                        id="productAllowOrder"
+                                        className="form-check-input shadow-none DALCFPDIR_Input DALCFPDIR_Input_Inventory"
+                                        type="radio"
+                                        name="allowbackorder"
+                                        value={true}
+                                        id="Allow"
+                                        onChange={() =>
+                                          onChangeAllowOrder(true)
+                                        }
+                                        checked={
+                                          productData.allowbackorder
+                                            ? true
+                                            : false
+                                        }
                                       />
                                       <label
-                                        htmlFor="productAllowOrder"
-                                        className="DALCFPDIR_Label DALCFPDIR_Label_Inventory ms-2"
+                                        className="form-check-label DALCFPDIR_Label DALCFPDIR_Label_Inventory ms-2"
+                                        htmlFor="Allow"
                                       >
-                                        Allow Backorders?
+                                        Allow
                                       </label>
                                     </div>
-                                    <div>
+                                    <div className="form-check">
                                       <input
-                                        class="form-check-input shadow-none DALCFPDIR_Input DALCFPDIR_Input_Inventory"
-                                        type="checkbox"
-                                        value="Do Not Allow"
-                                        name="alloworder"
-                                        id="productDoNotAllowOrder"
+                                        className="form-check-input shadow-none DALCFPDIR_Input DALCFPDIR_Input_Inventory"
+                                        type="radio"
+                                        name="allowbackorder"
+                                        value={false}
+                                        id="DontAllow"
+                                        onChange={() =>
+                                          onChangeAllowOrder(false)
+                                        }
+                                        checked={
+                                          productData.allowbackorder
+                                            ? false
+                                            : true
+                                        }
                                       />
                                       <label
-                                        htmlFor="productAllowOrder"
-                                        className="DALCFPDIR_Label DALCFPDIR_Label_Inventory ms-2"
+                                        className="form-check-label DALCFPDIR_Label DALCFPDIR_Label_Inventory ms-2"
+                                        htmlFor="DontAllow"
                                       >
                                         Do Not Allow
-                                      </label>
-                                    </div>
-                                    <div>
-                                      <input
-                                        class="form-check-input shadow-none DALCFPDIR_Input DALCFPDIR_Input_Inventory"
-                                        type="checkbox"
-                                        value="Allow But Notify Customer"
-                                        name="alloworder"
-                                        id="productNotifyAllowOrder"
-                                      />
-                                      <label
-                                        htmlFor="productNotifyAllowOrder"
-                                        className="DALCFPDIR_Label DALCFPDIR_Label_Inventory ms-2"
-                                      >
-                                        Allow, but notify customer
                                       </label>
                                     </div>
                                   </div>
                                 </div>
 
+                                <div className="DALCFPDIRI_StockStatus d-flex  mt-3">
+                                  <label
+                                    htmlFor="productAllowOrder"
+                                    className="DALCFPDIR_Label DALCFPDIR_Label_Inventory"
+                                  >
+                                    Stock Status
+                                  </label>
+                                  <div className="DALCFPDIR_Input">
+                                    <div className="form-check">
+                                      <input
+                                        className="form-check-input shadow-none DALCFPDIR_Input DALCFPDIR_Input_Inventory"
+                                        type="radio"
+                                        name="stockstatus"
+                                        value="In stock"
+                                        id="InStock"
+                                        onChange={() =>
+                                          onChangeStockStatus("In stock")
+                                        }
+                                        checked={
+                                          productData.stockstatus ==
+                                            "instock" ||
+                                          productData.stockstatus == "In stock"
+                                            ? true
+                                            : false
+                                        }
+                                      />
+                                      <label
+                                        className="form-check-label DALCFPDIR_Label DALCFPDIR_Label_Inventory ms-2"
+                                        htmlFor="InStock"
+                                      >
+                                        In stock
+                                      </label>
+                                    </div>
+                                    <div className="form-check">
+                                      <input
+                                        className="form-check-input shadow-none DALCFPDIR_Input DALCFPDIR_Input_Inventory"
+                                        type="radio"
+                                        name="stockstatus"
+                                        value="Out of stock"
+                                        id="OutofStock"
+                                        onChange={() =>
+                                          onChangeStockStatus("Out of stock")
+                                        }
+                                        checked={
+                                          productData.stockstatus ==
+                                            "Out of stock" ||
+                                          productData.stockstatus ==
+                                            "Outofstock"
+                                            ? true
+                                            : false
+                                        }
+                                      />
+                                      <label
+                                        className="form-check-label DALCFPDIR_Label DALCFPDIR_Label_Inventory ms-2"
+                                        htmlFor="OutofStock"
+                                      >
+                                        Out of stock
+                                      </label>
+                                    </div>
+                                  </div>
+                                </div>
                                 <div className="DALCFPDIRI_Stock mt-3">
                                   <label
                                     htmlFor="productStock"
@@ -439,6 +654,8 @@ const DAddProduct = () => {
                                     name="stock"
                                     id="productStock"
                                     className="form-control shadow-none d-inline w-auto border-2 DALCFPDIR_Input DALCFPDIR_Input_Inventory"
+                                    value={productData.stock || ""}
+                                    onChange={onChangeAddProduct}
                                   />
                                 </div>
                               </div>
@@ -454,9 +671,11 @@ const DAddProduct = () => {
                                   </label>
                                   <input
                                     type="number"
-                                    name="sku"
+                                    name="weight"
                                     id="productWeight"
                                     className="form-control shadow-none d-inline w-auto border-2 DALCFPDIR_Input"
+                                    value={productData.attributes.weight || ""}
+                                    onChange={onChangeAttributes}
                                   />
                                 </div>
                                 <div className="DALCFPDIRI_Dimensions mt-3">
@@ -468,24 +687,30 @@ const DAddProduct = () => {
                                   </label>
                                   <input
                                     type="number"
-                                    name="dimensions"
+                                    name="length"
                                     id="productDimension"
                                     placeholder="Length"
                                     className="form-control shadow-none d-inline border-2 DALCFPDIR_Input DALCFPDIR_Input_Dimensions"
+                                    value={productData.attributes.length || ""}
+                                    onChange={onChangeAttributes}
                                   />
                                   <input
                                     type="number"
-                                    name="stock"
+                                    name="width"
                                     id="productDimension"
                                     placeholder="Width"
                                     className="form-control shadow-none d-inline border-2 DALCFPDIR_Input DALCFPDIR_Input_Dimensions m-1"
+                                    value={productData.attributes.width || ""}
+                                    onChange={onChangeAttributes}
                                   />
                                   <input
                                     type="number"
-                                    name="dimensions"
+                                    name="height"
                                     id="productDimension"
                                     placeholder="Height"
                                     className="form-control shadow-none d-inline border-2 DALCFPDIR_Input DALCFPDIR_Input_Dimensions"
+                                    value={productData.attributes.height || ""}
+                                    onChange={onChangeAttributes}
                                   />
                                 </div>
                               </div>
@@ -494,19 +719,28 @@ const DAddProduct = () => {
                             <div className="DALCFPDIR_Item DALCF_Product_Data_Item_Right_Images h-100 w-100 p-3">
                               <div className="DALCF_Product_Data_Item_Right_Images_Container">
                                 <div className="DALCFPDIRI_Images">
-                                  <label
-                                    htmlFor="productImages"
-                                    className="DALCFPDIR_Label"
+                                  <form
+                                    method="POST"
+                                    encType="multipart/form-data"
                                   >
-                                    Product Images
-                                  </label>
-                                  <input
-                                    type="file"
-                                    multiple
-                                    name="sku"
-                                    id="productImages"
-                                    className="form-control shadow-none d-inline border-2 mt-2 DALCFPDIR_Input"
-                                  />
+                                    <label
+                                      htmlFor="productImages"
+                                      className="DALCFPDIR_Label"
+                                    >
+                                      Product Images
+                                    </label>
+                                    <input
+                                      type="file"
+                                      name="images"
+                                      accept="image/png, image/jpg, image/jpeg"
+                                      id="productImages"
+                                      className="form-control shadow-none d-inline border-2 mt-2 DALCFPDIR_Input"
+                                      multiple
+                                      required
+                                      tabIndex={10}
+                                      onChange={onChangeFile}
+                                    />
+                                  </form>
                                 </div>
                                 <div className="DALCFPDIRI_Images_Gallery d-flex flex-wrap align-items-start gap-2 mt-3">
                                   <img
@@ -605,11 +839,12 @@ const DAddProduct = () => {
                               <li className="DALC_Cards_Item_Product_Cat_Item">
                                 <label className="DALC_Cards_Item_Product_Cat_Item_Label">
                                   <input
-                                    value="15"
                                     type="checkbox"
-                                    name="ProductCat"
                                     id="ProductCat"
                                     className="DALC_Cards_Item_Product_Cat_Item_Input"
+                                    name="category"
+                                    value="Uncategorized"
+                                    onChange={onChangeCategory}
                                   />
                                   Uncategorized
                                 </label>
@@ -617,11 +852,12 @@ const DAddProduct = () => {
                               <li className="DALC_Cards_Item_Product_Cat_Item">
                                 <label className="DALC_Cards_Item_Product_Cat_Item_Label">
                                   <input
-                                    value="15"
                                     type="checkbox"
-                                    name="ProductCat"
                                     id="ProductCat"
                                     className="DALC_Cards_Item_Product_Cat_Item_Input"
+                                    name="category"
+                                    value="Clothing"
+                                    onChange={onChangeCategory}
                                   />
                                   Clothing
                                 </label>
@@ -629,11 +865,12 @@ const DAddProduct = () => {
                               <li className="DALC_Cards_Item_Product_Cat_Item">
                                 <label className="DALC_Cards_Item_Product_Cat_Item_Label">
                                   <input
-                                    value="15"
                                     type="checkbox"
-                                    name="ProductCat"
                                     id="ProductCat"
                                     className="DALC_Cards_Item_Product_Cat_Item_Input"
+                                    name="category"
+                                    value="Decor"
+                                    onChange={onChangeCategory}
                                   />
                                   Decor
                                 </label>
@@ -641,11 +878,12 @@ const DAddProduct = () => {
                               <li className="DALC_Cards_Item_Product_Cat_Item">
                                 <label className="DALC_Cards_Item_Product_Cat_Item_Label">
                                   <input
-                                    value="15"
                                     type="checkbox"
-                                    name="ProductCat"
                                     id="ProductCat"
                                     className="DALC_Cards_Item_Product_Cat_Item_Input"
+                                    name="category"
+                                    value="Digital"
+                                    onChange={onChangeCategory}
                                   />
                                   Digital
                                 </label>
@@ -653,11 +891,12 @@ const DAddProduct = () => {
                               <li className="DALC_Cards_Item_Product_Cat_Item">
                                 <label className="DALC_Cards_Item_Product_Cat_Item_Label">
                                   <input
-                                    value="15"
                                     type="checkbox"
-                                    name="ProductCat"
                                     id="ProductCat"
                                     className="DALC_Cards_Item_Product_Cat_Item_Input"
+                                    name="category"
+                                    value="Music"
+                                    onChange={onChangeCategory}
                                   />
                                   Music
                                 </label>
@@ -671,11 +910,12 @@ const DAddProduct = () => {
                               <li className="DALC_Cards_Item_Product_Cat_Item">
                                 <label className="DALC_Cards_Item_Product_Cat_Item_Label">
                                   <input
-                                    value="15"
                                     type="checkbox"
-                                    name="ProductCat"
+                                    name="category"
                                     id="ProductCat"
                                     className="DALC_Cards_Item_Product_Cat_Item_Input"
+                                    value="Clothing"
+                                    onChange={onChangeCategory}
                                   />
                                   Clothing
                                 </label>
@@ -683,11 +923,12 @@ const DAddProduct = () => {
                               <li className="DALC_Cards_Item_Product_Cat_Item">
                                 <label className="DALC_Cards_Item_Product_Cat_Item_Label">
                                   <input
-                                    value="15"
                                     type="checkbox"
-                                    name="ProductCat"
+                                    name="category"
                                     id="ProductCat"
                                     className="DALC_Cards_Item_Product_Cat_Item_Input"
+                                    value="Decor"
+                                    onChange={onChangeCategory}
                                   />
                                   Decor
                                 </label>
@@ -695,11 +936,12 @@ const DAddProduct = () => {
                               <li className="DALC_Cards_Item_Product_Cat_Item">
                                 <label className="DALC_Cards_Item_Product_Cat_Item_Label">
                                   <input
-                                    value="15"
                                     type="checkbox"
-                                    name="ProductCat"
+                                    name="category"
                                     id="ProductCat"
                                     className="DALC_Cards_Item_Product_Cat_Item_Input"
+                                    value="Digital"
+                                    onChange={onChangeCategory}
                                   />
                                   Digital
                                 </label>
