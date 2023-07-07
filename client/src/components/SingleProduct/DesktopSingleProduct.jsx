@@ -5,6 +5,8 @@ import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import GradeRoundedIcon from "@mui/icons-material/GradeRounded";
+import PropTypes from "prop-types";
+
 // import required actions
 import {
   selectIncDec,
@@ -31,7 +33,6 @@ const DesktopSingleProduct = () => {
   );
   const ShippingFee = useSelector((state) => state.Cart.shippingFee);
   const SingleProduct = useSelector((state) => state.Products.singleproduct);
-  console.log(SingleProduct);
   const Cart = useSelector((state) => {
     let res = state.Cart.items.filter((item) => item.uid == id);
     return res;
@@ -108,12 +109,12 @@ const DesktopSingleProduct = () => {
                   style={{ height: "100%" }}
                   {...{
                     imageClassName: "SP_MainImage_Image",
-
                     smallImage: {
                       alt: "Product Picture",
                       isFluidWidth: true,
                       src: ImageURL == null ? `${MainImage}` : `${ImageURL}`,
-                      height: 400,
+                      // width: 400,
+                      // height: 400,
                     },
                     largeImage: {
                       alt: "Product Picture",

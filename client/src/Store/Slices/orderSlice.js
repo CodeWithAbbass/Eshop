@@ -189,7 +189,7 @@ export const addNewAddress = createAsyncThunk(
         return result.data;
       }
       alert(result.message);
-      return result.data;
+      return [];
     } catch (error) {
       throw new Error(error);
     }

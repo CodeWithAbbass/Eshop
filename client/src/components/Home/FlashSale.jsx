@@ -6,6 +6,7 @@ const FlashSale = () => {
   const Products = useSelector((state) => {
     return state.Products.items;
   });
+
   return (
     <div className="Home_Sale_Container w-100 container-xl my-4">
       <div className="Home_Sale_Heading_Container">

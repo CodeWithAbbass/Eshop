@@ -8,6 +8,7 @@ import BuildIcon from "@mui/icons-material/Build";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import HelpIcon from "@mui/icons-material/Help";
 import InventoryIcon from "@mui/icons-material/Inventory";
+import ClearRoundedIcon from "@mui/icons-material/ClearRounded";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addProduct } from "../../../Store/Slices/productSlice";
@@ -16,6 +17,7 @@ const DAddProduct = () => {
   const [allCat, setAllCat] = useState(1);
   const [addNewCat, setAddNewCat] = useState({ NewCat: "" });
   const [content, setContent] = useState("");
+  const [selectedImages, setSelectedImages] = useState([]);
   const [productData, setProductData] = useState({
     title: "",
     description: "",
@@ -28,9 +30,9 @@ const DAddProduct = () => {
     maxquantity: "",
     allowbackorder: false,
     stock: 0,
-    stockstatus: "",
+    stockstatus: "In stock",
     attributes: { size: "", weight: "", length: "", width: "", height: "" },
-    images: "",
+    images: [],
     category: [],
   });
 
@@ -45,8 +47,10 @@ const DAddProduct = () => {
     const QuantityOption = document.querySelector(".DALCFPDIRI_Quantity");
     const AllowOrderOption = document.querySelector(".DALCFPDIRI_AlowOrder");
     const StockStatusOption = document.querySelector(".DALCFPDIRI_StockStatus");
+    const StockOption = document.querySelector(".DALCFPDIRI_Stock");
     QuantityOption.classList.toggle("active");
     AllowOrderOption.classList.toggle("active");
+    StockOption.classList.toggle("active");
     StockStatusOption.classList.toggle("hide");
   };
   const addNewOnChange = (e) => {
@@ -95,7 +99,15 @@ const DAddProduct = () => {
     setProductData({
       ...productData,
       stockmanagement: checked,
+      stockstatus: "",
     });
+    if (!checked) {
+      setProductData({
+        ...productData,
+        stockmanagement: checked,
+        stockstatus: "In stock",
+      });
+    }
     ToggleQuantityANDOrderANDStock();
   };
   const onChangeAllowOrder = (bool) => {
@@ -135,7 +147,49 @@ const DAddProduct = () => {
   };
   const onChangeFile = (e) => {
     const { files } = e.target;
-    setProductData({ ...productData, images: files });
+    const newImages = [];
+    const maxUploads = 5;
+    setSelectedImages([]);
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const reader = new FileReader();
+
+      reader.onloadend = () => {
+        if (i < maxUploads) {
+          newImages.push({
+            file: file,
+            previewUrl: reader.result,
+          });
+          setSelectedImages([...newImages]);
+        }
+      };
+
+      if (file) {
+        reader.readAsDataURL(file);
+      }
+    }
+    const Validator = document.querySelector(".DALCFPDIR_Validation");
+    if (files.length > 5) {
+      Validator.classList.add("Invalid");
+      let newArr = [];
+      for (let i = 0; i < files.length; i++) {
+        if (i < maxUploads) {
+          newArr.push(files[i]);
+        }
+      }
+      setProductData({ ...productData, images: newArr });
+    } else {
+      Validator.classList.remove("Invalid");
+      setSelectedImages([...newImages]); // If User Open For Upload Image Modal And Cancel. Then Selected State Should be Empty
+      setProductData({ ...productData, images: [...files] });
+    }
+  };
+  const deleteFile = (previewUrl, index) => {
+    const newImages = selectedImages.filter(
+      (item) => item.previewUrl !== previewUrl
+    );
+    productData.images.splice(index, 1);
+    setSelectedImages([...newImages]);
   };
   const onChangeAddProduct = (e) => {
     const { name, value } = e.target;
@@ -148,10 +202,14 @@ const DAddProduct = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     let formData = new FormData();
-    for (const iterator of productData.images) {
-      formData.append("images", iterator, productData.images.name);
-    }
-
+    console.log(productData.images);
+    // for (const iterator of productData.images) {
+    //   console.log(iterator);
+    //   formData.append("images", iterator, productData.images.name);
+    // }
+    productData.images.forEach((element) => {
+      formData.append("images", element, productData.images.name);
+    });
     formData.append("title", productData.title);
     formData.append("description", JSON.stringify(productData.description));
     formData.append("price", productData.price);
@@ -166,22 +224,45 @@ const DAddProduct = () => {
     formData.append("attributes", JSON.stringify(productData.attributes));
     formData.append("category", JSON.stringify(productData.category));
     dispatch(addProduct(formData));
-    console.log(productData);
     // // Inspect FormData
     // for (var pair of formData.entries()) {
     //   console.log(pair[0] + ", " + pair[1]);
     // }
   };
+
   useEffect(() => {
     return () => {};
   }, [allCat]);
+  console.log(
+    productData.title.length > 3,
+    productData.price > 0,
+    productData.images,
+    productData.images.length,
+    productData.images.length > 0,
+    productData.images.length < 5
+  );
   return (
     <div className="DAddProduct">
       <div className="DAddProduct_Container">
         <div className="DAddProduct_Heading px-2 bg-white mb-4 d-flex align-items-center justify-content-between">
           <button
-            className="btn btn-outline-primary DAddProduct_AddBtn rounded-0"
-            onClick={handleSubmit}
+            onClick={(e) => handleSubmit(e)}
+            className={`btn btn-outline-primary DAddProduct_AddBtn rounded-0 ${
+              productData.title.length > 3 &&
+              productData.price > 0 &&
+              productData.images.length > 0 &&
+              productData.images.length < 5
+                ? ""
+                : "text-muted border-secondary"
+            }`}
+            disabled={
+              productData.title.length > 3 &&
+              productData.price > 0 &&
+              productData.images.length > 0 &&
+              productData.images.length < 5
+                ? false
+                : true
+            }
           >
             Save Product
           </button>
@@ -190,17 +271,15 @@ const DAddProduct = () => {
           <div className="DALC_Forms_Container me-4">
             <div className="DALCF_Product_Info_Container">
               <div className="DALCF_Product_Name_Container mb-4">
-                <label
-                  className="DALC_Forms_Heading mb-2"
-                  htmlFor="ProductName"
-                >
+                <label className="DALC_Forms_Heading mb-2" htmlFor="title">
                   Add New Product
                 </label>
                 <input
                   type="text"
                   className="form-control rounded-0 shadow-none"
-                  id="ProductName"
+                  id="title"
                   name="title"
+                  autoComplete="true"
                   value={productData.title || ""}
                   onChange={onChangeAddProduct}
                   placeholder="Product Name"
@@ -729,6 +808,10 @@ const DAddProduct = () => {
                                     >
                                       Product Images
                                     </label>
+                                    <span className="DALCFPDIR_Label text-danger DALCFPDIR_Validation">
+                                      You can only upload minimum 1 or maximum 5
+                                      images.
+                                    </span>
                                     <input
                                       type="file"
                                       name="images"
@@ -743,38 +826,24 @@ const DAddProduct = () => {
                                   </form>
                                 </div>
                                 <div className="DALCFPDIRI_Images_Gallery d-flex flex-wrap align-items-start gap-2 mt-3">
-                                  <img
-                                    src="https://i0.wp.com/digital-photography-school.com/wp-content/uploads/2019/11/product_photography_tips_4.jpg?resize=1500%2C1001&ssl=1"
-                                    alt="Product Picture"
-                                    className="DALCFPDIRI_Images_Gallery_Item_Img shadow-sm border"
-                                  />
-
-                                  <img
-                                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxEBUrRuj1hGbHwWD2G8XCkQE-O_M4fOvwvcx6pndTQQ&s"
-                                    alt="Product Picture"
-                                    className="DALCFPDIRI_Images_Gallery_Item_Img shadow-sm border"
-                                  />
-
-                                  <img
-                                    src="https://images.squarespace-cdn.com/content/v1/5911f31c725e251d002da9ac/1613210424136-AS3MY547OBB5Y3GSQ359/Product+Photography?format=1000w"
-                                    alt="Product Picture"
-                                    className="DALCFPDIRI_Images_Gallery_Item_Img shadow-sm border"
-                                  />
-                                  <img
-                                    src="https://images.squarespace-cdn.com/content/v1/5911f31c725e251d002da9ac/1613210424136-AS3MY547OBB5Y3GSQ359/Product+Photography?format=1000w"
-                                    alt="Product Picture"
-                                    className="DALCFPDIRI_Images_Gallery_Item_Img shadow-sm border"
-                                  />
-                                  <img
-                                    src="https://images.squarespace-cdn.com/content/v1/5911f31c725e251d002da9ac/1613210424136-AS3MY547OBB5Y3GSQ359/Product+Photography?format=1000w"
-                                    alt="Product Picture"
-                                    className="DALCFPDIRI_Images_Gallery_Item_Img shadow-sm border"
-                                  />
-                                  <img
-                                    src="https://images.squarespace-cdn.com/content/v1/5911f31c725e251d002da9ac/1613210424136-AS3MY547OBB5Y3GSQ359/Product+Photography?format=1000w"
-                                    alt="Product Picture"
-                                    className="DALCFPDIRI_Images_Gallery_Item_Img shadow-sm border"
-                                  />
+                                  {selectedImages.map((image, index) => (
+                                    <span
+                                      className="position-relative"
+                                      key={index}
+                                    >
+                                      <img
+                                        src={image.previewUrl}
+                                        className="DALCFPDIRI_Images_Gallery_Item_Img shadow-sm border"
+                                        alt={`Preview ${index + 1}`}
+                                      />
+                                      <ClearRoundedIcon
+                                        className="DALCFPDIRI_Images_Gallery_Item_DeleteIcon text-muted position-absolute top-0 end-0"
+                                        onClick={() =>
+                                          deleteFile(image.previewUrl, index)
+                                        }
+                                      />
+                                    </span>
+                                  ))}
                                 </div>
                               </div>
                             </div>
@@ -787,6 +856,8 @@ const DAddProduct = () => {
               </div>
             </div>
           </div>
+
+          {/* Category  */}
           <div className="DALC_Cards_Container ">
             <div className="DALC_Cards_Item">
               <div className="accordion rounded-0" id="Card1Container">
@@ -836,19 +907,6 @@ const DAddProduct = () => {
                                 allCat == 1 ? "active" : ""
                               }`}
                             >
-                              <li className="DALC_Cards_Item_Product_Cat_Item">
-                                <label className="DALC_Cards_Item_Product_Cat_Item_Label">
-                                  <input
-                                    type="checkbox"
-                                    id="ProductCat"
-                                    className="DALC_Cards_Item_Product_Cat_Item_Input"
-                                    name="category"
-                                    value="Uncategorized"
-                                    onChange={onChangeCategory}
-                                  />
-                                  Uncategorized
-                                </label>
-                              </li>
                               <li className="DALC_Cards_Item_Product_Cat_Item">
                                 <label className="DALC_Cards_Item_Product_Cat_Item_Label">
                                   <input

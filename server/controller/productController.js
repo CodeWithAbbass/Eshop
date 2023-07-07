@@ -11,6 +11,10 @@ exports.allProduct = async (req, res) => {
     }
     for (const iterator of allProduct.rows) {
       iterator.images = JSON.parse(iterator.images);
+      iterator.saleschedule = JSON.parse(iterator.saleschedule);
+      iterator.attributes = JSON.parse(iterator.attributes);
+      iterator.description = JSON.parse(iterator.description);
+      iterator.category = JSON.parse(iterator.category);
     }
 
     success = true;
@@ -33,6 +37,16 @@ exports.singleProduct = async (req, res) => {
       return res.status(404).send({ success, message: "Product Not Found" });
     }
     singleProduct.rows[0].images = JSON.parse(singleProduct.rows[0].images);
+    singleProduct.rows[0].saleschedule = JSON.parse(
+      singleProduct.rows[0].saleschedule
+    );
+    singleProduct.rows[0].attributes = JSON.parse(
+      singleProduct.rows[0].attributes
+    );
+    singleProduct.rows[0].description = JSON.parse(
+      singleProduct.rows[0].description
+    );
+    singleProduct.rows[0].category = JSON.parse(singleProduct.rows[0].category);
     success = true;
     res.send({
       success,
@@ -134,15 +148,19 @@ exports.addProduct = async (req, res) => {
     const OriginalDescriptionArr = JSON.parse(addProduct.rows[0].description);
     let NewProduct = addProduct.rows[0];
     NewProduct.images = OriginalImageArr;
+    NewProduct.saleschedule = OriginalSaleScheduleArr;
+    NewProduct.attributes = OriginalAttributsArr;
+    NewProduct.category = OriginalCategoryArr;
+    NewProduct.description = OriginalDescriptionArr;
     success = true;
-    console.log(NewProduct);
+
     res.send({
       success,
       data: NewProduct,
       message: "Product Added Successfully",
     });
   } catch (error) {
-    console.error(error.message);
+    console.error(error.message, "catch");
     res.status(500).send("Internal Server Error");
   }
 };

@@ -126,6 +126,15 @@ const Admin = () => {
   ];
 
   useEffect(() => {
+    const Header = document.querySelector(".Header");
+    const Footer = document.querySelector(".Footer");
+    if (location.pathname.split("/")[1] == "admin") {
+      Header.classList.add("d-none");
+      Footer.classList.add("d-none");
+    } else {
+      Header.classList.remove("d-none");
+      Footer.classList.remove("d-none");
+    }
     return () => {};
   }, [location]);
   return (

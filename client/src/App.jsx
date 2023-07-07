@@ -17,7 +17,13 @@ import DUpdateOrder from "./components/Admin/Orders/DUpdateOrder";
 import DOrders from "./components/Admin/Orders/DOrders";
 import DAnalytics from "./components/Admin/Analytics/DAnalytics";
 
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Link,
+  useLocation,
+} from "react-router-dom";
 import { useEffect, useState } from "react";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -54,6 +60,7 @@ import DHeader from "./components/Admin/DHeader";
 
 const App = () => {
   const dispatch = useDispatch();
+
   let userLoading = useSelector((state) => state.User.loading);
   let productLoading = useSelector((state) => state.Products.loading);
   let cartLoading = useSelector((state) => state.Cart.loading);
@@ -61,6 +68,7 @@ const App = () => {
   let orderLoading = useSelector((state) => state.Orders.loading);
   useEffect(() => {
     // return () => {}
+
     dispatch(getProduct());
     dispatch(getUser());
     dispatch(getCart());
@@ -74,7 +82,7 @@ const App = () => {
   return (
     <div className="App">
       <BrowserRouter>
-        {/* <div className="Top_Header_Wrapper bg-white">
+        <div className="Top_Header_Wrapper bg-white">
           <div className={`Top_Header w-100 container-xl`}>
             <Link className="Top_Header_AdsLink w-100" to="/">
               <img
@@ -84,8 +92,8 @@ const App = () => {
               />
             </Link>
           </div>
-        </div> */}
-        {/* <Header /> */}
+        </div>
+        <Header />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/product/:id" element={<SingleProduct />} />
@@ -124,7 +132,7 @@ const App = () => {
           <Route path="*" element={<h1>404 Not Found</h1>} />
         </Routes>
 
-        {/* <Footer /> */}
+        <Footer />
         {(userLoading ||
           productLoading ||
           cartLoading ||

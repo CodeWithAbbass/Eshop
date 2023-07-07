@@ -105,27 +105,29 @@ const DesktopCart = () => {
                                     Rating:
                                   </span>
                                   <span className="CartItem_Product_Rating_Star">
-                                    {Array(parseInt(rating))
-                                      .fill()
-                                      .map((_, i) => (
-                                        <span
-                                          className="RatingStar text-warning"
-                                          key={i}
-                                        >
-                                          <GradeRoundedIcon />
-                                        </span>
-                                      ))}
+                                    {rating &&
+                                      Array(parseInt(rating))
+                                        .fill()
+                                        .map((_, i) => (
+                                          <span
+                                            className="RatingStar text-warning"
+                                            key={i}
+                                          >
+                                            <GradeRoundedIcon />
+                                          </span>
+                                        ))}
 
-                                    {Array(5 - parseInt(rating))
-                                      .fill()
-                                      .map((_, i) => (
-                                        <span
-                                          className="RatingStarSecondary text-secondary"
-                                          key={i}
-                                        >
-                                          <GradeRoundedIcon />
-                                        </span>
-                                      ))}
+                                    {rating &&
+                                      Array(5 - parseInt(rating))
+                                        .fill()
+                                        .map((_, i) => (
+                                          <span
+                                            className="RatingStarSecondary text-secondary"
+                                            key={i}
+                                          >
+                                            <GradeRoundedIcon />
+                                          </span>
+                                        ))}
                                   </span>
                                 </div>
                                 <div className="CarItem_Product_Information">

@@ -53,8 +53,15 @@ export const addProduct = createAsyncThunk("addProduct", async (formData) => {
         // "Content-Type": "multipart/form-data",
       },
     });
-    const res = await response.json();
-    console.log(res);
+
+    const result = await response.json();
+
+    if (result.success) {
+      alert(result.message);
+      return result.data;
+    }
+    alert(result.message);
+    return [];
   } catch (error) {
     throw new Error(error);
   }
