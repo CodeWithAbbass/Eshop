@@ -15,6 +15,7 @@ exports.allProduct = async (req, res) => {
       iterator.attributes = JSON.parse(iterator.attributes);
       iterator.description = JSON.parse(iterator.description);
       iterator.category = JSON.parse(iterator.category);
+      iterator.tags = JSON.parse(iterator.tags);
     }
 
     success = true;
@@ -77,6 +78,8 @@ exports.addProduct = async (req, res) => {
       stockstatus,
       attributes,
       category,
+      smalldesc,
+      tags,
       description,
       images,
     } = req.body;
@@ -112,8 +115,10 @@ exports.addProduct = async (req, res) => {
       stockstatus,
       attributes,
       category,
+      smalldesc,
       description,
-      images) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18) RETURNING *`,
+      tags,
+      images) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20) RETURNING *`,
       [
         uid,
         parseFloat(rating),
@@ -131,7 +136,9 @@ exports.addProduct = async (req, res) => {
         stockstatus,
         attributes,
         category,
+        smalldesc,
         description,
+        tags,
         images,
       ]
     );
@@ -146,12 +153,14 @@ exports.addProduct = async (req, res) => {
     const OriginalAttributsArr = JSON.parse(addProduct.rows[0].attributes);
     const OriginalCategoryArr = JSON.parse(addProduct.rows[0].category);
     const OriginalDescriptionArr = JSON.parse(addProduct.rows[0].description);
+    const OriginalTagsArr = JSON.parse(addProduct.rows[0].tags);
     let NewProduct = addProduct.rows[0];
     NewProduct.images = OriginalImageArr;
     NewProduct.saleschedule = OriginalSaleScheduleArr;
     NewProduct.attributes = OriginalAttributsArr;
     NewProduct.category = OriginalCategoryArr;
     NewProduct.description = OriginalDescriptionArr;
+    NewProduct.tags = OriginalTagsArr;
     success = true;
 
     res.send({

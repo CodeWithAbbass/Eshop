@@ -56,7 +56,6 @@ import EditAddress from "./components/Modals/EditAddress";
 import AddAddress from "./components/Modals/AddAddress";
 import DeliveryMethod from "./components/Modals/DeliveryMethod";
 import OrderDetails from "./components/User/OrderDetails";
-import DHeader from "./components/Admin/DHeader";
 
 const App = () => {
   const dispatch = useDispatch();

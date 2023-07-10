@@ -7,8 +7,6 @@ import FlashSale from "../components/Home/FlashSale";
 import CategoriesCard from "../components/Home/CategoriesCard";
 import JustForYou from "../components/Home/JustForYou";
 const Home = () => {
-
-
   useEffect(() => {
     document.body.style.backgroundColor = "#f5f5f5";
     return () => {
@@ -20,7 +18,7 @@ const Home = () => {
       <HeroSlider />
       <AdsBanner
         AdsImage={
-          // "https://icms-image.slatic.net/images/ims-web/113f5b22-9a21-4378-b6d9-2b0bded25717.gif"
+          "https://icms-image.slatic.net/images/ims-web/113f5b22-9a21-4378-b6d9-2b0bded25717.gif"
           // "https://gcp-img.slatic.net/lazada/571c8638-902e-453c-9f5a-78d894a80f8e_PK-1188-350.jpg"
           // "https://gcp-img.slatic.net/lazada/18c81b84-4534-4315-ae8d-ca8fa64644f7_PK-1188-350.jpg"
           // "https://laz-img-cdn.alicdn.com/imgextra/i2/O1CN01uwMebu1fjk6fz8Bhs_!!6000000004043-2-tps-1188-483.png"
@@ -29,7 +27,7 @@ const Home = () => {
           // "https://gcp-img.slatic.net/lazada/797ed80b-2b2f-4c49-afa9-5d593132ce80_PK-1188-343.png"
           // "https://laz-img-cdn.alicdn.com/imgextra/i4/O1CN01DM8x6G1DG9IQs4rK7_!!6000000000188-0-tps-1188-753.jpg"
           // "https://gcp-img.slatic.net/lazada/d61afda0-d45e-4526-9d77-e0b97af49b28_PK-1188-350.jpg"
-          "https://gcp-img.slatic.net/lazada/4a4e8426-2162-422d-a057-0619cb617b01_PK-1188-350.jpg"
+          // "https://gcp-img.slatic.net/lazada/4a4e8426-2162-422d-a057-0619cb617b01_PK-1188-350.jpg"
           // "https://laz-img-cdn.alicdn.com/imgextra/i1/O1CN01RuPMoq1cb5npyFJRT_!!6000000003618-0-tps-1188-500.jpg"
         }
         AdsLink={"/"}

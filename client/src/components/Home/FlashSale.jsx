@@ -3,9 +3,7 @@ import Countdown from "./Countdown";
 import ProductCard from "./ProductCard";
 
 const FlashSale = () => {
-  const Products = useSelector((state) => {
-    return state.Products.items;
-  });
+  const Products = useSelector((state) => state.Products.items);
 
   return (
     <div className="Home_Sale_Container w-100 container-xl my-4">
