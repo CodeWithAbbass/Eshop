@@ -1,6 +1,15 @@
 /* ****************************************************** */
 /*                    DAddProduct Css                     */
 /* ****************************************************** */
+.FS_12 {
+  font-size: 12px;
+}
+.FS_13 {
+  font-size: 13px;
+}
+.FS_14 {
+  font-size: 13px;
+}
 .DAddProduct_Heading {
   min-height: 60px;
   height: 60px;
@@ -353,13 +362,30 @@
 /* ****************************************************** */
 /*                    DAllProduct Css                     */
 /* ****************************************************** */
-.DAllProduct_Header_Btn {
-  font-size: 12px;
+.DAllProduct_Header_Btn,
+.DAllProduct_AllProducts_Header_Search_Input {
   border-radius: 2px;
 }
 .DAllProduct_AllProducts_Header_Btn_Container {
-  width: 140px !important;
+  width: 140px;
 }
+.DAllProduct_AllProducts_Header_Search_Input {
+  width: 230px;
+  background-color: transparent;
+  transition: 0.4s ease-in-out;
+}
+
+.DAllProduct_AllProducts_Header_Search_Input:focus,
+.DAllProduct_AllProducts_Header_Search_Input:focus-visible,
+.DAllProduct_AllProducts_Header_Search_Input:focus-within {
+  border-color: white !important;
+  color: black !important;
+}
+.DAllProduct_AllProducts_Header_Search_Icon {
+  width: 16px !important;
+  height: 16px !important;
+}
+
 .DAllProduct_AllProducts_Header_Btn_Item_Container {
   min-width: 140px !important;
   z-index: 1;
@@ -436,4 +462,25 @@
 .DAPIH_Tags_Txt,
 .DAPIH_Date_Txt {
   color: #50575e;
+}
+
+.DAllProduct_AllProducts_Mobile {
+  display: none;
+}
+.DAPAC_Item_Img {
+  width: 50px;
+}
+.DAPAC_Item_OtherInfo_LeftHeading {
+  width: 120px;
+}
+.DAPAC_Item_OtherInfo_RightValue {
+  width: 200px;
+}
+@media (max-width: 1200px) {
+  .DAllProduct_AllProducts_Desktop {
+    display: none;
+  }
+  .DAllProduct_AllProducts_Mobile {
+    display: block;
+  }
 }

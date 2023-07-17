@@ -22,12 +22,11 @@ import {
   deleteFromWishlist,
 } from "../../Store/Slices/wishlistSlice";
 import Meta from "../Meta";
+import { Helmet } from "react-helmet";
 
 const DesktopSingleProduct = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
-  // const [fetchOne, { data, isSuccess, isLoading, isError, error, status }] =
-  // useLazyFetchOneQuery();
   const [ImageURL, setImageURL] = useState(null);
   const ItemExist = useSelector((state) =>
     state.Wishlist.wishitems.filter((item) => item == id)
@@ -54,6 +53,7 @@ const DesktopSingleProduct = () => {
     Discount,
     Stock,
     isSale,
+    Tags,
     ProductSubtotal;
 
   Uid = SingleProduct.uid;
@@ -63,6 +63,7 @@ const DesktopSingleProduct = () => {
   Discount = SingleProduct.discount;
   Stock = SingleProduct.stock;
   isSale = SingleProduct.issale;
+  Tags = SingleProduct.tags;
   MainImage = SingleProduct.images ? SingleProduct.images[0] : [];
   SideImage = SingleProduct.images ? SingleProduct.images : [];
   ProductSubtotal =
@@ -74,6 +75,7 @@ const DesktopSingleProduct = () => {
   useEffect(() => {
     dispatch(totalPrice());
     dispatch(getSingleProduct(id));
+
     return () => {};
   }, [id]);
   const ChangeMainImage = (ImageItem) => {
@@ -84,11 +86,12 @@ const DesktopSingleProduct = () => {
 
   return (
     <>
-      <Meta
+      {/* <Meta
         title={SingleProduct.title || ""}
         description={SingleProduct.smalldesc || ""}
-        keyword={SingleProduct.tags?.join(", ")}
-      />
+        keyword={SingleProduct.tags?.join(" , ")}
+      /> */}
+
       <div className="Desktop_SingleProduct">
         <div className="SingleProduct_Product_Container">
           <div className="SingleProduct_Container">

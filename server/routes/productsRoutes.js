@@ -4,7 +4,7 @@ const {
   allProduct,
   addProduct,
   singleProduct,
-  updateProduct,
+  editProduct,
   deleteProduct,
 } = require("../controller/productController");
 const {
@@ -16,7 +16,7 @@ const upload = require("../middleware/upload");
 router.get("/allproducts", allProduct);
 router.get("/:id", singleProduct);
 router.post("/add", upload.array("images", 5), addProduct);
-router.put("/update/:id", productFormValidation, updateProduct);
+router.put("/edit", productFormValidation, editProduct);
 router.delete("/delete/:id", deleteProduct);
-
+// ?cat=clothing&status=1&tag=new&query=new+product
 module.exports = router;

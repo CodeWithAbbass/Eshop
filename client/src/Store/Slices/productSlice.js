@@ -67,6 +67,31 @@ export const addProduct = createAsyncThunk("addProduct", async (formData) => {
     throw new Error(error);
   }
 });
+export const editProduct = createAsyncThunk("editProduct", async (formData) => {
+  try {
+    const URL = `${import.meta.env.VITE_API_KEY}/product/edit`;
+    const response = await fetch(URL, {
+      method: "POST",
+      body: formData,
+      credentials: "include",
+      headers: {
+        // "Content-Type": "multipart/form-data",
+      },
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      console.log(result);
+      alert(result.message);
+      return result.data;
+    }
+    alert(result.message);
+    return [];
+  } catch (error) {
+    throw new Error(error);
+  }
+});
 export const productSlice = createSlice({
   name: "Products",
   initialState: {
@@ -81,16 +106,6 @@ export const productSlice = createSlice({
     },
   },
   reducers: {
-    addProduct(state, action) {
-      console.log(state.items);
-    },
-    updateProduct(state, action) {
-      console.log(state);
-    },
-    deleteProduct(state, action) {
-      // console.log(action.payload);
-      return state;
-    },
     changeLayout(state, action) {
       const Grid = action.payload;
 
@@ -126,7 +141,11 @@ export const productSlice = createSlice({
       })
       .addCase(getSingleProduct.fulfilled, (state, action) => {
         state.loading = false;
-        state.singleproduct = action.payload;
+        if (Object.keys(action.payload).length > 1) {
+          state.singleproduct = action.payload;
+        } else {
+          state.singleproduct = state.singleproduct;
+        }
         state.error = null;
       })
       .addCase(getSingleProduct.rejected, (state, action) => {
@@ -153,6 +172,5 @@ export const productSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { updateProduct, deleteProduct, changeLayout } =
-  productSlice.actions;
+export const { changeLayout } = productSlice.actions;
 export default productSlice.reducer;

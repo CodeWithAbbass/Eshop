@@ -5,7 +5,7 @@ import Admin from "./Pages/Admin";
 import DProducts from "./components/Admin/Products/DProducts";
 import DAllProducts from "./components/Admin/Products/DAllProducts";
 import DAddProduct from "./components/Admin/Products/DAddProduct";
-import DUpdateProduct from "./components/Admin/Products/DUpdateProduct";
+import DEditProduct from "./components/Admin/Products/DEditProduct";
 import DDeleteProduct from "./components/Admin/Products/DDeleteProduct";
 import DCategories from "./components/Admin/Products/DCategories";
 import DReviews from "./components/Admin/Products/DReviews";
@@ -115,7 +115,7 @@ const App = () => {
             <Route path="products" element={<DProducts />}>
               <Route path="allproducts" element={<DAllProducts />} />
               <Route path="addproduct" element={<DAddProduct />} />
-              <Route path="updateproduct" element={<DUpdateProduct />} />
+              <Route path="edit/:id" element={<DEditProduct />} />
               <Route path="deleteproduct" element={<DDeleteProduct />} />
               <Route path="categories" element={<DCategories />} />
               <Route path="reviews" element={<DReviews />} />
