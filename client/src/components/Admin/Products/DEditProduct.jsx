@@ -22,11 +22,7 @@ const DEditProduct = () => {
   const dispatch = useDispatch();
   const SingleProduct = useSelector((state) => state.Products.singleproduct);
 
-  const [allCat, setAllCat] = useState(1);
-  const [addNewCat, setAddNewCat] = useState({ NewCat: "" });
-  const [content, setContent] = useState("");
-  const [selectedImages, setSelectedImages] = useState([]);
-  const [productData, setProductData] = useState({
+  const initial = {
     title: "",
     sku: "",
     smalldesc: "",
@@ -44,7 +40,13 @@ const DEditProduct = () => {
     attributes: { size: "", weight: "", length: "", width: "", height: "" },
     images: [],
     category: [],
-  });
+  };
+
+  const [allCat, setAllCat] = useState(1);
+  const [addNewCat, setAddNewCat] = useState({ NewCat: "" });
+  const [selectedImages, setSelectedImages] = useState([]);
+  const [productData, setProductData] = useState(initial);
+  const [content, setContent] = useState("");
 
   const toggleCodeView = (isCodeView) => {};
   const toggleCatTabs = (tab) => {
@@ -181,7 +183,6 @@ const DEditProduct = () => {
       if (file) {
         reader.readAsDataURL(file);
       }
-      console.log(selectedImages);
     }
     const Validator = document.querySelector(".DALCFPDIR_Validation");
     if (files.length > 5) {
@@ -193,6 +194,7 @@ const DEditProduct = () => {
         }
       }
       setProductData({ ...productData, images: newArr });
+      console.log(selectedImages);
     } else {
       Validator.classList.remove("Invalid");
       setSelectedImages([...newImages]); // If User Open For Upload Image Modal And Cancel. Then Selected State Should be Empty
@@ -210,8 +212,11 @@ const DEditProduct = () => {
     const newImages = selectedImages.filter(
       (item) => item.previewUrl !== previewUrl
     );
-    productData.images.splice(index, 1);
+
     setSelectedImages([...newImages]);
+    const newImagesArr = [...productData?.images];
+    newImagesArr.splice(index, 1);
+    setProductData({ ...productData, images: newImagesArr });
   };
   const onChangeAddProduct = (e) => {
     const { name, value } = e.target;
@@ -224,8 +229,12 @@ const DEditProduct = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     let formData = new FormData();
-    productData.images.forEach((element) => {
-      formData.append("images", element, productData.images.name);
+    productData?.images?.forEach((element) => {
+      if (element.name) {
+        formData.append("images", element, productData?.images?.name);
+      } else {
+        formData.append("images", element);
+      }
     });
     formData.append("title", productData.title);
     formData.append("sku", productData.sku);
@@ -243,6 +252,7 @@ const DEditProduct = () => {
     formData.append("stockstatus", productData.stockstatus);
     formData.append("attributes", JSON.stringify(productData.attributes));
     formData.append("category", JSON.stringify(productData.category));
+    console.log(productData);
     // dispatch(editProduct(formData));
     // // Inspect FormData
     // for (var pair of formData.entries()) {
@@ -256,15 +266,19 @@ const DEditProduct = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (Object.keys(SingleProduct).length > 0 && productData?.title == "") {
+    if (Object.keys(SingleProduct).length > 0) {
       setProductData(SingleProduct);
-      setContent(SingleProduct?.description);
+      let newArr = [];
+      productData?.images?.forEach((image, index) => {
+        let newPrev = { previewUrl: image };
+        newArr.push(newPrev);
+      });
+      setSelectedImages([...newArr]);
+      setContent(productData.description);
     }
-
     return () => {};
-  }, [SingleProduct, id]);
+  }, [SingleProduct, content]);
 
-  console.log(SingleProduct, productData);
   return (
     <div className="UpdateProduct">
       <div className="DAddProduct">
@@ -273,18 +287,18 @@ const DEditProduct = () => {
             <button
               onClick={(e) => handleSubmit(e)}
               className={`btn btn-outline-primary DAddProduct_AddBtn rounded-0 ${
-                productData?.title?.length > 3 &&
-                productData?.price > 0 &&
-                productData?.images?.length > 0 &&
-                productData?.images?.length < 6
+                productData.title.length > 3 &&
+                productData.price > 0 &&
+                productData.images.length > 0 &&
+                productData.images.length < 6
                   ? ""
                   : "text-muted border-secondary"
               }`}
               disabled={
-                productData?.title?.length > 3 &&
-                productData?.price > 0 &&
-                productData?.images?.length > 0 &&
-                productData?.images?.length < 6
+                productData.title.length > 3 &&
+                productData.price > 0 &&
+                productData.images.length > 0 &&
+                productData.images.length < 6
                   ? false
                   : true
               }
@@ -329,83 +343,86 @@ const DEditProduct = () => {
                     placeholder="Small Description"
                   />
                 </div>
-                <div className="DALCF_Product_Description_Container bg-white">
-                  <div className="DALCF_Product_Description_Header border border-bottom-0">
-                    <label
-                      htmlFor="ProductDescription"
-                      className="DALCF_Product_Description_Heading "
-                    >
-                      Product Description
-                    </label>
-                  </div>
+                {content !== "" && (
+                  <div className="DALCF_Product_Description_Container bg-white">
+                    <div className="DALCF_Product_Description_Header border border-bottom-0">
+                      <label
+                        htmlFor="ProductDescription"
+                        className="DALCF_Product_Description_Heading"
+                      >
+                        Product Description
+                      </label>
+                    </div>
 
-                  <div className="DALCF_Text_Editor_Container w-100">
-                    <SunEditor
-                      name="description"
-                      value={productData?.description}
-                      autoFocus={true}
-                      placeholder="Type..."
-                      onChange={(contents) => setContent(contents)}
-                      width="100%"
-                      height="300"
-                      toolbarContainer="#toolbar_container"
-                      charCounter={true}
-                      showPathLabel={false}
-                      maxCharCount={720}
-                      setDefaultStyle="font-family:Roboto;font-size:14px;color:black;"
-                      toggleCodeView={toggleCodeView}
-                      popupDisplay="local"
-                      setOptions={{
-                        height: 200,
-                        buttonList: [
-                          [
-                            "undo",
-                            "redo",
-                            "font",
-                            "fontSize",
-                            "fontColor",
-                            "textStyle",
-                            "formatBlock",
-                            "paragraphStyle",
+                    <div className="DALCF_Text_Editor_Container w-100">
+                      <SunEditor
+                        name="description"
+                        value={content}
+                        autoFocus={true}
+                        placeholder="Type..."
+                        width="100%"
+                        height="300"
+                        toolbarContainer="#toolbar_container"
+                        charCounter={true}
+                        showPathLabel={false}
+                        maxCharCount={720}
+                        setDefaultStyle="font-family:Roboto;font-size:14px;color:black;"
+                        toggleCodeView={toggleCodeView}
+                        popupDisplay="local"
+                        setOptions={{
+                          height: 200,
+                          buttonList: [
+                            [
+                              "undo",
+                              "redo",
+                              "font",
+                              "fontSize",
+                              "fontColor",
+                              "textStyle",
+                              "formatBlock",
+                              "paragraphStyle",
+                            ],
+                            [
+                              "bold",
+                              "underline",
+                              "italic",
+                              "strike",
+                              "subscript",
+                              "superscript",
+                              "removeFormat",
+                            ],
+                            [
+                              "fontColor",
+                              "hiliteColor",
+                              "outdent",
+                              "indent",
+                              "align",
+                              "horizontalRule",
+                              "lineHeight",
+                              "list",
+                              "table",
+                            ],
+                            [
+                              "link",
+                              "image",
+                              "video",
+                              "audio",
+                              "fullScreen",
+                              "showBlocks",
+                              "codeView",
+                            ],
+                            ["preview", "print"],
                           ],
-                          [
-                            "bold",
-                            "underline",
-                            "italic",
-                            "strike",
-                            "subscript",
-                            "superscript",
-                            "removeFormat",
-                          ],
-                          [
-                            "fontColor",
-                            "hiliteColor",
-                            "outdent",
-                            "indent",
-                            "align",
-                            "horizontalRule",
-                            "lineHeight",
-                            "list",
-                            "table",
-                          ],
-                          [
-                            "link",
-                            "image",
-                            "video",
-                            "audio",
-                            "fullScreen",
-                            "showBlocks",
-                            "codeView",
-                          ],
-                          ["preview", "print"],
-                        ],
-                        callBackSave: function (contents, isChanged) {
-                          setContent(contents);
-                        },
-                      }}
-                    />
+                          callBackSave: function (contents, isChanged) {
+                            setContent(contents);
+                          },
+                        }}
+                        setContents={productData?.description}
+                        onChange={(contents) => setContent(contents)}
+                      />
+                    </div>
                   </div>
-                </div>
+                )}
 
                 <div className="DALCF_Product_Data_Container mt-4">
                   <div className="accordion rounded-0" id="Card2Container">

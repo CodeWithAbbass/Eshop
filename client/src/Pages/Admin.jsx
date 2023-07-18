@@ -135,7 +135,11 @@ const Admin = () => {
       Header.classList.remove("d-none");
       Footer.classList.remove("d-none");
     }
-    return () => {};
+
+    return () => {
+      Header.classList.remove("d-none");
+      Footer.classList.remove("d-none");
+    };
   }, [location]);
   return (
     <div className="Admin">

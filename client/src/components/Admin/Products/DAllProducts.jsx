@@ -383,9 +383,12 @@ const DAllProducts = () => {
                                         <button className="btn rounded-0 FS_12 py-0 px-2 border-0 border-end">
                                           ID: {id || ""}
                                         </button>
-                                        <button className="btn rounded-0 FS_12 py-0 px-2 border-0 border-end">
+                                        <Link
+                                          to={`/admin/products/edit/${uid}`}
+                                          className="btn rounded-0 FS_12 py-0 px-2 border-0 border-end"
+                                        >
                                           Edit
-                                        </button>
+                                        </Link>
                                         <button className="btn rounded-0 FS_12 py-0 px-2 border-0 border-end text-danger">
                                           Trash
                                         </button>

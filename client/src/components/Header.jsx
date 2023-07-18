@@ -63,7 +63,6 @@ const Header = () => {
       TopHeader.classList.remove("d-none");
       return;
     }
-
     TopHeader.classList.add("d-none");
   }, [location]);
   return (
@@ -101,9 +100,7 @@ const Header = () => {
             <li className="d-inline p-0">
               <Link
                 className={`TopBar_Link ${
-                  location.pathname == "/user/order"
-                    ? "active  Bg_Primary"
-                    : ""
+                  location.pathname == "/user/order" ? "active  Bg_Primary" : ""
                 }`}
                 to="/user/order"
               >
@@ -113,9 +110,7 @@ const Header = () => {
             <li className="d-inline p-0">
               <Link
                 className={`TopBar_Link ${
-                  location.pathname == "/categories"
-                    ? "active  Bg_Primary"
-                    : ""
+                  location.pathname == "/categories" ? "active  Bg_Primary" : ""
                 }`}
                 to="/categories"
               >
