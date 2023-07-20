@@ -5,7 +5,7 @@ const productFormValidation = async (req, res, next) => {
     price: "required",
     stock: "required",
     images: "required",
-    description: "required|string|min:8",
+    smalldesc: "required|string|min:8",
   };
 
   await validator(req.body, validationRule, {}, (err, status) => {

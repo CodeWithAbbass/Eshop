@@ -154,6 +154,7 @@
   height: 14px !important;
   color: #fff;
   transition: all 0.4s ease-in-out;
+  cursor: pointer;
 }
 .DALC_Tags_Txt_Cross_Icon:hover {
   color: red;

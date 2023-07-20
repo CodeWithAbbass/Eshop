@@ -23,21 +23,23 @@ const DEditProduct = () => {
   const SingleProduct = useSelector((state) => state.Products.singleproduct);
 
   const initial = {
+    uid: "",
     title: "",
     sku: "",
     smalldesc: "",
     description: "",
     tags: [],
     price: "",
-    discount: "",
-    saleprice: "",
+    discount: null,
+    saleprice: null,
     saleschedule: { start: "", end: "" },
     stockmanagement: false,
-    maxquantity: "",
+    maxquantity: null,
     allowbackorder: false,
-    stock: 0,
+    stock: null,
     stockstatus: "In stock",
     attributes: { size: "", weight: "", length: "", width: "", height: "" },
+    deletedimages: [],
     images: [],
     category: [],
   };
@@ -163,20 +165,25 @@ const DEditProduct = () => {
   };
   const onChangeFile = (e) => {
     const { files } = e.target;
-    const newImages = [];
+    const Validator = document.querySelector(".DALCFPDIR_Validation");
+
+    const newImages = [...selectedImages];
+
     const maxUploads = 5;
-    setSelectedImages([]);
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
       const reader = new FileReader();
-
       reader.onloadend = () => {
-        if (i < maxUploads) {
-          newImages.push({
-            file: file,
-            previewUrl: reader.result,
-          });
-          setSelectedImages([...newImages]);
+        newImages.push({
+          file: file,
+          previewUrl: reader.result,
+        });
+        setSelectedImages([...newImages]);
+
+        if (newImages.length > maxUploads) {
+          Validator.classList.add("Invalid");
+        } else {
+          Validator.classList.remove("Invalid"); // Removing Invalid If Uploads Greater Than 0 or Less than 6. Limit 1-5
         }
       };
 
@@ -184,22 +191,43 @@ const DEditProduct = () => {
         reader.readAsDataURL(file);
       }
     }
-    const Validator = document.querySelector(".DALCFPDIR_Validation");
-    if (files.length > 5) {
+    if (newImages.length > maxUploads) {
       Validator.classList.add("Invalid");
-      let newArr = [];
-      for (let i = 0; i < files.length; i++) {
-        if (i < maxUploads) {
-          newArr.push(files[i]);
-        }
-      }
-      setProductData({ ...productData, images: newArr });
-      console.log(selectedImages);
+      setProductData({
+        ...productData,
+        images: [...productData.images, ...files],
+      });
     } else {
-      Validator.classList.remove("Invalid");
-      setSelectedImages([...newImages]); // If User Open For Upload Image Modal And Cancel. Then Selected State Should be Empty
-      setProductData({ ...productData, images: [...files] });
+      Validator.classList.remove("Invalid"); // Removing Invalid If Uploads Greater Than 0 or Less than 6. Limit 1-5
+      setProductData({
+        ...productData,
+        images: [...productData.images, ...files],
+      });
     }
+  };
+  const deleteFile = (previewUrl, index) => {
+    const Validator = document.querySelector(".DALCFPDIR_Validation");
+    const newImages = selectedImages.filter(
+      (item) => item.previewUrl !== previewUrl
+    );
+    if (newImages.length > 1 && newImages.length < 6) {
+      Validator.classList.remove("Invalid");
+    }
+    setSelectedImages([...newImages]);
+    const newImagesArr = [...productData?.images];
+    const newDeletedArr = [...productData?.deletedimages];
+    const deletedImage = newImagesArr.splice(index, 1);
+    deletedImage.forEach((item) => {
+      if (typeof item == "string") {
+        newDeletedArr.push(...deletedImage); // Add To DeletedImages Which is Send to Server
+      }
+    });
+
+    setProductData({
+      ...productData,
+      images: [...newImagesArr],
+      deletedimages: [...newDeletedArr],
+    });
   };
   const deleteTag = (i) => {
     const newTags = productData.tags.filter((item, index) => index != i);
@@ -207,16 +235,6 @@ const DEditProduct = () => {
       ...productData,
       tags: [...newTags],
     });
-  };
-  const deleteFile = (previewUrl, index) => {
-    const newImages = selectedImages.filter(
-      (item) => item.previewUrl !== previewUrl
-    );
-
-    setSelectedImages([...newImages]);
-    const newImagesArr = [...productData?.images];
-    newImagesArr.splice(index, 1);
-    setProductData({ ...productData, images: newImagesArr });
   };
   const onChangeAddProduct = (e) => {
     const { name, value } = e.target;
@@ -231,11 +249,13 @@ const DEditProduct = () => {
     let formData = new FormData();
     productData?.images?.forEach((element) => {
       if (element.name) {
-        formData.append("images", element, productData?.images?.name);
+        formData.append("images", element, element.name);
       } else {
         formData.append("images", element);
       }
     });
+
+    formData.append("uid", productData.uid);
     formData.append("title", productData.title);
     formData.append("sku", productData.sku);
     formData.append("smalldesc", productData.smalldesc);
@@ -251,9 +271,9 @@ const DEditProduct = () => {
     formData.append("stock", productData.stock);
     formData.append("stockstatus", productData.stockstatus);
     formData.append("attributes", JSON.stringify(productData.attributes));
+    formData.append("deletedimages", JSON.stringify(productData.deletedimages));
     formData.append("category", JSON.stringify(productData.category));
-    console.log(productData);
-    // dispatch(editProduct(formData));
+    dispatch(editProduct(formData));
     // // Inspect FormData
     // for (var pair of formData.entries()) {
     //   console.log(pair[0] + ", " + pair[1]);
@@ -267,7 +287,7 @@ const DEditProduct = () => {
 
   useEffect(() => {
     if (Object.keys(SingleProduct).length > 0) {
-      setProductData(SingleProduct);
+      setProductData({ ...SingleProduct, deletedimages: [] });
       let newArr = [];
       productData?.images?.forEach((image, index) => {
         let newPrev = { previewUrl: image };
@@ -277,7 +297,7 @@ const DEditProduct = () => {
       setContent(productData.description);
     }
     return () => {};
-  }, [SingleProduct, content]);
+  }, [SingleProduct]);
 
   return (
     <div className="UpdateProduct">
@@ -357,7 +377,7 @@ const DEditProduct = () => {
                     <div className="DALCF_Text_Editor_Container w-100">
                       <SunEditor
                         name="description"
-                        value={content}
+                        value={productData?.description}
                         autoFocus={true}
                         placeholder="Type..."
                         width="100%"
@@ -418,7 +438,13 @@ const DEditProduct = () => {
                           },
                         }}
                         setContents={productData?.description}
-                        onChange={(contents) => setContent(contents)}
+                        onChange={(contents) => {
+                          setContent(contents);
+                          setProductData({
+                            ...productData,
+                            description: contents,
+                          });
+                        }}
                       />
                     </div>
                   </div>

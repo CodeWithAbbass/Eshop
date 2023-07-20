@@ -438,7 +438,7 @@ const DAllProducts = () => {
                                           </div>
                                         </div>
                                       </div>
-                                      <div className="DAPAC_Item_OtherInfo_Category w-100 mt-2">
+                                      <div className="DAPAC_Item_OtherInfo_Category d-flex align-items-start w-100 mt-2">
                                         <span className="DAPAC_Item_OtherInfo_LeftHeading d-inline-block">
                                           Category
                                         </span>
@@ -447,7 +447,7 @@ const DAllProducts = () => {
                                             "UnCategorized"}
                                         </span>
                                       </div>
-                                      <div className="DAPAC_Item_OtherInfo_Tag w-100 mt-2">
+                                      <div className="DAPAC_Item_OtherInfo_Tag d-flex align-items-start w-100 mt-2">
                                         <span className="DAPAC_Item_OtherInfo_LeftHeading d-inline-block">
                                           Tag
                                         </span>

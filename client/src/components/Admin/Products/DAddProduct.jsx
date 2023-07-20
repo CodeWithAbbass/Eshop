@@ -26,13 +26,13 @@ const DAddProduct = () => {
     description: "",
     tags: [],
     price: "",
-    discount: "",
-    saleprice: "",
+    discount: null,
+    saleprice: null,
     saleschedule: { start: "", end: "" },
     stockmanagement: false,
-    maxquantity: "",
+    maxquantity: null,
     allowbackorder: false,
-    stock: 0,
+    stock: null,
     stockstatus: "In stock",
     attributes: { size: "", weight: "", length: "", width: "", height: "" },
     images: [],
@@ -858,7 +858,7 @@ const DAddProduct = () => {
                                     >
                                       <img
                                         src={image.previewUrl}
-                                        className="DALCFPDIRI_Images_Gallery_Item_Img shadow-sm border"
+                                        className="DALCFPDIRI_Images_Gallery_Item_Img shadow-sm"
                                         alt={`Preview ${index + 1}`}
                                       />
                                       <ClearRoundedIcon

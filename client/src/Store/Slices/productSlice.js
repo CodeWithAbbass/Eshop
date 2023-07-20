@@ -82,7 +82,6 @@ export const editProduct = createAsyncThunk("editProduct", async (formData) => {
     const result = await response.json();
 
     if (result.success) {
-      console.log(result);
       alert(result.message);
       return result.data;
     }
@@ -165,6 +164,18 @@ export const productSlice = createSlice({
         state.error = null;
       })
       .addCase(addProduct.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(editProduct.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(editProduct.fulfilled, (state, action) => {
+        state.loading = false;
+        state.singleproduct = action.payload;
+        state.error = null;
+      })
+      .addCase(editProduct.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       });
