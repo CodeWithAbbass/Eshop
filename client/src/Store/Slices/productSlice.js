@@ -57,7 +57,6 @@ export const addProduct = createAsyncThunk("addProduct", async (formData) => {
     const result = await response.json();
 
     if (result.success) {
-      console.log(result);
       alert(result.message);
       return result.data;
     }

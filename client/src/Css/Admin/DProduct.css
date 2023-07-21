@@ -69,8 +69,8 @@
 .DALC_Cards_Container {
   padding-top: 2rem;
 }
+
 .DALC_Cards_Item_Product_Cat_Item,
-.DALC_Cards_Item_Product_Cat_Btn,
 .DALC_Cat_AddNewCat_Link {
   margin: 0;
   padding: 0;
@@ -94,38 +94,14 @@
   transition: 0.05s border-color ease-in-out;
 }
 
-.DALC_Cards_Item_Product_Cat_Btn {
-  color: #2271b1;
-  outline: none;
-  margin-bottom: -1px;
-  padding: 3px 5px 6px;
-  z-index: 2;
-}
-.DALC_Cards_Item_Product_Cat_Btn.active {
-  border: 1px solid #dcdcde;
-  border-bottom-color: #fff;
-  background-color: #fff;
-  color: #2c3338;
-}
 .DALC_Cards_Item_Product_Cat {
   min-height: 42px;
   max-height: 200px;
   overflow: auto;
-  border: solid 1px #dcdcde;
   background-color: #fff;
-  visibility: hidden;
-  opacity: 0;
-  display: none;
-  transition: opacity 0.8s ease-in-out, visibility 0.8s ease-in-out,
-    display 0.8s ease-in-out;
+  transition: 0.8s ease-in-out;
 }
-.DALC_Cards_Item_Product_Cat.active {
-  visibility: visible;
-  opacity: 1;
-  display: block;
-  transition: opacity 0.8s ease-in-out, visibility 0.8s ease-in-out,
-    display 0.8s ease-in-out;
-}
+
 .DALC_Cat_AddNew_Item {
   height: 0px;
   overflow: hidden;
@@ -283,6 +259,9 @@
   overflow-y: auto;
   height: 110px;
   padding-bottom: 1rem;
+}
+.DALCFPDIRI_Images_Gallery_Heading {
+  font-size: 12px;
 }
 .DALCFPDIRI_Images_Gallery_Item_Img {
   width: 115px;

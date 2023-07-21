@@ -176,132 +176,135 @@ exports.addProduct = async (req, res) => {
 };
 exports.editProduct = async (req, res) => {
   try {
-    let success = false;
-    let {
-      uid,
-      title,
-      sku,
-      price,
-      discount,
-      brand,
-      saleprice,
-      saleschedule,
-      stockmanagement,
-      maxquantity,
-      allowbackorder,
-      stock,
-      stockstatus,
-      attributes,
-      category,
-      smalldesc,
-      tags,
-      description,
-      deletedimages,
-      images,
-    } = req.body;
-    const productExist = await pool.query(
-      `SELECT * FROM products WHERE uid = $1`,
-      [uid]
-    );
-    if (productExist.rowCount == 0) {
-      return res
-        .status(404)
-        .send({ success, data: [], message: "Product Not Found" });
-    }
-    if (typeof images == "string") {
-      images = [images];
-    }
-    if (req.files) {
-      req.files.forEach(function (file, index, arr) {
-        images.push("http://localhost:5000/" + file.filename);
-      });
-    }
+    console.log(req.files);
+    res.send({ Files: req.files });
+    // let success = false;
+    // let {
+    //   uid,
+    //   title,
+    //   sku,
+    //   price,
+    //   discount,
+    //   brand,
+    //   saleprice,
+    //   saleschedule,
+    //   stockmanagement,
+    //   maxquantity,
+    //   allowbackorder,
+    //   stock,
+    //   stockstatus,
+    //   attributes,
+    //   category,
+    //   smalldesc,
+    //   tags,
+    //   description,
+    //   deletedimages,
+    //   images,
+    // } = req.body;
+    // const productExist = await pool.query(
+    //   `SELECT * FROM products WHERE uid = $1`,
+    //   [uid]
+    // );
+    // if (productExist.rowCount == 0) {
+    //   return res
+    //     .status(404)
+    //     .send({ success, data: [], message: "Product Not Found" });
+    // }
 
-    deletedimages = JSON.parse(deletedimages);
-    deletedimages.forEach((filename) => {
-      const ImageName = filename.split("http://localhost:5000/");
-      const filePath = path.join(__dirname, "../", "/uploads/") + ImageName[1];
+    // if (req.files) {
+    //   req.files.forEach(function (file, index, arr) {
+    //     images.push("http://localhost:5000/" + file.filename);
+    //   });
+    // }
 
-      // Use fs.unlink to delete the file
-      fs.unlink(filePath, (err) => {
-        if (err) {
-          console.error("Error deleting file:", err);
-          return res
-            .status(404)
-            .send({ success, message: "Error deleting image file" });
-        }
+    // deletedimages = JSON.parse(deletedimages);
+    // deletedimages.forEach((filename) => {
+    //   const ImageName = filename.split("http://localhost:5000/");
 
-        console.log("File deleted successfully:", ImageName[1]);
-      });
-    });
-    images = JSON.stringify(images);
-    const updateProduct = await pool.query(
-      `
-    UPDATE products
-    SET price = $2,
-        discount = $3,
-        stock = $4,
-        saleprice = $5,
-        maxquantity = $6,
-        title = $7,
-        sku = $8,
-        brand = $9,
-        saleschedule = $10,
-        stockmanagement = $11,
-        allowbackorder = $12,
-        stockstatus = $13,
-        attributes = $14,
-        category = $15,
-        smalldesc = $16,
-        description = $17,
-        tags = $18,
-        images = $19
-    WHERE uid = $1
-    RETURNING *;
-    `,
-      [
-        uid,
-        parseFloat(price),
-        parseFloat(discount),
-        parseFloat(stock),
-        parseFloat(saleprice),
-        parseFloat(maxquantity),
-        title,
-        sku,
-        brand,
-        saleschedule,
-        stockmanagement,
-        allowbackorder,
-        stockstatus,
-        attributes,
-        category,
-        smalldesc,
-        description,
-        tags,
-        images,
-      ]
-    );
-    if (updateProduct.rowCount == 0) {
-      return res.status(404).send("Product Not Updated");
-    }
+    //   const filePath = path.join(__dirname, "../", "/uploads/") + ImageName[1];
 
-    for (const iterator of updateProduct.rows) {
-      iterator.images = JSON.parse(iterator.images);
-      iterator.saleschedule = JSON.parse(iterator.saleschedule);
-      iterator.attributes = JSON.parse(iterator.attributes);
-      iterator.description = JSON.parse(iterator.description);
-      iterator.category = JSON.parse(iterator.category);
-      iterator.tags = JSON.parse(iterator.tags);
-    }
+    //   // Use fs.unlink to delete the file
+    //   fs.unlink(filePath, (err) => {
+    //     if (err) {
+    //       // return res.status(404).send({
+    //       //   success,
+    //       //   message: "Images files Not Found During Deleteion Process.",
+    //       // });
+    //       // console.error(err);
+    //       console.log("Images files Not Found During Deleteion Process.:");
+    //     }
 
-    success = true;
-    res.send({
-      success,
-      data: updateProduct.rows[0],
-      message: "Product Updated Successfully",
-    });
+    //     // console.log("File deleted successfully:", ImageName[1]);
+    //   });
+    // });
+    // images = JSON.stringify(images);
+    // const updateProduct = await pool.query(
+    //   `
+    // UPDATE products
+    // SET price = $2,
+    //     discount = $3,
+    //     stock = $4,
+    //     saleprice = $5,
+    //     maxquantity = $6,
+    //     title = $7,
+    //     sku = $8,
+    //     brand = $9,
+    //     saleschedule = $10,
+    //     stockmanagement = $11,
+    //     allowbackorder = $12,
+    //     stockstatus = $13,
+    //     attributes = $14,
+    //     category = $15,
+    //     smalldesc = $16,
+    //     description = $17,
+    //     tags = $18,
+    //     images = $19
+    // WHERE uid = $1
+    // RETURNING *;
+    // `,
+    //   [
+    //     uid,
+    //     parseFloat(price),
+    //     parseFloat(discount),
+    //     parseFloat(stock),
+    //     parseFloat(saleprice),
+    //     parseFloat(maxquantity),
+    //     title,
+    //     sku,
+    //     brand,
+    //     saleschedule,
+    //     stockmanagement,
+    //     allowbackorder,
+    //     stockstatus,
+    //     attributes,
+    //     category,
+    //     smalldesc,
+    //     description,
+    //     tags,
+    //     images,
+    //   ]
+    // );
+    // if (updateProduct.rowCount == 0) {
+    //   return res.status(404).send("Product Not Updated");
+    // }
+
+    // for (const iterator of updateProduct.rows) {
+    //   iterator.images = JSON.parse(iterator.images);
+    //   iterator.saleschedule = JSON.parse(iterator.saleschedule);
+    //   iterator.attributes = JSON.parse(iterator.attributes);
+    //   iterator.description = JSON.parse(iterator.description);
+    //   iterator.category = JSON.parse(iterator.category);
+    //   iterator.tags = JSON.parse(iterator.tags);
+    // }
+
+    // success = true;
+    // res.send({
+    //   success,
+    //   data: updateProduct.rows[0],
+    //   message: "Product Updated Successfully",
+    // });
   } catch (error) {
-    console.error(error.message);
+    console.error(error.message, "======================Catch");
     res.status(500).send("Internal Server Error");
   }
 };

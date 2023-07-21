@@ -41,14 +41,23 @@ const DEditProduct = () => {
     attributes: { size: "", weight: "", length: "", width: "", height: "" },
     deletedimages: [],
     images: [],
+    files: [],
     category: [],
   };
 
-  const [allCat, setAllCat] = useState(1);
-  const [addNewCat, setAddNewCat] = useState({ NewCat: "" });
-  const [selectedImages, setSelectedImages] = useState([]);
+  const Categories = [
+    "Clothing",
+    "Decor",
+    "Digital",
+    "Music",
+    "Sports",
+    "Fashion",
+  ];
+  const [cat, setCat] = useState(Categories); // For Product Category
+  const [addNewCat, setAddNewCat] = useState(""); // For Product Category
+  const [content, setContent] = useState(""); // For Text Editor
+  const [selectedImages, setSelectedImages] = useState([]); // For Image Preview
   const [productData, setProductData] = useState(initial);
-  const [content, setContent] = useState("");
 
   const toggleCodeView = (isCodeView) => {};
   const toggleCatTabs = (tab) => {
@@ -64,8 +73,12 @@ const DEditProduct = () => {
     StockOption.classList.toggle("active");
     StockStatusOption.classList.toggle("hide");
   };
-  const addNewOnChange = (e) => {
-    setAddNewCat({ ...addNewCat, NewCat: e.target.value });
+  const addNewCategory = () => {
+    setCat([...cat, addNewCat]);
+    setAddNewCat("");
+  };
+  const addNewCatOnChange = (e) => {
+    setAddNewCat(e.target.value);
   };
   const ShowAddNewCatOption = () => {
     const AddNewCatInput = document.querySelector(`.DALC_Cat_AddNew_Item`);
@@ -195,39 +208,48 @@ const DEditProduct = () => {
       Validator.classList.add("Invalid");
       setProductData({
         ...productData,
-        images: [...productData.images, ...files],
+        files: [...productData.files, ...files],
       });
     } else {
       Validator.classList.remove("Invalid"); // Removing Invalid If Uploads Greater Than 0 or Less than 6. Limit 1-5
       setProductData({
         ...productData,
-        images: [...productData.images, ...files],
+        files: [...productData.files, ...files],
       });
     }
   };
   const deleteFile = (previewUrl, index) => {
     const Validator = document.querySelector(".DALCFPDIR_Validation");
-    const newImages = selectedImages.filter(
+    const RemainItem = selectedImages.filter(
       (item) => item.previewUrl !== previewUrl
-    );
-    if (newImages.length > 1 && newImages.length < 6) {
+    ); // Filter Returns Remaining Items in selectedImages.
+
+    if (RemainItem.length > 1 && RemainItem.length < 6) {
       Validator.classList.remove("Invalid");
     }
-    setSelectedImages([...newImages]);
-    const newImagesArr = [...productData?.images];
-    const newDeletedArr = [...productData?.deletedimages];
-    const deletedImage = newImagesArr.splice(index, 1);
-    deletedImage.forEach((item) => {
-      if (typeof item == "string") {
-        newDeletedArr.push(...deletedImage); // Add To DeletedImages Which is Send to Server
-      }
-    });
 
-    setProductData({
-      ...productData,
-      images: [...newImagesArr],
-      deletedimages: [...newDeletedArr],
-    });
+    // setSelectedImages(RemainItem);
+    if (previewUrl.file) {
+      productData?.files.splice(index, 1);
+      console.log("File", index);
+    } else {
+      console.log("URL", index);
+    }
+    // const newUploadsArr = [...productData?.files];
+    // const newDeletedArr = [...productData?.deletedimages];
+    // const deletedImage = newImagesArr.splice(index, 1);
+    // deletedImage.forEach((item) => {
+    //   if (typeof item == "string") {
+    //     newDeletedArr.push(...deletedImage); // Add To DeletedImages Which is Send to Server
+    //   }
+    // });
+
+    // setProductData({
+    //   ...productData,
+    //   files: [...newImagesArr],
+    //   deletedimages: [...newDeletedArr],
+    // });
+    console.log("Deleting...", productData);
   };
   const deleteTag = (i) => {
     const newTags = productData.tags.filter((item, index) => index != i);
@@ -243,16 +265,19 @@ const DEditProduct = () => {
       [name]: value,
       description: content,
     });
+    console.log(
+      "OnChange",
+      "productData====",
+      productData,
+      "selectedImages====",
+      selectedImages
+    );
   };
   const handleSubmit = (e) => {
     e.preventDefault();
     let formData = new FormData();
-    productData?.images?.forEach((element) => {
-      if (element.name) {
-        formData.append("images", element, element.name);
-      } else {
-        formData.append("images", element);
-      }
+    productData?.files?.forEach((element) => {
+      formData.append("file", element);
     });
 
     formData.append("uid", productData.uid);
@@ -287,17 +312,19 @@ const DEditProduct = () => {
 
   useEffect(() => {
     if (Object.keys(SingleProduct).length > 0) {
-      setProductData({ ...SingleProduct, deletedimages: [] });
+      setProductData({ ...SingleProduct, deletedimages: [], files: [] });
       let newArr = [];
-      productData?.images?.forEach((image, index) => {
+      SingleProduct?.images?.forEach((image, index) => {
         let newPrev = { previewUrl: image };
         newArr.push(newPrev);
       });
+
       setSelectedImages([...newArr]);
       setContent(productData.description);
     }
+    console.log("useEffect", productData);
     return () => {};
-  }, [SingleProduct]);
+  }, [SingleProduct, dispatch]);
 
   return (
     <div className="UpdateProduct">
@@ -897,7 +924,6 @@ const DEditProduct = () => {
                                   </div>
                                 </div>
                               </div>
-
                               <div className="DALCFPDIR_Item DALCF_Product_Data_Item_Right_Images h-100 w-100 p-3">
                                 <div className="DALCF_Product_Data_Item_Right_Images_Container">
                                   <div className="DALCFPDIRI_Images">
@@ -928,7 +954,7 @@ const DEditProduct = () => {
                                       />
                                     </form>
                                   </div>
-                                  <div className="DALCFPDIRI_Images_Gallery d-flex flex-wrap align-items-start gap-2 mt-3">
+                                  <div className="DALCFPDIRI_Images_Gallery d-flex flex-wrap align-items-start gap-3 mt-3">
                                     {selectedImages.map((image, index) => (
                                       <span
                                         className="position-relative"
@@ -942,7 +968,7 @@ const DEditProduct = () => {
                                         <ClearRoundedIcon
                                           className="DALCFPDIRI_Images_Gallery_Item_DeleteIcon text-muted position-absolute top-0 end-0"
                                           onClick={() =>
-                                            deleteFile(image.previewUrl, index)
+                                            deleteFile(image, index)
                                           }
                                         />
                                       </span>
@@ -961,6 +987,7 @@ const DEditProduct = () => {
             </div>
             <div className="DALC_Cards_Container_Layout_Container">
               {/* Category  */}
+
               <div className="DALC_Cards_Container ">
                 <div className="DALC_Cards_Item">
                   <div className="accordion rounded-0" id="Card1Container">
@@ -983,175 +1010,60 @@ const DEditProduct = () => {
                         aria-labelledby="headingOne"
                         data-bs-parent="#Card1Container"
                       >
-                        <div className="accordion-body p-2">
+                        <div className="accordion-body p-0">
                           <div className="DALC_Cards_Item_Card1Container_Body">
-                            <div className="DALC_Cards_Item_Product_Cat_Container">
-                              <div className="DALC_Cards_Item_Product_Cat_Btn_Container d-flex align-items-center">
-                                <button
-                                  className={`btn DALC_Cards_Item_Product_Cat_Btn rounded-0 ${
-                                    allCat == 1 ? "active" : ""
-                                  }`}
-                                  onClick={() => toggleCatTabs(1)}
-                                >
-                                  All Categories
-                                </button>
-                                <button
-                                  className={`btn DALC_Cards_Item_Product_Cat_Btn rounded-0 ms-1 ${
-                                    allCat == 2 ? "active" : ""
-                                  }`}
-                                  onClick={() => toggleCatTabs(2)}
-                                >
-                                  Most Used
-                                </button>
-                              </div>
-                              <div className="DALC_Cards_Product_Cat_Items_Container">
-                                <ul
-                                  className={`DALC_Cards_Item_Product_Cat px-2 py-3 w-100 ${
-                                    allCat == 1 ? "active" : ""
-                                  }`}
-                                >
-                                  <li className="DALC_Cards_Item_Product_Cat_Item">
-                                    <label className="DALC_Cards_Item_Product_Cat_Item_Label">
-                                      <input
-                                        type="checkbox"
-                                        id="ProductCat"
-                                        className="DALC_Cards_Item_Product_Cat_Item_Input"
-                                        name="category"
-                                        value="Clothing"
-                                        checked={productData?.category?.includes(
-                                          "Clothing"
-                                        )}
-                                        onChange={onChangeCategory}
-                                      />
-                                      Clothing
-                                    </label>
-                                  </li>
-                                  <li className="DALC_Cards_Item_Product_Cat_Item">
-                                    <label className="DALC_Cards_Item_Product_Cat_Item_Label">
-                                      <input
-                                        type="checkbox"
-                                        id="ProductCat"
-                                        className="DALC_Cards_Item_Product_Cat_Item_Input"
-                                        name="category"
-                                        value="Decor"
-                                        checked={productData?.category?.includes(
-                                          "Decor"
-                                        )}
-                                        onChange={onChangeCategory}
-                                      />
-                                      Decor
-                                    </label>
-                                  </li>
-                                  <li className="DALC_Cards_Item_Product_Cat_Item">
-                                    <label className="DALC_Cards_Item_Product_Cat_Item_Label">
-                                      <input
-                                        type="checkbox"
-                                        id="ProductCat"
-                                        className="DALC_Cards_Item_Product_Cat_Item_Input"
-                                        name="category"
-                                        value="Digital"
-                                        checked={productData?.category?.includes(
-                                          "Digital"
-                                        )}
-                                        onChange={onChangeCategory}
-                                      />
-                                      Digital
-                                    </label>
-                                  </li>
-                                  <li className="DALC_Cards_Item_Product_Cat_Item">
-                                    <label className="DALC_Cards_Item_Product_Cat_Item_Label">
-                                      <input
-                                        type="checkbox"
-                                        id="ProductCat"
-                                        className="DALC_Cards_Item_Product_Cat_Item_Input"
-                                        name="category"
-                                        value="Music"
-                                        checked={productData?.category?.includes(
-                                          "Music"
-                                        )}
-                                        onChange={onChangeCategory}
-                                      />
-                                      Music
-                                    </label>
-                                  </li>
-                                </ul>
-                                <ul
-                                  className={`DALC_Cards_Item_Product_Cat px-2 py-3 ${
-                                    allCat == 2 ? "active" : ""
-                                  }`}
-                                >
-                                  <li className="DALC_Cards_Item_Product_Cat_Item">
-                                    <label className="DALC_Cards_Item_Product_Cat_Item_Label">
-                                      <input
-                                        type="checkbox"
-                                        name="category"
-                                        id="ProductCat"
-                                        className="DALC_Cards_Item_Product_Cat_Item_Input"
-                                        value="Clothing"
-                                        checked={productData?.category?.includes(
-                                          "Clothing"
-                                        )}
-                                        onChange={onChangeCategory}
-                                      />
-                                      Clothing
-                                    </label>
-                                  </li>
-                                  <li className="DALC_Cards_Item_Product_Cat_Item">
-                                    <label className="DALC_Cards_Item_Product_Cat_Item_Label">
-                                      <input
-                                        type="checkbox"
-                                        name="category"
-                                        id="ProductCat"
-                                        className="DALC_Cards_Item_Product_Cat_Item_Input"
-                                        value="Decor"
-                                        checked={productData?.category?.includes(
-                                          "Decor"
-                                        )}
-                                        onChange={onChangeCategory}
-                                      />
-                                      Decor
-                                    </label>
-                                  </li>
-                                  <li className="DALC_Cards_Item_Product_Cat_Item">
-                                    <label className="DALC_Cards_Item_Product_Cat_Item_Label">
-                                      <input
-                                        type="checkbox"
-                                        name="category"
-                                        id="ProductCat"
-                                        className="DALC_Cards_Item_Product_Cat_Item_Input"
-                                        value="Digital"
-                                        checked={productData?.category?.includes(
-                                          "Digital"
-                                        )}
-                                        onChange={onChangeCategory}
-                                      />
-                                      Digital
-                                    </label>
-                                  </li>
-                                </ul>
+                            <ul
+                              className={`DALC_Cards_Item_Product_Cat px-3 py-3 w-100 mb-0`}
+                            >
+                              {cat.length > 0 &&
+                                cat.map((item, index) => {
+                                  return (
+                                    <li
+                                      className="DALC_Cards_Item_Product_Cat_Item"
+                                      key={index}
+                                    >
+                                      <label className="DALC_Cards_Item_Product_Cat_Item_Label">
+                                        <input
+                                          type="checkbox"
+                                          id="ProductCat"
+                                          className="DALC_Cards_Item_Product_Cat_Item_Input"
+                                          name="category"
+                                          value={item || "UnCategorized"}
+                                          checked={productData?.category?.includes(
+                                            item
+                                          )}
+                                          onChange={onChangeCategory}
+                                        />
+                                        {item || ""}
+                                      </label>
+                                    </li>
+                                  );
+                                })}
+                            </ul>
 
-                                <div className="DALC_Cat_AddNew_Container">
-                                  <Link
-                                    className="DALC_Cat_AddNewCat_Link text-primary text-decoration-underline"
-                                    onClick={() => ShowAddNewCatOption()}
-                                  >
-                                    + Add New Category
-                                  </Link>
-                                  <div className="DALC_Cat_AddNew_Item my-2 d-flex align-items-center justify-content-between gap-3">
-                                    <input
-                                      type="text"
-                                      name="NewCat"
-                                      id="NewCat"
-                                      value={addNewCat.NewCat || ""}
-                                      placeholder="Enter New Category"
-                                      onChange={addNewOnChange}
-                                      className="form-control DALC_Cat_AddNew_Item_Input rounded-0 p-2"
-                                    />
-                                    <button className="btn shadow-none border rounded-0 p-0 DALC_Cat_AddNewCat_Btn">
-                                      Add
-                                    </button>
-                                  </div>
-                                </div>
+                            <div className="DALC_Cat_AddNew_Container mb-3 px-3">
+                              <Link
+                                className="DALC_Cat_AddNewCat_Link text-primary text-decoration-underline"
+                                onClick={() => ShowAddNewCatOption()}
+                              >
+                                + Add New Category
+                              </Link>
+                              <div className="DALC_Cat_AddNew_Item my-2 d-flex align-items-center justify-content-between gap-3">
+                                <input
+                                  type="text"
+                                  name="NewCat"
+                                  id="NewCat"
+                                  value={addNewCat || ""}
+                                  placeholder="Enter New Category"
+                                  onChange={addNewCatOnChange}
+                                  className="form-control DALC_Cat_AddNew_Item_Input DALC_Cat_AddNewCat_Input rounded-0 p-2"
+                                />
+                                <button
+                                  className="btn shadow-none border rounded-0 p-0 DALC_Cat_AddNewCat_Btn"
+                                  onClick={() => addNewCategory()}
+                                >
+                                  Add
+                                </button>
                               </div>
                             </div>
                           </div>
