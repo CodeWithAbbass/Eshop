@@ -1,0 +1,55 @@
+/* Category Left Part Css  */
+.DCLC_AddNewCatForm {
+  width: 200px;
+  flex: 1;
+}
+.DCLC_AllCat {
+  float: right;
+  width: 65%;
+  min-width: 65%;
+}
+@media (max-width: 1200px) {
+  .DCLC_AllCat {
+    width: 100%;
+  }
+}
+
+/* Category Right Part Css  */
+.DCLC_AllCat_Header_Headings {
+  color: #2271b1;
+  line-height: 2;
+}
+.DCLC_AllCat_Body_Item {
+  background-color: transparent;
+  min-height: 50px;
+  height: 100%;
+}
+.DCLC_AllCat_Body_Name {
+  color: #2271b1;
+  font-weight: 500;
+}
+.DCLC_AllCat_Body_Count {
+  color: #2271b1;
+}
+.DCLCACB_Item_Operation_Container {
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.4s ease-in-out;
+}
+.DCLC_AllCat_Body_Name:hover .DCLCACB_Item_Operation_Container {
+  opacity: 1;
+  visibility: visible;
+  transition: all 0.4s ease-in-out;
+}
+.DCLC_AllCat_Body_Description .READMore {
+  color: #2271b1;
+}
+.DCLC_AllCat_Body_Description_Hidden {
+  display: none;
+}
+.DCLC_AllCat_Body_Description_Hidden:target {
+  display: block;
+}
+.DCLC_AllCat_Body_Description_Hidden:target + .READMore {
+  display: none;
+}

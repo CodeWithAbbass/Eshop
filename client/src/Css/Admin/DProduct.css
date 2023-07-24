@@ -8,7 +8,7 @@
   font-size: 13px;
 }
 .FS_14 {
-  font-size: 13px;
+  font-size: 14px;
 }
 .DAddProduct_Heading {
   min-height: 60px;
@@ -32,7 +32,7 @@
   min-width: 280px;
 }
 
-.DAddProduct .form-control {
+.Admin .form-control {
   font-size: 14px;
 }
 
@@ -177,8 +177,8 @@
   color: #3f6ad8;
   cursor: pointer;
   z-index: 2;
-  height: 50px;
-  line-height: 36px;
+  height: 60px;
+  line-height: 46px;
 }
 .DALCF_Product_Data_Item_Link {
   color: inherit;
@@ -393,7 +393,8 @@
   width: 100%;
   height: 100%;
 }
-.DAPIH_Image_Container {
+.DAPIH_Image_Container,
+.DAPIH_Image_Container_Image_Parent {
   width: 110px !important;
   height: 35px !important;
   padding: 5px;
@@ -401,24 +402,21 @@
   white-space: nowrap;
 }
 .DAPIH_Image_Container_Image_Parent {
-  width: 110px !important;
   height: 70px !important;
-  padding: 5px;
-  text-align: center;
-  white-space: nowrap;
 }
 .DAPIH_Title_Container {
-  width: 22%;
+  width: 17%;
 }
+
 .DAPIH_Tags_Container,
 .DAPIH_Stock_Container,
 .DAPIH_Price_Container {
   width: 11%;
-  padding: 5px;
   color: #2271b1;
 }
-
-.DAPIH_Sku_Container,
+.DAPIH_Sku_Container {
+  width: 11%;
+}
 .DAPIH_Category_Container,
 .DAPIH_Date_Container {
   width: 15%;
@@ -444,6 +442,14 @@
   color: #50575e;
 }
 
+.DAPIH_Tags_Txt {
+  height: 100%;
+  padding: 5px;
+  overflow-y: auto;
+}
+.DAPIH_Tags_Txt::-webkit-scrollbar {
+  appearance: none;
+}
 .DAllProduct_AllProducts_Mobile {
   display: none;
 }

@@ -3,10 +3,11 @@ import { Link } from "react-router-dom";
 import "../../../Css/Admin/DProduct.css";
 import PhotoOutlinedIcon from "@mui/icons-material/PhotoOutlined";
 import PriceFormat from "../../../helpers/PriceFormat";
-import { useSelector } from "react-redux";
-import ClearRoundedIcon from "@mui/icons-material/ClearRounded";
+import { useDispatch, useSelector } from "react-redux";
 import SearchIcon from "@mui/icons-material/Search";
+import { deleteProduct } from "../../../Store/Slices/productSlice";
 const DAllProducts = () => {
+  const dispatch = useDispatch();
   const [filterByCat, setFilterByCat] = useState("Filter By Category");
   const [filterByStockStatus, setFilterByStockStatus] = useState(
     "Filter By Stock Status"
@@ -19,11 +20,17 @@ const DAllProducts = () => {
   };
   const AllProducts = useSelector((state) => state.Products.items);
 
+  const DeleteProduct = (uid) => {
+    const Response = confirm("You are going to delete this item!");
+    if (Response) {
+      dispatch(deleteProduct(uid));
+    }
+  };
   return (
     <div className="DAllProducts">
       <div className="DAllProducts_Container">
         <div className="DAllProduct_Header_Container mb-5 d-flex align-items-center">
-          <h4 className="DALC_Forms_Heading m-0 fw-normal">Products</h4>
+          <h4 className="DALC_Forms_Heading m-0 fw-normal">All Products</h4>
           <Link
             to="/admin/products/addproduct"
             className="btn btn-outline-primary DAllProduct_Header_Btn FS_12 ms-2 px-2 py-1"
@@ -191,7 +198,10 @@ const DAllProducts = () => {
                             >
                               Edit
                             </Link>
-                            <button className="btn rounded-0 FS_12 py-0 px-2 border-0 border-end text-danger">
+                            <button
+                              className="btn rounded-0 FS_12 py-0 px-2 border-0 border-end text-danger"
+                              onClick={() => DeleteProduct(uid)}
+                            >
                               Trash
                             </button>
                             <Link
@@ -389,7 +399,10 @@ const DAllProducts = () => {
                                         >
                                           Edit
                                         </Link>
-                                        <button className="btn rounded-0 FS_12 py-0 px-2 border-0 border-end text-danger">
+                                        <button
+                                          className="btn rounded-0 FS_12 py-0 px-2 border-0 border-end text-danger"
+                                          onClick={() => DeleteProduct(uid)}
+                                        >
                                           Trash
                                         </button>
                                         <Link

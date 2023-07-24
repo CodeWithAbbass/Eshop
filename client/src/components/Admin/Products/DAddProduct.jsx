@@ -283,11 +283,14 @@ const DAddProduct = () => {
             Save Product
           </button>
         </div>
-        <div className="DAddProduct_Layout_Container d-flex align-items-start justify-content-between">
-          <div className="DALC_Forms_Container me-4">
+        <div className="DAddProduct_Layout_Container d-flex flex-wrap align-items-start justify-content-between gap-4">
+          <div className="DALC_Forms_Container">
             <div className="DALCF_Product_Info_Container">
               <div className="DALCF_Product_Name_Container mb-4">
-                <label className="DALC_Forms_Heading mb-2" htmlFor="title">
+                <label
+                  className="DALC_Forms_Heading FS_13"
+                  htmlFor="title"
+                >
                   Title
                 </label>
                 <input
@@ -302,7 +305,7 @@ const DAddProduct = () => {
                 />
               </div>
               <div className="DALCF_Product_Name_Container mb-4">
-                <label className="DALC_Forms_Heading mb-2" htmlFor="smalldesc">
+                <label className="DALC_Forms_Heading FS_13" htmlFor="smalldesc">
                   Small Description
                 </label>
                 <input

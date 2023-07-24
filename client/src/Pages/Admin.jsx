@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
-import DHeader from "../components/Admin/DHeader";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import NotificationsIcon from "@mui/icons-material/Notifications";
@@ -93,6 +92,7 @@ const Admin = () => {
     const Menu = document.querySelector(".Admin_TopDown_Mobile_Header");
     Menu.classList.toggle("active");
   };
+
   const MenuList = [
     {
       icon: RocketIcon,
@@ -100,8 +100,7 @@ const Admin = () => {
       subcategories: [
         { subheading: "All Products", link: "products/allproducts" },
         { subheading: "Add Product", link: "products/addproduct" },
-        { subheading: "Update Product", link: "products/updateproduct" },
-        { subheading: "Delete Product", link: "products/deleteproduct" },
+        { subheading: "Categories", link: "products/categories" },
       ],
     },
     {
@@ -143,7 +142,6 @@ const Admin = () => {
   }, [location]);
   return (
     <div className="Admin">
-      {/* <DHeader /> */}
       <div className="Admin_Layout_Container">
         <div className="Admin_Header_Container w-100">
           {/* Desktop Header  */}

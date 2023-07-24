@@ -71,11 +71,34 @@ export const editProduct = createAsyncThunk("editProduct", async (formData) => {
     const URL = `${import.meta.env.VITE_API_KEY}/product/edit`;
     const response = await fetch(URL, {
       method: "POST",
-      body: formData,
-      credentials: "include",
       headers: {
         // "Content-Type": "multipart/form-data",
       },
+      credentials: "include",
+      body: formData,
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      alert(result.message);
+      return result.data;
+    }
+    alert(result.message);
+    return [];
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+export const deleteProduct = createAsyncThunk("deleteProduct", async (uid) => {
+  try {
+    const URL = `${import.meta.env.VITE_API_KEY}/product/delete/${uid}`;
+    const response = await fetch(URL, {
+      method: "DELETE",
+      headers: {
+        // "Content-Type": "multipart/form-data",
+      },
+      credentials: "include",
     });
 
     const result = await response.json();
@@ -175,6 +198,18 @@ export const productSlice = createSlice({
         state.error = null;
       })
       .addCase(editProduct.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(deleteProduct.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(deleteProduct.fulfilled, (state, action) => {
+        state.loading = false;
+        state.items = action.payload;
+        state.error = null;
+      })
+      .addCase(deleteProduct.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       });

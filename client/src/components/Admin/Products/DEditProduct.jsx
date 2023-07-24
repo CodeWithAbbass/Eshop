@@ -218,38 +218,40 @@ const DEditProduct = () => {
       });
     }
   };
-  const deleteFile = (previewUrl, index) => {
+  const deleteFile = (image, index) => {
     const Validator = document.querySelector(".DALCFPDIR_Validation");
     const RemainItem = selectedImages.filter(
-      (item) => item.previewUrl !== previewUrl
+      (item) => item.previewUrl !== image.previewUrl
     ); // Filter Returns Remaining Items in selectedImages.
-
-    if (RemainItem.length > 1 && RemainItem.length < 6) {
+    setSelectedImages(RemainItem);
+    if (RemainItem.length > 0 && RemainItem.length < 6) {
       Validator.classList.remove("Invalid");
-    }
-
-    // setSelectedImages(RemainItem);
-    if (previewUrl.file) {
-      productData?.files.splice(index, 1);
-      console.log("File", index);
     } else {
-      console.log("URL", index);
+      if (!Validator.classList.contains("Invalid")) {
+        Validator.classList.add("Invalid");
+      }
     }
-    // const newUploadsArr = [...productData?.files];
-    // const newDeletedArr = [...productData?.deletedimages];
-    // const deletedImage = newImagesArr.splice(index, 1);
-    // deletedImage.forEach((item) => {
-    //   if (typeof item == "string") {
-    //     newDeletedArr.push(...deletedImage); // Add To DeletedImages Which is Send to Server
-    //   }
-    // });
 
-    // setProductData({
-    //   ...productData,
-    //   files: [...newImagesArr],
-    //   deletedimages: [...newDeletedArr],
-    // });
-    console.log("Deleting...", productData);
+    const deletedImageArr = [...productData?.images].splice(index, 1);
+    if (deletedImageArr.length > 0) {
+      const newImagesArr = productData.images.filter(
+        (item) => item != image.previewUrl
+      );
+
+      setProductData({
+        ...productData,
+        images: newImagesArr,
+        deletedimages: [...productData.deletedimages, ...deletedImageArr],
+      });
+    } else {
+      const newFilesArr = productData?.files?.filter(
+        (item) => item.name != image.file.name
+      );
+      setProductData({
+        ...productData,
+        files: newFilesArr,
+      });
+    }
   };
   const deleteTag = (i) => {
     const newTags = productData.tags.filter((item, index) => index != i);
@@ -265,13 +267,6 @@ const DEditProduct = () => {
       [name]: value,
       description: content,
     });
-    console.log(
-      "OnChange",
-      "productData====",
-      productData,
-      "selectedImages====",
-      selectedImages
-    );
   };
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -296,6 +291,7 @@ const DEditProduct = () => {
     formData.append("stock", productData.stock);
     formData.append("stockstatus", productData.stockstatus);
     formData.append("attributes", JSON.stringify(productData.attributes));
+    formData.append("images", JSON.stringify(productData.images));
     formData.append("deletedimages", JSON.stringify(productData.deletedimages));
     formData.append("category", JSON.stringify(productData.category));
     dispatch(editProduct(formData));
@@ -322,10 +318,10 @@ const DEditProduct = () => {
       setSelectedImages([...newArr]);
       setContent(productData.description);
     }
-    console.log("useEffect", productData);
     return () => {};
   }, [SingleProduct, dispatch]);
 
+  const ValidationImageLength = [...productData.images, ...productData.files];
   return (
     <div className="UpdateProduct">
       <div className="DAddProduct">
@@ -336,16 +332,16 @@ const DEditProduct = () => {
               className={`btn btn-outline-primary DAddProduct_AddBtn rounded-0 ${
                 productData.title.length > 3 &&
                 productData.price > 0 &&
-                productData.images.length > 0 &&
-                productData.images.length < 6
+                ValidationImageLength.length > 0 &&
+                ValidationImageLength.length < 6
                   ? ""
                   : "text-muted border-secondary"
               }`}
               disabled={
                 productData.title.length > 3 &&
                 productData.price > 0 &&
-                productData.images.length > 0 &&
-                productData.images.length < 6
+                ValidationImageLength.length > 0 &&
+                ValidationImageLength.length < 6
                   ? false
                   : true
               }
@@ -357,7 +353,7 @@ const DEditProduct = () => {
             <div className="DALC_Forms_Container me-4">
               <div className="DALCF_Product_Info_Container">
                 <div className="DALCF_Product_Name_Container mb-4">
-                  <label className="DALC_Forms_Heading mb-2" htmlFor="title">
+                  <label className="DALC_Forms_Heading FS_13" htmlFor="title">
                     Title
                   </label>
                   <input
@@ -371,9 +367,9 @@ const DEditProduct = () => {
                     placeholder="Product Name"
                   />
                 </div>
-                <div className="DALCF_Product_Name_Container mb-4">
+                <div className="DALCF_Product_SmallDesc_Container mb-4">
                   <label
-                    className="DALC_Forms_Heading mb-2"
+                    className="DALC_Forms_Heading FS_13"
                     htmlFor="smalldesc"
                   >
                     Small Description

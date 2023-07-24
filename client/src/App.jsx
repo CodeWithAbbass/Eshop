@@ -6,7 +6,6 @@ import DProducts from "./components/Admin/Products/DProducts";
 import DAllProducts from "./components/Admin/Products/DAllProducts";
 import DAddProduct from "./components/Admin/Products/DAddProduct";
 import DEditProduct from "./components/Admin/Products/DEditProduct";
-import DDeleteProduct from "./components/Admin/Products/DDeleteProduct";
 import DCategories from "./components/Admin/Products/DCategories";
 import DReviews from "./components/Admin/Products/DReviews";
 
@@ -66,8 +65,6 @@ const App = () => {
   let wishlistLoading = useSelector((state) => state.Wishlist.loading);
   let orderLoading = useSelector((state) => state.Orders.loading);
   useEffect(() => {
-    // return () => {}
-
     dispatch(getProduct());
     dispatch(getUser());
     dispatch(getCart());
@@ -116,7 +113,6 @@ const App = () => {
               <Route path="allproducts" element={<DAllProducts />} />
               <Route path="addproduct" element={<DAddProduct />} />
               <Route path="edit/:id" element={<DEditProduct />} />
-              <Route path="deleteproduct" element={<DDeleteProduct />} />
               <Route path="categories" element={<DCategories />} />
               <Route path="reviews" element={<DReviews />} />
             </Route>
@@ -163,3 +159,13 @@ const App = () => {
 };
 
 export default App;
+
+// Edit Product Page Code Optimized.
+// Edit Product Page Revamp Code For Old Images URL, New Uploaded Files, Preview Files.
+// Delete Images and Upload Images in Editing Page Completed.
+// Renew Delete Product API.
+// Delete Product API Integrated.
+// Delete Images on Deleting Product.
+// Confirm by Admin for Proceed to Deletion.
+// Continue With Category Page.
+// Category Pending.
