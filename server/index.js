@@ -1,14 +1,14 @@
 require("dotenv").config();
 const express = require("express");
-// const bodyParser = require("body-parser");
 const app = express();
 const path = require("path");
 const port = 5000;
 const user = require("./routes/userRoutes");
 const product = require("./routes/productsRoutes");
+const category = require("./routes/categoryRoutes");
 const wishlist = require("./routes/wishlistRoutes");
 const order = require("./routes/orderRoutes");
-const address = require("./routes/addressRoute");
+const address = require("./routes/addressRoutes");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 
@@ -36,6 +36,7 @@ app.use(express.static(path.join(__dirname, "/uploads")));
 // Available Routes
 app.use("/api/auth", user);
 app.use("/api/product", product);
+app.use("/api/cat", category);
 app.use("/api/wishlist", wishlist);
 app.use("/api/order", order);
 app.use("/api/address", address);

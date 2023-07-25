@@ -9,10 +9,11 @@ import HelpIcon from "@mui/icons-material/Help";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import ClearRoundedIcon from "@mui/icons-material/ClearRounded";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addProduct } from "../../../Store/Slices/productSlice";
 import { Helmet } from "react-helmet";
 import Meta from "../../Meta";
+import { addCategory, getAllCat } from "../../../Store/Slices/categorySlice";
 const DAddProduct = () => {
   const initial = {
     title: "",
@@ -33,16 +34,10 @@ const DAddProduct = () => {
     images: [],
     category: [],
   };
-  const Categories = [
-    "Clothing",
-    "Decor",
-    "Digital",
-    "Music",
-    "Sports",
-    "Fashion",
-  ];
+
+  const AllCat = useSelector((state) => state.Categories.categories);
+
   const dispatch = useDispatch();
-  const [cat, setCat] = useState(Categories); // For Product Category
   const [addNewCat, setAddNewCat] = useState(""); // For Product Category
   const [content, setContent] = useState(""); // For Text Editor
   const [selectedImages, setSelectedImages] = useState([]); // For Image Preview
@@ -61,7 +56,8 @@ const DAddProduct = () => {
     StockStatusOption.classList.toggle("hide");
   };
   const addNewCategory = () => {
-    setCat([...cat, addNewCat]);
+    const newCat = { name: addNewCat, description: "" };
+    dispatch(addCategory(newCat));
     setAddNewCat("");
   };
   const addNewCatOnChange = (e) => {
@@ -254,8 +250,9 @@ const DAddProduct = () => {
   };
 
   useEffect(() => {
+    dispatch(getAllCat());
     return () => {};
-  }, []);
+  }, [dispatch]);
 
   return (
     <div className="DAddProduct">
@@ -287,10 +284,7 @@ const DAddProduct = () => {
           <div className="DALC_Forms_Container">
             <div className="DALCF_Product_Info_Container">
               <div className="DALCF_Product_Name_Container mb-4">
-                <label
-                  className="DALC_Forms_Heading FS_13"
-                  htmlFor="title"
-                >
+                <label className="DALC_Forms_Heading FS_13" htmlFor="title">
                   Title
                 </label>
                 <input
@@ -923,8 +917,9 @@ const DAddProduct = () => {
                           <ul
                             className={`DALC_Cards_Item_Product_Cat px-3 py-3 w-100 mb-0`}
                           >
-                            {cat.length > 0 &&
-                              cat.map((item, index) => {
+                            {AllCat.length > 0 &&
+                              AllCat.map((item, index) => {
+                                const { cid, name, description, count } = item;
                                 return (
                                   <li
                                     className="DALC_Cards_Item_Product_Cat_Item"
@@ -936,10 +931,10 @@ const DAddProduct = () => {
                                         id="ProductCat"
                                         className="DALC_Cards_Item_Product_Cat_Item_Input"
                                         name="category"
-                                        value={item || "UnCategorized"}
+                                        value={name || "UnCategorized"}
                                         onChange={onChangeCategory}
                                       />
-                                      {item || ""}
+                                      {name || ""}
                                     </label>
                                   </li>
                                 );

@@ -8,6 +8,8 @@ import SearchIcon from "@mui/icons-material/Search";
 import { deleteProduct } from "../../../Store/Slices/productSlice";
 const DAllProducts = () => {
   const dispatch = useDispatch();
+  const AllProducts = useSelector((state) => state.Products.items);
+
   const [filterByCat, setFilterByCat] = useState("Filter By Category");
   const [filterByStockStatus, setFilterByStockStatus] = useState(
     "Filter By Stock Status"
@@ -18,7 +20,6 @@ const DAllProducts = () => {
   const onChangeFilterByStockStatus = (stockStatus) => {
     setFilterByStockStatus(stockStatus);
   };
-  const AllProducts = useSelector((state) => state.Products.items);
 
   const DeleteProduct = (uid) => {
     const Response = confirm("You are going to delete this item!");

@@ -3,11 +3,38 @@ const path = require("path");
 const fs = require("fs");
 const crypto = require("crypto");
 
+const catCountUp = async (cat) => {
+  const CatExist = await pool.query(`SELECT * FROM category WHERE name = $1`, [
+    cat,
+  ]);
+  if (CatExist.rowCount == 0) {
+    console.log("Category Not Found During Product Addition");
+    return;
+  }
+  const newCount = +CatExist.rows[0].count + 1;
+  const CountUp = await pool.query(
+    `UPDATE category SET count = $2 WHERE name = $1`,
+    [cat, newCount]
+  );
+};
+const catCountDown = async (cat) => {
+  const CatExist = await pool.query(`SELECT * FROM category WHERE name = $1`, [
+    cat,
+  ]);
+  if (CatExist.rowCount == 0) {
+    console.log("Category Not Found During Product Addition");
+    return;
+  }
+  const newCount = +CatExist.rows[0].count - 1;
+  const CountUp = await pool.query(
+    `UPDATE category SET count = $2 WHERE name = $1`,
+    [cat, newCount]
+  );
+};
 exports.allProduct = async (req, res) => {
   try {
     let success = false;
     const allProduct = await pool.query("SELECT * FROM products");
-
     if (allProduct.rows.length == 0) {
       return res.status(404).send({ success, message: "Products Not Found" });
     }
@@ -84,6 +111,7 @@ exports.addProduct = async (req, res) => {
       description,
       images,
     } = req.body;
+
     if (req.files) {
       let path = [];
       req.files.forEach(function (files, index, arr) {
@@ -96,8 +124,13 @@ exports.addProduct = async (req, res) => {
       crypto.randomBytes(5).toString("hex") +
       Date.now().toString(5) +
       crypto.randomBytes(5).toString("hex");
-    images = JSON.stringify(images);
 
+    const dupCategroy = [...JSON.parse(category)];
+    dupCategroy?.forEach(async (cat, index) => {
+      await catCountUp(cat);
+    });
+
+    images = JSON.stringify(images);
     const addProduct = await pool.query(
       `INSERT INTO products (
       uid, 
@@ -170,7 +203,7 @@ exports.addProduct = async (req, res) => {
       message: "Product Added Successfully",
     });
   } catch (error) {
-    console.error(error.message, "catch");
+    console.error(error);
     res.status(500).send("Internal Server Error");
   }
 };
@@ -331,6 +364,10 @@ exports.deleteProduct = async (req, res) => {
       });
     });
 
+    const dupCategroy = [...JSON.parse(singleProduct.rows[0].category)];
+    dupCategroy?.forEach(async (cat, index) => {
+      await catCountDown(cat);
+    });
     // Deleting Product.
     const deleteProduct = await pool.query(
       `DELETE FROM products WHERE uid = $1 RETURNING *;`,
@@ -345,7 +382,14 @@ exports.deleteProduct = async (req, res) => {
     }
 
     const allProduct = await pool.query("SELECT * FROM products");
-
+    success = true;
+    if (allProduct.rowCount == 0) {
+      return res.send({
+        success,
+        data: [],
+        message: "Product Deleted Successfully",
+      });
+    }
     // Parsing All Products Data.
     for (const iterator of allProduct.rows) {
       iterator.images = JSON.parse(iterator.images);
@@ -356,7 +400,6 @@ exports.deleteProduct = async (req, res) => {
       iterator.tags = JSON.parse(iterator.tags);
     }
 
-    success = true;
     res.status(200).send({
       success,
       message: "Product Deleted Successfully",

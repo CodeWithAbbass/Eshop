@@ -47,11 +47,12 @@ export const addProduct = createAsyncThunk("addProduct", async (formData) => {
     const URL = `${import.meta.env.VITE_API_KEY}/product/add`;
     const response = await fetch(URL, {
       method: "POST",
-      body: formData,
-      credentials: "include",
+
       headers: {
         // "Content-Type": "multipart/form-data",
       },
+      body: formData,
+      credentials: "include",
     });
 
     const result = await response.json();
@@ -146,14 +147,11 @@ export const productSlice = createSlice({
         state.loading = true;
       })
       .addCase(getProduct.fulfilled, (state, action) => {
-        // console.log(action, "from fulfiled");
-
         state.loading = false;
         state.items = action.payload;
         state.error = null;
       })
       .addCase(getProduct.rejected, (state, action) => {
-        // console.log(action, "from rejections");
         state.loading = false;
         state.error = action.error.message;
       })

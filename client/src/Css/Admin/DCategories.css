@@ -41,15 +41,23 @@
   visibility: visible;
   transition: all 0.4s ease-in-out;
 }
+.DCLC_AllCat_Body_Description {
+  word-wrap: break-word;
+}
 .DCLC_AllCat_Body_Description .READMore {
   color: #2271b1;
 }
-.DCLC_AllCat_Body_Description_Hidden {
+.DCLC_AllCat_Mobile {
   display: none;
 }
-.DCLC_AllCat_Body_Description_Hidden:target {
-  display: block;
+.DCLC_AllCat_LeftHeading {
+  min-width: 80px;
 }
-.DCLC_AllCat_Body_Description_Hidden:target + .READMore {
-  display: none;
+@media (max-width: 1200px) {
+  .DCLC_AllCat_Desktop {
+    display: none;
+  }
+  .DCLC_AllCat_Mobile {
+    display: block;
+  }
 }

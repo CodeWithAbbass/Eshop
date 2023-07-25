@@ -48,6 +48,7 @@ import { getProduct } from "./Store/Slices/productSlice";
 import { getUserWishlist } from "./Store/Slices/wishlistSlice";
 import { totalPrice, getCart } from "./Store/Slices/cartSlice";
 import { getUserOrderAddress, getUserOrders } from "./Store/Slices/orderSlice";
+import { getAllCat } from "./Store/Slices/categorySlice";
 
 import { getAddress } from "./Store/Slices/orderSlice";
 import UserAddressBook from "./components/Modals/UserAddressBook";
@@ -61,6 +62,7 @@ const App = () => {
 
   let userLoading = useSelector((state) => state.User.loading);
   let productLoading = useSelector((state) => state.Products.loading);
+  let categoryLoading = useSelector((state) => state.Categories.loading);
   let cartLoading = useSelector((state) => state.Cart.loading);
   let wishlistLoading = useSelector((state) => state.Wishlist.loading);
   let orderLoading = useSelector((state) => state.Orders.loading);
@@ -73,6 +75,7 @@ const App = () => {
     dispatch(getAddress());
     dispatch(getUserOrderAddress());
     dispatch(totalPrice());
+    // dispatch(getAllCat());
   }, []);
 
   return (
@@ -129,6 +132,7 @@ const App = () => {
 
         <Footer />
         {(userLoading ||
+          categoryLoading ||
           productLoading ||
           cartLoading ||
           wishlistLoading ||
@@ -160,12 +164,4 @@ const App = () => {
 
 export default App;
 
-// Edit Product Page Code Optimized.
-// Edit Product Page Revamp Code For Old Images URL, New Uploaded Files, Preview Files.
-// Delete Images and Upload Images in Editing Page Completed.
-// Renew Delete Product API.
-// Delete Product API Integrated.
-// Delete Images on Deleting Product.
-// Confirm by Admin for Proceed to Deletion.
-// Continue With Category Page.
 // Category Pending.
