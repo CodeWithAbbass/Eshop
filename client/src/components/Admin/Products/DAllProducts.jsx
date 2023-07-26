@@ -162,6 +162,7 @@ const DAllProducts = () => {
                       tags,
                       publish,
                     } = product;
+                    console.log(publish);
                     let Date = publish?.split("T");
                     let TimeStamp = Date[1] ? Date[1].split(".") : "00:00:00";
                     const Year = Date[0] ? Date[0] : "0000";
@@ -169,7 +170,7 @@ const DAllProducts = () => {
                     return (
                       <div
                         className={`DAllProduct_AllProducts_Item_Body ${
-                          index % 2 == 0 ? "bg-white" : ""
+                          index % 2 == 1 ? "bg-white" : ""
                         } d-flex align-items-center w-100 border border-top-0`}
                         key={index}
                       >

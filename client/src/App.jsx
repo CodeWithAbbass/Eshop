@@ -121,7 +121,7 @@ const App = () => {
             </Route>
             <Route path="orders" element={<DOrders />}>
               <Route path="allorders" element={<DAllOrders />} />
-              <Route path="addorder" element={<DAddOrder />} />
+              <Route path="add" element={<DAddOrder />} />
               <Route path="deleteorder" element={<DDeleteOrder />} />
               <Route path="status" element={<DUpdateOrder />} />
             </Route>
@@ -163,5 +163,3 @@ const App = () => {
 };
 
 export default App;
-
-// Category Pending.

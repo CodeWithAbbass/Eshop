@@ -1,0 +1,60 @@
+.DAllOrders_Item_Header {
+  height: 35px;
+  overflow: hidden;
+  line-height: 34px;
+  color: #2271b1;
+}
+.DAllOrders_Header_Btn {
+  border-radius: 2px;
+}
+.DAllOrders_Item_Body {
+  background-color: transparent;
+  height: 70px;
+  line-height: 67px;
+}
+.DAOIB_OrderID_EditStatus {
+  color: #43aafd;
+}
+.DAOIB_OrderStatusBtn {
+  border-radius: 2px;
+}
+.DAOIB_EditStatus_Btn {
+  color: #43aafd;
+  transition: all 0.4s ease-in-out;
+}
+.DAOIB_EditStatus_Btn:hover {
+  color: #2271b1;
+}
+.DAOIB_EditStatus_Icon {
+  width: 18px !important;
+  height: 18px !important;
+}
+.DAOIB_OrderStatusCloseBtn {
+  height: 50px;
+  transition: all 0.4s ease-in-out;
+}
+.DAOIB_OrderStatusCloseBtn:hover {
+  background-color: #dfdfdf;
+}
+.DAllOrders .modal-dialog {
+  max-width: 500px !important;
+}
+.DAllOrders .modal-footer {
+  background: #fcfcfc;
+  border-top: 1px solid #dfdfdf;
+  box-shadow: 0 -4px 4px -4px rgba(0, 0, 0, 0.1);
+}
+.EditOrderModal_StatusBtn {
+  border: 1px solid #ccc;
+  color: #0a4b78;
+  background: #f0f0f1;
+  text-align: center;
+  white-space: nowrap;
+
+  transition: all 0.4s ease-in-out;
+}
+
+.EditOrderModal_EditBtn {
+  border-radius: 2px;
+  background-color: #2271b1;
+}

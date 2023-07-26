@@ -21,11 +21,7 @@ const ReadMore = ({ children }) => {
 };
 
 const Content = ({ Description }) => {
-  return (
-    <div className="Content_Container">
-      <ReadMore>{Description}</ReadMore>
-    </div>
-  );
+  return <ReadMore>{Description}</ReadMore>;
 };
 
 export default Content;

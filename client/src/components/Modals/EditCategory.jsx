@@ -6,6 +6,7 @@ const EditCategory = ({ editCat, setEditCat }) => {
   const dispatch = useDispatch();
   const handleEditCat = (e) => {
     e.preventDefault();
+
     dispatch(editCategory(editCat));
   };
   useEffect(() => {

@@ -16,6 +16,7 @@ import {
 } from "../../../Store/Slices/productSlice";
 import { Helmet } from "react-helmet";
 import Meta from "../../Meta";
+import { addCategory, getAllCat } from "../../../Store/Slices/categorySlice";
 const DEditProduct = () => {
   const { id } = useParams();
 
@@ -45,15 +46,7 @@ const DEditProduct = () => {
     category: [],
   };
 
-  const Categories = [
-    "Clothing",
-    "Decor",
-    "Digital",
-    "Music",
-    "Sports",
-    "Fashion",
-  ];
-  const [cat, setCat] = useState(Categories); // For Product Category
+  const AllCat = useSelector((state) => state.Categories.categories);
   const [addNewCat, setAddNewCat] = useState(""); // For Product Category
   const [content, setContent] = useState(""); // For Text Editor
   const [selectedImages, setSelectedImages] = useState([]); // For Image Preview
@@ -74,7 +67,8 @@ const DEditProduct = () => {
     StockStatusOption.classList.toggle("hide");
   };
   const addNewCategory = () => {
-    setCat([...cat, addNewCat]);
+    const newCat = { name: addNewCat, description: "" };
+    dispatch(addCategory(newCat));
     setAddNewCat("");
   };
   const addNewCatOnChange = (e) => {
@@ -161,10 +155,12 @@ const DEditProduct = () => {
         category: [...productData.category, value],
       });
     } else {
+      const OldCategory = productData.category.filter((item) => item == value);
       const NewCategory = productData.category.filter((item) => item != value);
       setProductData({
         ...productData,
         category: NewCategory,
+        deletedcat: [...productData.deletedcat, ...OldCategory],
       });
     }
   };
@@ -294,6 +290,7 @@ const DEditProduct = () => {
     formData.append("images", JSON.stringify(productData.images));
     formData.append("deletedimages", JSON.stringify(productData.deletedimages));
     formData.append("category", JSON.stringify(productData.category));
+    formData.append("deletedcat", JSON.stringify(productData.deletedcat));
     dispatch(editProduct(formData));
     // // Inspect FormData
     // for (var pair of formData.entries()) {
@@ -303,12 +300,18 @@ const DEditProduct = () => {
 
   useEffect(() => {
     dispatch(getSingleProduct(id));
+    dispatch(getAllCat());
     return () => {};
   }, [dispatch]);
 
   useEffect(() => {
     if (Object.keys(SingleProduct).length > 0) {
-      setProductData({ ...SingleProduct, deletedimages: [], files: [] });
+      setProductData({
+        ...SingleProduct,
+        deletedimages: [],
+        files: [],
+        deletedcat: [],
+      });
       let newArr = [];
       SingleProduct?.images?.forEach((image, index) => {
         let newPrev = { previewUrl: image };
@@ -1011,8 +1014,11 @@ const DEditProduct = () => {
                             <ul
                               className={`DALC_Cards_Item_Product_Cat px-3 py-3 w-100 mb-0`}
                             >
-                              {cat.length > 0 &&
-                                cat.map((item, index) => {
+                              {AllCat.length > 0 &&
+                                AllCat.map((item, index) => {
+                                  const { cid, name, description, count } =
+                                    item;
+
                                   return (
                                     <li
                                       className="DALC_Cards_Item_Product_Cat_Item"
@@ -1024,13 +1030,13 @@ const DEditProduct = () => {
                                           id="ProductCat"
                                           className="DALC_Cards_Item_Product_Cat_Item_Input"
                                           name="category"
-                                          value={item || "UnCategorized"}
+                                          value={name || "UnCategorized"}
                                           checked={productData?.category?.includes(
-                                            item
+                                            name
                                           )}
                                           onChange={onChangeCategory}
                                         />
-                                        {item || ""}
+                                        {name || ""}
                                       </label>
                                     </li>
                                   );

@@ -34,7 +34,7 @@ const DCategories = () => {
       dispatch(deleteCategory(cid));
     }
   };
-  console.log(AllCat);
+
   useEffect(() => {
     dispatch(getAllCat());
     return () => {};
@@ -92,13 +92,13 @@ const DCategories = () => {
               </div>
               <button
                 type="submit"
-                className="btn btn-outline-primary DAllProduct_Header_Btn FS_12 ms-2 px-2 py-1"
+                className="btn btn-outline-primary DAllProduct_Header_Btn FS_12 px-2 py-1"
               >
                 Add New Category
               </button>
             </form>
           </div>
-          <div className="DCLC_AllCat">
+          <div className="DCLC_AllCat mt-4">
             <div className="DCLC_AllCat_Desktop">
               <div className="DCLC_AllCat_Container border">
                 <div className="DCLC_AllCat_Header border-0 border-bottom row m-0 w-100 bg-white justify-content-between">
@@ -127,6 +127,7 @@ const DCategories = () => {
                   {AllCat.length > 0 &&
                     AllCat.map((cat, index) => {
                       const { cid, name, description, count } = cat;
+
                       return (
                         <div
                           className={`DCLC_AllCat_Body_Item row m-0 w-100 justify-content-between py-2 ${
@@ -167,7 +168,7 @@ const DCategories = () => {
                           </div>
                           <div className="DCLC_AllCat_Body_Count col-1 text-end">
                             <p className="mb-0 FS_13 DCLC_AllCat_Body_Count">
-                              {count || " "}
+                              {count}
                             </p>
                           </div>
                         </div>
@@ -244,7 +245,7 @@ const DCategories = () => {
                                           Count
                                         </span>
                                         <span className="DCLC_AllCat_Body_Count">
-                                          {count || ""}
+                                          {count}
                                         </span>
                                       </div>
                                       <div className="w-100 mt-2 d-flex align-items-start gap-3">

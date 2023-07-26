@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 const initialState = {
   orders: [],
+  userOrders: [],
   orderDetails: [],
   addressbook: [],
   paymentmethod: "cod",
@@ -9,6 +10,31 @@ const initialState = {
   error: "",
 };
 
+export const getAllOrders = createAsyncThunk("getAllOrders", async (data) => {
+  const authtoken = localStorage.getItem("authtoken");
+  if (!authtoken) {
+    return [];
+  }
+  try {
+    const URL = `${import.meta.env.VITE_API_KEY}/order`;
+    const response = await fetch(URL, {
+      method: "GET",
+      headers: {
+        authtoken,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
+
+    const result = await response.json();
+    if (result.success) {
+      return result.data;
+    }
+  } catch (error) {
+    throw new Error(error);
+  }
+});
 export const getUserOrders = createAsyncThunk("getUserOrders", async (data) => {
   const authtoken = localStorage.getItem("authtoken");
   if (!authtoken) {
@@ -310,18 +336,36 @@ const orderSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(getAllOrders.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getAllOrders.fulfilled, (state, action) => {
+        state.loading = false;
+        if (action?.payload?.length > 0) {
+          state.orders = action.payload;
+        } else {
+          state.orders = state.orders;
+        }
+        state.error = null;
+      })
+      .addCase(getAllOrders.rejected, (state, action) => {
+        // console.log(action, "from rejections");
+        state.loading = false;
+        state.error = action.error.message;
+      })
       .addCase(getUserOrders.pending, (state) => {
         state.loading = true;
       })
       .addCase(getUserOrders.fulfilled, (state, action) => {
-        // console.log(action, "from fulfiled");
-
         state.loading = false;
-        state.orders = action.payload;
+        if (action?.payload?.length > 0) {
+          state.userOrders = action.payload;
+        } else {
+          state.userOrders = state.userOrders;
+        }
         state.error = null;
       })
       .addCase(getUserOrders.rejected, (state, action) => {
-        // console.log(action, "from rejections");
         state.loading = false;
         state.error = action.error.message;
       })

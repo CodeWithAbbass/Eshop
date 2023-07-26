@@ -24,6 +24,15 @@ a {
 ul {
   list-style: none;
 }
+.FS_12 {
+  font-size: 12px;
+}
+.FS_13 {
+  font-size: 13px;
+}
+.FS_14 {
+  font-size: 14px;
+}
 .BtnStyle1 {
   background-color: #40cdbd;
   border: 1px solid #40cdbd;

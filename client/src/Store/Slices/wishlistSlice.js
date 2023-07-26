@@ -23,7 +23,6 @@ export const getUserWishlist = createAsyncThunk(
 
       const result = await response.json();
       if (result.success) {
-        console.log("Inner", result);
         return result.data;
       }
       return [];

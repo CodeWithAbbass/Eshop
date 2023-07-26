@@ -94,7 +94,7 @@ exports.placeOrder = async (req, res) => {
       phone,
       orderid = uid,
       userid = req.user.uid,
-      date,
+
       products,
       status = req.body.paymentmethod.toLowerCase() == "card"
         ? "processing"
@@ -118,14 +118,12 @@ exports.placeOrder = async (req, res) => {
         .send({ success, message: "Please Fill the Mandatory Fields." });
     }
     const StrProducts = JSON.stringify(products);
-    date = Date.now().toString();
 
     const placeOrder = await pool.query(
-      `INSERT INTO orders (orderid, userid, date, status, shipaddress, billaddress, paymentmethod, deliverto, phone, products) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *`,
+      `INSERT INTO orders (orderid, userid, status, shipaddress, billaddress, paymentmethod, deliverto, phone, products) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`,
       [
         orderid,
         userid,
-        date,
         status,
         shipaddress,
         billaddress,

@@ -10,27 +10,29 @@ const catCountUp = async (cat) => {
   if (CatExist.rowCount == 0) {
     console.log("Category Not Found During Product Addition");
     return;
+  } else {
+    const newCount = +CatExist.rows[0].count + 1;
+    const CountUp = await pool.query(
+      `UPDATE category SET count = $2 WHERE name = $1`,
+      [cat, newCount]
+    );
   }
-  const newCount = +CatExist.rows[0].count + 1;
-  const CountUp = await pool.query(
-    `UPDATE category SET count = $2 WHERE name = $1`,
-    [cat, newCount]
-  );
-};
+}; // Category Count Up
 const catCountDown = async (cat) => {
   const CatExist = await pool.query(`SELECT * FROM category WHERE name = $1`, [
     cat,
   ]);
   if (CatExist.rowCount == 0) {
-    console.log("Category Not Found During Product Addition");
+    console.log("Category Not Found During Product Changes");
     return;
+  } else {
+    const newCount = +CatExist.rows[0].count - 1;
+    const CountDown = await pool.query(
+      `UPDATE category SET count = $2 WHERE name = $1`,
+      [cat, newCount]
+    );
   }
-  const newCount = +CatExist.rows[0].count - 1;
-  const CountUp = await pool.query(
-    `UPDATE category SET count = $2 WHERE name = $1`,
-    [cat, newCount]
-  );
-};
+}; // Category Count Down
 exports.allProduct = async (req, res) => {
   try {
     let success = false;
@@ -226,6 +228,7 @@ exports.editProduct = async (req, res) => {
       stockstatus,
       attributes,
       category,
+      deletedcat,
       smalldesc,
       tags,
       description,
@@ -243,6 +246,15 @@ exports.editProduct = async (req, res) => {
         .status(404)
         .send({ success, data: [], message: "Product Not Found" });
     }
+    const dupCategroy = [...JSON.parse(category)];
+    const dupDelCategroy = [...JSON.parse(deletedcat)];
+
+    dupCategroy?.forEach(async (cat, index) => {
+      await catCountUp(cat);
+    });
+    dupDelCategroy?.forEach(async (cat, index) => {
+      await catCountDown(cat);
+    });
 
     if (req.files) {
       req.files.forEach(function (file, index, arr) {

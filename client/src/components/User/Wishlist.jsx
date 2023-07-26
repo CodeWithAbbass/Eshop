@@ -34,7 +34,7 @@ const Wishlist = () => {
   useEffect(() => {
     dispatch(getUserWishlist());
     return () => {};
-  }, []);
+  }, [dispatch]);
 
   return (
     <div className="User_Wishlist_Container">

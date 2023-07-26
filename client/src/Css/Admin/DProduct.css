@@ -1,15 +1,7 @@
 /* ****************************************************** */
 /*                    DAddProduct Css                     */
 /* ****************************************************** */
-.FS_12 {
-  font-size: 12px;
-}
-.FS_13 {
-  font-size: 13px;
-}
-.FS_14 {
-  font-size: 14px;
-}
+
 .DAddProduct_Heading {
   min-height: 60px;
   height: 60px;
@@ -19,9 +11,7 @@
   font-size: 14px;
   line-height: 60px;
 }
-.DAddProduct_AddBtn {
-  font-size: 14px;
-}
+
 .DALC_Forms_Container {
   width: 200px;
   flex: 1;

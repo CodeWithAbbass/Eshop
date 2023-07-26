@@ -26,7 +26,7 @@ const OrderDetails = () => {
   let {
     orderid,
     status,
-    date,
+    publish,
     products,
     deliverto,
     phone,
@@ -56,7 +56,7 @@ const OrderDetails = () => {
           <div className="UOC_Orders_Header_Requested mb-0">
             <span>Placed On</span>
             <span className="ms-1">
-              {moment.unix(date / 1000).format("DD MMM  YYYY HH:mm:ss")}
+              {moment.unix(publish / 1000).format("DD MMM  YYYY HH:mm:ss")}
             </span>
           </div>
         </div>

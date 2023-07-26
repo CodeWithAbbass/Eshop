@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import moment from "moment/moment";
 
 const Order = () => {
-  const Orders = useSelector((state) => state.Orders.orders);
+  const Orders = useSelector((state) => state.Orders.userOrders);
   return (
     <div className="User_Orders_Container">
       {Orders.length == 0 && (
@@ -38,7 +38,7 @@ const Order = () => {
       <div className="UOC_Container mt-2">
         {Orders &&
           Orders.map((item, index) => {
-            let { orderid, status, date, products } = item;
+            let { orderid, status, publish, products } = item;
             return (
               <div
                 className="UOC_Orders_Item_Container my-3 shadow-sm"
@@ -51,7 +51,7 @@ const Order = () => {
                         <span>Requested on </span>
                         <span>
                           {moment
-                            .unix(date / 1000)
+                            .unix(publish / 1000)
                             .format("ddd MMM DD YYYY HH:mm:ss")}
                         </span>
                       </p>

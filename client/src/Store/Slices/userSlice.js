@@ -133,13 +133,11 @@ const userSlice = createSlice({
         state.loading = true;
       })
       .addCase(getUser.fulfilled, (state, action) => {
-        // console.log(action, "from fulfiled");
         state.loading = false;
         state.user = { ...state.user, ...action.payload };
         state.error = null;
       })
       .addCase(getUser.rejected, (state, action) => {
-        // console.log(action, "from rejections");
         state.loading = false;
         state.error = action.error.message;
       })
@@ -156,7 +154,6 @@ const userSlice = createSlice({
         state.error = null;
       })
       .addCase(Signup.rejected, (state, action) => {
-        // console.log(action, "from rejections");
         state.loading = false;
         state.error = action.error.message;
       })

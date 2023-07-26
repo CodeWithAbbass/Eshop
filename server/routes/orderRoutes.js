@@ -13,7 +13,7 @@ const { fetchUser } = require("../middleware/fetchUser");
 const { fetchAdmin } = require("../middleware/fetchAdmin");
 const { orderFormValidation } = require("../middleware/orderFormValidation");
 
-router.get("/", fetchAdmin, getAllOrders);
+router.get("/", getAllOrders);
 router.get("/user", fetchUser, getUserOrders);
 router.get("/details/:id", fetchUser, getOrderDetails);
 router.post("/confirm", orderFormValidation, fetchUser, placeOrder);
