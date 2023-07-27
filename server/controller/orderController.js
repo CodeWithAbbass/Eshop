@@ -162,29 +162,42 @@ exports.updateStatus = async (req, res) => {
   // pending ||  processing || shipped || delivered || returned || cancelled
   try {
     let success = false;
-    let { status } = req.body;
-    const orderExist = await pool.query(`SELECT * FROM WHERE orderid = $1`, [
-      req.params.id,
-    ]);
+    let { status, orderid } = req.body;
+
+    const orderExist = await pool.query(
+      `SELECT * FROM orders WHERE orderid = $1`,
+      [orderid]
+    );
     if (orderExist.rowCount == 0) {
-      return res.send({ success, data: [], message: "Order Not Found" });
+      return res
+        .status(400)
+        .send({ success, data: [], message: "Order Not Found" });
     }
     const updateStatus = await pool.query(
       `UPDATE orders SET status = $2 WHERE orderid = $1 RETURNING *`,
-      [req.params.id, status.toLowerCase()]
+      [orderid, status.toLowerCase()]
     );
     if (updateStatus.rowCount == 0) {
-      return res.send({
+      return res.status(500).send({
         success,
         data: [],
         message: "Order Status Not Updated",
       });
     }
-    updateStatus.rows[0].products = JSON.parse(updateStatus.rows[0].products);
+
+    const allOrders = await pool.query("SELECT * FROM orders");
+    if (allOrders.rowCount == 0) {
+      return res
+        .status(404)
+        .send({ success, data: [], message: "No New Orders Yet!" });
+    }
+    for (const iterator of allOrders.rows) {
+      iterator.products = JSON.parse(iterator.products);
+    }
     success = true;
     res.send({
       success,
-      data: updateStatus.rows,
+      data: allOrders.rows,
       message: "Order Status Updated Successfully",
     });
   } catch (error) {

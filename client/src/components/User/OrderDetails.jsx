@@ -2,12 +2,13 @@ import { Link, useParams } from "react-router-dom";
 import "../../Css/User.css";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import moment from "moment/moment";
 import RedeemIcon from "@mui/icons-material/Redeem";
 import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
 import PriceFormat from "../../helpers/PriceFormat";
 import { cancelOrder, getOrderDetails } from "../../Store/Slices/orderSlice";
 import JustForYou from "../Home/JustForYou";
+import DateFormat from "../../helpers/DataFormat";
+import ESTDeliveryTime from "../../helpers/ESTDeliveryTime";
 
 const OrderDetails = () => {
   const { id } = useParams();
@@ -55,9 +56,7 @@ const OrderDetails = () => {
           </div>
           <div className="UOC_Orders_Header_Requested mb-0">
             <span>Placed On</span>
-            <span className="ms-1">
-              {moment.unix(publish / 1000).format("DD MMM  YYYY HH:mm:ss")}
-            </span>
+            <span className="ms-1">{DateFormat(publish)}</span>
           </div>
         </div>
         <div className="User_OrderDetails_OrderHeader_Right">
@@ -99,7 +98,8 @@ const OrderDetails = () => {
         <div className="User_OrderDetails_OrderBody p-2">
           <div className="User_OrderDetails_OrderBody_Header d-flex align-items-center justify-content-between">
             <span className="User_OrderDetails_OrderBody_Header_GetBy">
-              Get by Wed 21 Jun - Sat 24 Jun
+              <span className="me-1">Get By :</span>
+              {ESTDeliveryTime(publish)}
             </span>
             <span className="UOC_Orders_txt User_OrderDetails_OrderBody_Header_Right">
               <LocalShippingOutlinedIcon />

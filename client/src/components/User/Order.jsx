@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import "../../Css/User.css";
 import { useSelector } from "react-redux";
-import moment from "moment/moment";
+import DateFormat from "../../helpers/DataFormat";
 
 const Order = () => {
   const Orders = useSelector((state) => state.Orders.userOrders);
@@ -49,11 +49,7 @@ const Order = () => {
                     <div className="col-8 p-0">
                       <p className="UOC_Orders_Header_Requested_Heading mb-0">
                         <span>Requested on </span>
-                        <span>
-                          {moment
-                            .unix(publish / 1000)
-                            .format("ddd MMM DD YYYY HH:mm:ss")}
-                        </span>
+                        <span>{DateFormat(publish)}</span>
                       </p>
                       <div className="UOC_Orders_Header_Order">
                         <span>Order</span>

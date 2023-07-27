@@ -11,8 +11,6 @@ import DReviews from "./components/Admin/Products/DReviews";
 
 import DAllOrders from "./components/Admin/Orders/DAllOrders";
 import DAddOrder from "./components/Admin/Orders/DAddOrder";
-import DDeleteOrder from "./components/Admin/Orders/DDeleteOrder";
-import DUpdateOrder from "./components/Admin/Orders/DUpdateOrder";
 import DOrders from "./components/Admin/Orders/DOrders";
 import DAnalytics from "./components/Admin/Analytics/DAnalytics";
 
@@ -56,6 +54,7 @@ import EditAddress from "./components/Modals/EditAddress";
 import AddAddress from "./components/Modals/AddAddress";
 import DeliveryMethod from "./components/Modals/DeliveryMethod";
 import OrderDetails from "./components/User/OrderDetails";
+import DEditOrder from "./components/Admin/Orders/DEditOrder";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -122,8 +121,7 @@ const App = () => {
             <Route path="orders" element={<DOrders />}>
               <Route path="allorders" element={<DAllOrders />} />
               <Route path="add" element={<DAddOrder />} />
-              <Route path="deleteorder" element={<DDeleteOrder />} />
-              <Route path="status" element={<DUpdateOrder />} />
+              <Route path="edit" element={<DEditOrder />} />
             </Route>
             <Route path="analytic" element={<DAnalytics />} />
           </Route>

@@ -3,15 +3,17 @@ import { Link } from "react-router-dom";
 import "../../../Css/Admin/DOrder.css";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import PriceFormat from "../../../helpers/PriceFormat";
+import ColorFinder from "../../../helpers/ColorFinder";
 import CalcDiscount from "../../../helpers/CalcDiscount";
 import { useDispatch, useSelector } from "react-redux";
 import SearchIcon from "@mui/icons-material/Search";
 import { getAllOrders } from "../../../Store/Slices/orderSlice";
 import EditOrderStatus from "../../Modals/EditOrderStatus";
+import DateFormat from "../../../helpers/DataFormat";
 const DAllOrders = () => {
   const dispatch = useDispatch();
   const AllOrders = useSelector((state) => state.Orders.orders);
-
+  const [updateOrderStatus, setUpdateOrderStatus] = useState({});
   const [filterByCat, setFilterByCat] = useState("Filter By Category");
   const [filterByStockStatus, setFilterByStockStatus] = useState(
     "Filter By Stock Status"
@@ -135,10 +137,11 @@ const DAllOrders = () => {
               </div>
               <div className="DAllProduct_AllProducts_Item_Container my-2">
                 <div className="DAllOrders_Item_Header bg-white row m-0 w-100 justify-content-between border FS_14">
-                  <div className="col-5">Order</div>
+                  <div className="col-3">Order</div>
+                  <div className="col-3">Billing Address</div>
                   <div className="col-2">Date</div>
                   <div className="col-2">Status</div>
-                  <div className="col-2">Total</div>
+                  <div className="col-2 text-end">Total</div>
                 </div>
                 {AllOrders.length > 0 &&
                   AllOrders.map((order, index) => {
@@ -160,44 +163,14 @@ const DAllOrders = () => {
                           element?.quantity;
                     });
 
-                    // const currentTime = Date.now();
-                    // const timestampWithoutTimezone = new Date(publish);
-                    // const timeDifferenceInMillis =
-                    //   currentTime - timestampWithoutTimezone.getTime();
-                    // const secondsDifference = Math.floor(
-                    //   timeDifferenceInMillis / 1000
-                    // );
-                    // const minutesDifference = Math.floor(
-                    //   timeDifferenceInMillis / (1000 * 60)
-                    // );
-                    // const hoursDifference = Math.floor(
-                    //   timeDifferenceInMillis / (1000 * 60 * 60)
-                    // );
-
-                    // console.log(
-                    //   "Time difference in seconds:",
-                    //   secondsDifference
-                    // );
-                    // console.log(
-                    //   "Time difference in minutes:",
-                    //   minutesDifference
-                    // );
-                    // console.log("Time difference in hours:", hoursDifference);
-
-                    let PlacedDate = publish?.split("T");
-                    let TimeStamp = PlacedDate[1]
-                      ? PlacedDate[1].split(".")
-                      : "00:00:00";
-                    const Year = PlacedDate[0] ? PlacedDate[0] : "0000";
-                    const Time = TimeStamp[0] ? TimeStamp[0] : "00:00:00";
                     return (
                       <div
-                        className={`DAllOrders_Item_Body FS_14 ${
+                        className={`DAllOrders_Item_Body FS_13 ${
                           index % 2 == 0 ? "bg-white" : ""
                         } row m-0 w-100 border border-top-0 justify-content-between`}
                         key={index}
                       >
-                        <div className="col-5 DAOIB_OrderID_EditStatus d-flex align-items-center justify-content-between">
+                        <div className="col-3 DAOIB_OrderID_EditStatus d-flex align-items-center justify-content-between">
                           <div className="">
                             <span>{"#" + id || ""}</span>
                             <span className="ms-2">{deliverto || ""}</span>
@@ -207,25 +180,28 @@ const DAllOrders = () => {
                             className="btn DAOIB_EditStatus_Btn"
                             data-bs-toggle="modal"
                             data-bs-target="#EditOrderStatus"
+                            onClick={() => setUpdateOrderStatus(order)}
                           >
                             <VisibilityIcon className="DAOIB_EditStatus_Icon" />
                           </button>
                         </div>
-                        <div className="col-2 DAOIB_OrderPlaced lh-sm d-flex flex-column justify-content-center FS_13">
-                          <p className="mb-0">Placed</p>
-                          <p className="mb-0">{Year + ` at ` + Time}</p>
+                        <div className="col-3 DAOIB_OrderID_EditStatus d-flex align-items-center justify-content-between overflow-hidden">
+                          {billaddress || ""}
                         </div>
-                        <div className="col-2">
+                        <div className="col-2 DAOIB_OrderPlaced lh-sm d-flex flex-column justify-content-center FS_13">
+                          <p className="mb-0">Order Placed</p>
+                          <p className="mb-0">{DateFormat(publish)}</p>
+                        </div>
+                        <div className="col-2 d-flex align-items-center justify-content-start">
                           <button
-                            className={`btn btn-${
-                              (status == "pending" && "warning") ||
-                              (status == "processing" && "success")
-                            } DAOIB_OrderStatusBtn text-capitalize FS_14 text-muted`}
+                            className={`btn btn-${ColorFinder(
+                              status
+                            )} DAOIB_OrderStatusBtn text-capitalize FS_13 `}
                           >
                             {status || ""}
                           </button>
                         </div>
-                        <div className="col-2">
+                        <div className="col-2 d-flex align-items-center justify-content-end text-end">
                           {PriceFormat(AfterDiscountPrice) || ""}
                         </div>
                       </div>
@@ -479,7 +455,10 @@ const DAllOrders = () => {
           </div>
         )}
       </div>
-      <EditOrderStatus />
+      <EditOrderStatus
+        updateOrderStatus={updateOrderStatus}
+        setUpdateOrderStatus={setUpdateOrderStatus}
+      />
     </div>
   );
 };

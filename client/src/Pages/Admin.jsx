@@ -108,9 +108,7 @@ const Admin = () => {
       category: "Orders",
       subcategories: [
         { subheading: "All Orders", link: "orders/allorders" },
-        { subheading: "Add Order", link: "orders/addorder" },
-        { subheading: "Delete Order", link: "orders/deleteorder" },
-        { subheading: "Update Status", link: "orders/status" },
+        { subheading: "Add Order", link: "orders/add" },
       ],
     },
     {

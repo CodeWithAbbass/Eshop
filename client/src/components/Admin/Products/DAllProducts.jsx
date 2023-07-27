@@ -162,7 +162,7 @@ const DAllProducts = () => {
                       tags,
                       publish,
                     } = product;
-                    console.log(publish);
+
                     let Date = publish?.split("T");
                     let TimeStamp = Date[1] ? Date[1].split(".") : "00:00:00";
                     const Year = Date[0] ? Date[0] : "0000";

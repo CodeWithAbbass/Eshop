@@ -322,7 +322,34 @@ export const deleteAddress = createAsyncThunk("deleteAddress", async (aid) => {
     throw new Error(error);
   }
 });
+export const updateStatus = createAsyncThunk("updateStatus", async (data) => {
+  const authtoken = localStorage.getItem("authtoken");
+  if (!authtoken) {
+    return [];
+  }
+  try {
+    const URL = `${import.meta.env.VITE_API_KEY}/order/updatestatus`;
+    const response = await fetch(URL, {
+      method: "POST",
+      headers: {
+        authtoken,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify(data),
+    });
 
+    const result = await response.json();
+
+    if (result.success) {
+      alert(result.message);
+      return result.data;
+    }
+  } catch (error) {
+    throw new Error(error);
+  }
+});
 const orderSlice = createSlice({
   name: "Orders",
   initialState,
@@ -504,6 +531,22 @@ const orderSlice = createSlice({
         state.error = null;
       })
       .addCase(deleteAddress.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(updateStatus.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(updateStatus.fulfilled, (state, action) => {
+        state.loading = false;
+        if (action.payload.length > 0) {
+          state.orders = action.payload;
+        } else {
+          state.orders = state.orders;
+        }
+        state.error = null;
+      })
+      .addCase(updateStatus.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       });

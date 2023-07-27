@@ -27,6 +27,11 @@ const DCategories = () => {
   const handleAddNewCat = (e) => {
     e.preventDefault();
     dispatch(addCategory(catData));
+    setCatData({
+      name: "",
+      description: "",
+      count: 0,
+    });
   };
   const deleteCat = (cid, name) => {
     const response = confirm(`You're Going to delete ${name} Category`);
@@ -98,162 +103,168 @@ const DCategories = () => {
               </button>
             </form>
           </div>
-          <div className="DCLC_AllCat mt-4">
-            <div className="DCLC_AllCat_Desktop">
-              <div className="DCLC_AllCat_Container border">
-                <div className="DCLC_AllCat_Header border-0 border-bottom row m-0 w-100 bg-white justify-content-between">
-                  <div className="DCLC_AllCat_Header_Name col-3">
-                    <p className="mb-0 FS_14 DCLC_AllCat_Header_Headings">
-                      Name
-                    </p>
+          {AllCat.length == 0 ? (
+            <div className="DCLC_AllCat FS_13 text-center mt-4">
+              Not Categories Yet!
+            </div>
+          ) : (
+            <div className="DCLC_AllCat mt-4">
+              <div className="DCLC_AllCat_Desktop">
+                <div className="DCLC_AllCat_Container border">
+                  <div className="DCLC_AllCat_Header border-0 border-bottom row m-0 w-100 bg-white justify-content-between">
+                    <div className="DCLC_AllCat_Header_Name col-3">
+                      <p className="mb-0 FS_14 DCLC_AllCat_Header_Headings">
+                        Name
+                      </p>
+                    </div>
+                    <div className="DCLC_AllCat_Header_Description col-5">
+                      <p className="mb-0 FS_14 DCLC_AllCat_Header_Headings">
+                        Description
+                      </p>
+                    </div>
+                    <div className="DCLC_AllCat_Header_Slug col-2">
+                      <p className="mb-0 FS_14 DCLC_AllCat_Header_Headings">
+                        Slug
+                      </p>
+                    </div>
+                    <div className="DCLC_AllCat_Header_Count col-2 text-end">
+                      <p className="mb-0 FS_14 DCLC_AllCat_Header_Headings">
+                        Count
+                      </p>
+                    </div>
                   </div>
-                  <div className="DCLC_AllCat_Header_Description col-5">
-                    <p className="mb-0 FS_14 DCLC_AllCat_Header_Headings">
-                      Description
-                    </p>
-                  </div>
-                  <div className="DCLC_AllCat_Header_Slug col-2">
-                    <p className="mb-0 FS_14 DCLC_AllCat_Header_Headings">
-                      Slug
-                    </p>
-                  </div>
-                  <div className="DCLC_AllCat_Header_Count col-2 text-end">
-                    <p className="mb-0 FS_14 DCLC_AllCat_Header_Headings">
-                      Count
-                    </p>
-                  </div>
-                </div>
-                <div className="DCLC_AllCat_Body">
-                  {AllCat.length > 0 &&
-                    AllCat.map((cat, index) => {
-                      const { cid, name, description, count } = cat;
+                  <div className="DCLC_AllCat_Body">
+                    {AllCat.length > 0 &&
+                      AllCat.map((cat, index) => {
+                        const { cid, name, description, count } = cat;
 
-                      return (
-                        <div
-                          className={`DCLC_AllCat_Body_Item row m-0 w-100 justify-content-between py-2 ${
-                            index % 2 == 1 ? "bg-white" : ""
-                          }`}
-                          key={index}
-                        >
-                          <div className="DCLC_AllCat_Body_Name col-3">
-                            <p className="mb-0 FS_14 DCLC_AllCat_Body_Name">
-                              {name || ""}
-                            </p>
-                            <div className="DCLCACB_Item_Operation_Container d-flex align-items-center">
-                              <Link
-                                className="btn rounded-0 FS_12 py-0 pe-2 ps-0 border-0 border-end"
-                                data-bs-toggle="modal"
-                                data-bs-target="#EditCategory"
-                                onClick={() => {
-                                  setEditCat(cat);
-                                }}
-                              >
-                                Edit
-                              </Link>
-                              <Link
-                                className="btn rounded-0 FS_12 py-0 px-2 border-0 text-danger"
-                                onClick={() => deleteCat(cid, name)}
-                              >
-                                Trash
-                              </Link>
+                        return (
+                          <div
+                            className={`DCLC_AllCat_Body_Item row m-0 w-100 justify-content-between py-2 ${
+                              index % 2 == 1 ? "bg-white" : ""
+                            }`}
+                            key={index}
+                          >
+                            <div className="DCLC_AllCat_Body_Name col-3">
+                              <p className="mb-0 FS_14 DCLC_AllCat_Body_Name">
+                                {name || ""}
+                              </p>
+                              <div className="DCLCACB_Item_Operation_Container d-flex align-items-center">
+                                <Link
+                                  className="btn rounded-0 FS_12 py-0 pe-2 ps-0 border-0 border-end"
+                                  data-bs-toggle="modal"
+                                  data-bs-target="#EditCategory"
+                                  onClick={() => {
+                                    setEditCat(cat);
+                                  }}
+                                >
+                                  Edit
+                                </Link>
+                                <Link
+                                  className="btn rounded-0 FS_12 py-0 px-2 border-0 text-danger"
+                                  onClick={() => deleteCat(cid, name)}
+                                >
+                                  Trash
+                                </Link>
+                              </div>
+                            </div>
+                            <div className="DCLC_AllCat_Body_Description col-5">
+                              <Content Description={description} />
+                            </div>
+                            <div className="DCLC_AllCat_Body_Slug col-3">
+                              <p className="mb-0 FS_13 DCLC_AllCat_Body_Slug text-lowercase">
+                                {name || ""}
+                              </p>
+                            </div>
+                            <div className="DCLC_AllCat_Body_Count col-1 text-end">
+                              <p className="mb-0 FS_13 DCLC_AllCat_Body_Count">
+                                {count}
+                              </p>
                             </div>
                           </div>
-                          <div className="DCLC_AllCat_Body_Description col-5">
-                            <Content Description={description} />
-                          </div>
-                          <div className="DCLC_AllCat_Body_Slug col-3">
-                            <p className="mb-0 FS_13 DCLC_AllCat_Body_Slug text-lowercase">
-                              {name || ""}
-                            </p>
-                          </div>
-                          <div className="DCLC_AllCat_Body_Count col-1 text-end">
-                            <p className="mb-0 FS_13 DCLC_AllCat_Body_Count">
-                              {count}
-                            </p>
-                          </div>
-                        </div>
-                      );
-                    })}
+                        );
+                      })}
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="DCLC_AllCat_Mobile">
-              <div className="DAllProduct_AllProducts_Item_Container">
-                <div className="DAllProduct_AllProducts_Item_Header bg-white d-flex align-items-center w-100 border-top mt-3">
-                  <div className="DAPIH_Title_Container px-2 mb-0">Name</div>
-                </div>
-                <div className="DALC_Cards_Container p-0">
-                  {AllCat.length > 0 &&
-                    AllCat.map((cat, index) => {
-                      const { cid, name, description, count } = cat;
-                      return (
-                        <div className="DALC_Cards_Item" key={index}>
-                          <div
-                            className="accordion accordion-flush rounded-0"
-                            id={`CardContainer${index}`}
-                          >
-                            <div className="accordion-item rounded-0">
-                              <h2 className="accordion-header rounded-0  border-top ">
-                                <button
-                                  className="accordion-button collapsed shadow-none bg-transparent rounded-0 p-2 h-100 DCLC_AllCat_Body_Name FS_13 d-flex align-items-center justify-content-between"
-                                  type="button"
-                                  data-bs-toggle="collapse"
-                                  data-bs-target={`#Card${index}`}
-                                  aria-expanded="true"
-                                  aria-controls={`Card${index}`}
+              <div className="DCLC_AllCat_Mobile">
+                <div className="DAllProduct_AllProducts_Item_Container">
+                  <div className="DAllProduct_AllProducts_Item_Header bg-white d-flex align-items-center w-100 border-top mt-3">
+                    <div className="DAPIH_Title_Container px-2 mb-0">Name</div>
+                  </div>
+                  <div className="DALC_Cards_Container p-0">
+                    {AllCat.length > 0 &&
+                      AllCat.map((cat, index) => {
+                        const { cid, name, description, count } = cat;
+                        return (
+                          <div className="DALC_Cards_Item" key={index}>
+                            <div
+                              className="accordion accordion-flush rounded-0"
+                              id={`CardContainer${index}`}
+                            >
+                              <div className="accordion-item rounded-0">
+                                <h2 className="accordion-header rounded-0  border-top ">
+                                  <button
+                                    className="accordion-button collapsed shadow-none bg-transparent rounded-0 p-2 h-100 DCLC_AllCat_Body_Name FS_13 d-flex align-items-center justify-content-between"
+                                    type="button"
+                                    data-bs-toggle="collapse"
+                                    data-bs-target={`#Card${index}`}
+                                    aria-expanded="true"
+                                    aria-controls={`Card${index}`}
+                                  >
+                                    <p className="mb-0 w-100">{name || ""}</p>
+                                    <div className="DCLCACB_Item_Operation_Container d-flex align-items-center justify-content-end w-100">
+                                      <Link
+                                        className="btn rounded-0 FS_12 py-0 pe-2 ps-0 border-0 border-end"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#EditCategory"
+                                        onClick={() => {
+                                          setEditCat(cat);
+                                        }}
+                                      >
+                                        Edit
+                                      </Link>
+                                      <Link
+                                        className="btn rounded-0 FS_12 py-0 px-2 border-0 text-danger"
+                                        onClick={() => deleteCat(cid, name)}
+                                      >
+                                        Trash
+                                      </Link>
+                                    </div>
+                                  </button>
+                                </h2>
+                                <div
+                                  id={`Card${index}`}
+                                  className="accordion-collapse collapse"
+                                  aria-labelledby="headingOne"
+                                  data-bs-parent={`#CardContainer${index}`}
                                 >
-                                  <p className="mb-0 w-100">{name || ""}</p>
-                                  <div className="DCLCACB_Item_Operation_Container d-flex align-items-center justify-content-end w-100">
-                                    <Link
-                                      className="btn rounded-0 FS_12 py-0 pe-2 ps-0 border-0 border-end"
-                                      data-bs-toggle="modal"
-                                      data-bs-target="#EditCategory"
-                                      onClick={() => {
-                                        setEditCat(cat);
-                                      }}
-                                    >
-                                      Edit
-                                    </Link>
-                                    <Link
-                                      className="btn rounded-0 FS_12 py-0 px-2 border-0 text-danger"
-                                      onClick={() => deleteCat(cid, name)}
-                                    >
-                                      Trash
-                                    </Link>
-                                  </div>
-                                </button>
-                              </h2>
-                              <div
-                                id={`Card${index}`}
-                                className="accordion-collapse collapse"
-                                aria-labelledby="headingOne"
-                                data-bs-parent={`#CardContainer${index}`}
-                              >
-                                <div className="accordion-body p-2">
-                                  <div className="DAPAC_Item_Info">
-                                    <div className="FS_12 w-auto mb-4">
-                                      <div className="w-100 d-flex align-items-center gap-3">
-                                        <span className="DCLC_AllCat_LeftHeading">
-                                          Slug
-                                        </span>
-                                        <span className="DCLC_AllCat_Body_Count text-lowercase">
-                                          {name || ""}
-                                        </span>
-                                      </div>
-                                      <div className="w-100 mt-2 d-flex align-items-center gap-3">
-                                        <span className="DCLC_AllCat_LeftHeading">
-                                          Count
-                                        </span>
-                                        <span className="DCLC_AllCat_Body_Count">
-                                          {count}
-                                        </span>
-                                      </div>
-                                      <div className="w-100 mt-2 d-flex align-items-start gap-3">
-                                        <span className="DCLC_AllCat_LeftHeading">
-                                          Description
-                                        </span>
+                                  <div className="accordion-body p-2">
+                                    <div className="DAPAC_Item_Info">
+                                      <div className="FS_12 w-auto mb-4">
+                                        <div className="w-100 d-flex align-items-center gap-3">
+                                          <span className="DCLC_AllCat_LeftHeading">
+                                            Slug
+                                          </span>
+                                          <span className="DCLC_AllCat_Body_Count text-lowercase">
+                                            {name || ""}
+                                          </span>
+                                        </div>
+                                        <div className="w-100 mt-2 d-flex align-items-center gap-3">
+                                          <span className="DCLC_AllCat_LeftHeading">
+                                            Count
+                                          </span>
+                                          <span className="DCLC_AllCat_Body_Count">
+                                            {count}
+                                          </span>
+                                        </div>
+                                        <div className="w-100 mt-2 d-flex align-items-start gap-3">
+                                          <span className="DCLC_AllCat_LeftHeading">
+                                            Description
+                                          </span>
 
-                                        <Content Description={description} />
+                                          <Content Description={description} />
+                                        </div>
                                       </div>
                                     </div>
                                   </div>
@@ -261,13 +272,13 @@ const DCategories = () => {
                               </div>
                             </div>
                           </div>
-                        </div>
-                      );
-                    })}
+                        );
+                      })}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
       <EditCategory editCat={editCat} setEditCat={setEditCat} />

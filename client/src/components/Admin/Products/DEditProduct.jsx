@@ -332,7 +332,7 @@ const DEditProduct = () => {
           <div className="DAddProduct_Heading px-2 bg-white mb-4 d-flex align-items-center justify-content-between">
             <button
               onClick={(e) => handleSubmit(e)}
-              className={`btn btn-outline-primary DAddProduct_AddBtn rounded-0 ${
+              className={`btn btn-outline-primary DEditProduct_SaveBtn rounded-0 FS_14 ${
                 productData.title.length > 3 &&
                 productData.price > 0 &&
                 ValidationImageLength.length > 0 &&

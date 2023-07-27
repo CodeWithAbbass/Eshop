@@ -17,7 +17,7 @@ router.get("/", getAllOrders);
 router.get("/user", fetchUser, getUserOrders);
 router.get("/details/:id", fetchUser, getOrderDetails);
 router.post("/confirm", orderFormValidation, fetchUser, placeOrder);
-router.post("/update/:id", fetchAdmin, updateStatus);
+router.post("/updatestatus", updateStatus);
 router.post("/cancel/:id", fetchUser, cancelOrder);
 router.delete("/delete/:id", fetchAdmin, deleteOrder);
 

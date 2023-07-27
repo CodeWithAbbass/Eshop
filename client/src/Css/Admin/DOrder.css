@@ -1,3 +1,6 @@
+/* ************************************************ */
+/*                  All Order Css                   */
+/* ************************************************ */
 .DAllOrders_Item_Header {
   height: 35px;
   overflow: hidden;
@@ -57,4 +60,12 @@
 .EditOrderModal_EditBtn {
   border-radius: 2px;
   background-color: #2271b1;
+}
+
+/* ************************************************ */
+/*                  Add Order Css                   */
+/* ************************************************ */
+.DAddOrder_Heading {
+  min-height: 60px;
+  height: 60px;
 }

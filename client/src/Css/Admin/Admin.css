@@ -398,3 +398,27 @@
   flex-grow: 1;
   background-color: #f1f4f6;
 }
+
+.DAdmin_Hero_Btn {
+  box-shadow: 0 0.125rem 0.625rem rgba(22, 170, 255, 0.4),
+    0 0.0625rem 0.125rem rgba(22, 170, 255, 0.5) !important;
+  transition: color 0.15s, background-color 0.15s, border-color 0.15s,
+    box-shadow 0.15s !important;
+  color: #fff !important;
+  background-color: #16aaff !important;
+  border-color: #16aaff !important;
+  font-size: 0.8rem !important;
+  font-weight: 500 !important;
+  outline: none !important;
+  border: 1px solid transparent !important;
+  padding: 0.375rem 0.75rem !important;
+  border-radius: 3px !important;
+}
+
+.DAdmin_Hero_Btn:hover {
+  box-shadow: 0 0.125rem 0.625rem rgba(22, 170, 255, 0.5),
+    0 0.0625rem 0.125rem rgba(22, 170, 255, 0.6) !important;
+  color: #fff !important;
+  background-color: #0098ef !important;
+  border-color: #0090e2 !important;
+}

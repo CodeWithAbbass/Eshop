@@ -15,6 +15,8 @@ import { Helmet } from "react-helmet";
 import Meta from "../../Meta";
 import { addCategory, getAllCat } from "../../../Store/Slices/categorySlice";
 const DAddProduct = () => {
+  const dispatch = useDispatch();
+
   const initial = {
     title: "",
     sku: "",
@@ -37,7 +39,6 @@ const DAddProduct = () => {
 
   const AllCat = useSelector((state) => state.Categories.categories);
 
-  const dispatch = useDispatch();
   const [addNewCat, setAddNewCat] = useState(""); // For Product Category
   const [content, setContent] = useState(""); // For Text Editor
   const [selectedImages, setSelectedImages] = useState([]); // For Image Preview
@@ -260,7 +261,7 @@ const DAddProduct = () => {
         <div className="DAddProduct_Heading px-2 bg-white mb-4 d-flex align-items-center justify-content-between">
           <button
             onClick={(e) => handleSubmit(e)}
-            className={`btn btn-outline-primary DAddProduct_AddBtn rounded-0 ${
+            className={`btn DAdmin_Hero_Btn rounded-0 FS_14 ${
               productData.title.length > 3 &&
               productData.price > 0 &&
               productData.images.length > 0 &&
