@@ -4,7 +4,8 @@ import { Link } from "react-router-dom";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import {
-  defaultAddress,
+  dShippingAddress,
+  dBillingAddress,
   deleteAddress,
   editAddressState,
 } from "../../Store/Slices/orderSlice";
@@ -74,8 +75,15 @@ const UserAddressBook = () => {
                     {AddressBook.length == 0
                       ? ""
                       : AddressBook.map((item, index) => {
-                          let { name, phone, address, aid, defaultaddress } =
-                            item;
+                          let {
+                            name,
+                            phone,
+                            email,
+                            address,
+                            aid,
+                            shippingaddress,
+                            billingaddress,
+                          } = item;
                           return (
                             <div className="col-lg-6 col-md-12 p-1" key={index}>
                               <div className="UAC_AddressBook p-2">
@@ -116,35 +124,45 @@ const UserAddressBook = () => {
                                   </div>
                                 </div>
                                 <div className="UAC_AddressBook_Info">
-                                  <div className="MMA_Profile_Item_Title mb-2">
+                                  <div className="MMA_Profile_Item_Title mb-2 d-flex align-items-center flex-wrap">
                                     <span>{phone || ""}</span>
+                                    <span className="ms-3">{email || ""}</span>
                                   </div>
 
                                   <div className="MMA_Profile_Item_Title mb-4">
                                     <span className="">{address || ""}</span>
                                   </div>
-                                  {defaultaddress && (
-                                    <div className="UAC_AddressBook_Info_MainTag_Container d-flex align-items-center justify-content-start">
+
+                                  <div className="UAC_AddressBook_Info_MainTag_Container d-flex align-items-center justify-content-start">
+                                    {shippingaddress ? (
                                       <small className="UAC_AddressBook_Info_MainTag defaultAddress">
                                         Default Shipping Address
                                       </small>
-                                      <small className="UAC_AddressBook_Info_SecondaryTag ">
-                                        Default Billing Address
-                                      </small>
-                                    </div>
-                                  )}
-                                  {defaultaddress || (
-                                    <div className="UAC_AddressBook_Info_MainTag_Container d-flex align-items-center justify-content-start">
+                                    ) : (
                                       <small
                                         className="UAC_AddressBook_Info_MainTag"
                                         onClick={() =>
-                                          dispatch(defaultAddress(aid))
+                                          dispatch(dShippingAddress(aid))
                                         }
                                       >
-                                        Set As Default Address
+                                        Set Default Shipping Address
                                       </small>
-                                    </div>
-                                  )}
+                                    )}
+                                    {billingaddress ? (
+                                      <small className="UAC_AddressBook_Info_MainTag defaultAddress">
+                                        Default Billing Address
+                                      </small>
+                                    ) : (
+                                      <small
+                                        className="UAC_AddressBook_Info_MainTag"
+                                        onClick={() =>
+                                          dispatch(dBillingAddress(aid))
+                                        }
+                                      >
+                                        Set Default Billing Address
+                                      </small>
+                                    )}
+                                  </div>
                                 </div>
                               </div>
                             </div>

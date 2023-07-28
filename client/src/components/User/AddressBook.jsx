@@ -5,7 +5,7 @@ import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  defaultAddress,
+  dShippingAddress,
   deleteAddress,
   editAddressState,
 } from "../../Store/Slices/orderSlice";
@@ -44,7 +44,7 @@ const AddressBook = () => {
           <div className="row m-0 w-100">
             {UserAddressBook.length > 0 &&
               UserAddressBook.map((item, index) => {
-                let { name, phone, address, aid, defaultaddress } = item;
+                let { name, phone, address, aid, shippingaddress } = item;
                 return (
                   <div className="col-lg-6 col-md-12 p-1" key={index}>
                     <div className="UAC_AddressBook p-4">
@@ -82,7 +82,7 @@ const AddressBook = () => {
                         <div className="MMA_Profile_Item_Title mb-4">
                           {address || ""}
                         </div>
-                        {defaultaddress && (
+                        {shippingaddress && (
                           <div className="UAC_AddressBook_Info_MainTag_Container d-flex align-items-center justify-content-start">
                             <small className="UAC_AddressBook_Info_MainTag defaultAddress">
                               Default Shipping Address
@@ -92,11 +92,11 @@ const AddressBook = () => {
                             </small>
                           </div>
                         )}
-                        {defaultaddress || (
+                        {shippingaddress || (
                           <div className="UAC_AddressBook_Info_MainTag_Container d-flex align-items-center justify-content-start">
                             <small
                               className="UAC_AddressBook_Info_MainTag"
-                              onClick={() => dispatch(defaultAddress(aid))}
+                              onClick={() => dispatch(dShippingAddress(aid))}
                             >
                               Set As Default Address
                             </small>
@@ -138,7 +138,7 @@ const AddressBook = () => {
             {UserAddressBook.length == 0
               ? ""
               : UserAddressBook.map((item, index) => {
-                  let { name, phone, address, aid, defaultaddress } = item;
+                  let { name, phone, address, aid, shippingaddress } = item;
                   return (
                     <div className="col-lg-6 col-md-12 p-1" key={index}>
                       <div className="UAC_AddressBook p-3">
@@ -181,7 +181,7 @@ const AddressBook = () => {
                           <div className="MMA_Profile_Item_Title mb-4">
                             {address || ""}
                           </div>
-                          {defaultaddress && (
+                          {shippingaddress && (
                             <div className="UAC_AddressBook_Info_MainTag_Container d-flex align-items-center justify-content-start">
                               <small className="UAC_AddressBook_Info_MainTag defaultAddress">
                                 Default Shipping Address
@@ -191,11 +191,11 @@ const AddressBook = () => {
                               </small>
                             </div>
                           )}
-                          {defaultaddress || (
+                          {shippingaddress || (
                             <div className="UAC_AddressBook_Info_MainTag_Container d-flex align-items-center justify-content-start">
                               <small
                                 className="UAC_AddressBook_Info_MainTag"
-                                onClick={() => dispatch(defaultAddress(aid))}
+                                onClick={() => dispatch(dShippingAddress(aid))}
                               >
                                 Set As Default Address
                               </small>

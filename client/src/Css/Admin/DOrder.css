@@ -61,6 +61,27 @@
   border-radius: 2px;
   background-color: #2271b1;
 }
+.DCLCACB_Item_Operation_Container {
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.4s ease-in-out;
+}
+.MAO_AllOrder_Order_Body_Name:hover .DCLCACB_Item_Operation_Container {
+  opacity: 1;
+  visibility: visible;
+  transition: all 0.4s ease-in-out;
+}
+.DAllOrder_Mobile {
+  display: none;
+}
+@media (max-width: 768px) {
+  .DAllOrders_Desktop {
+    display: none;
+  }
+  .DAllOrder_Mobile {
+    display: block;
+  }
+}
 
 /* ************************************************ */
 /*                  Add Order Css                   */
@@ -68,4 +89,7 @@
 .DAddOrder_Heading {
   min-height: 60px;
   height: 60px;
+}
+.DAllOrders_Item {
+  height: 50px;
 }

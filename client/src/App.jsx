@@ -121,7 +121,7 @@ const App = () => {
             <Route path="orders" element={<DOrders />}>
               <Route path="allorders" element={<DAllOrders />} />
               <Route path="add" element={<DAddOrder />} />
-              <Route path="edit" element={<DEditOrder />} />
+              <Route path="edit/:id" element={<DEditOrder />} />
             </Route>
             <Route path="analytic" element={<DAnalytics />} />
           </Route>

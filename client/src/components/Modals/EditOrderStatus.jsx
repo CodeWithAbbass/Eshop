@@ -41,7 +41,7 @@ const EditOrderStatus = ({ updateOrderStatus, setUpdateOrderStatus }) => {
       aria-labelledby="staticBackdropLabel"
       aria-hidden="true"
     >
-      <div className="modal-dialog modal-dialog-centered">
+      <div className="modal-dialog modal-dialog-centered ">
         <div className="modal-content rounded-0">
           <div className="modal-header pe-0 py-0">
             <h2 className="modal-title fs-5" id="staticBackdropLabel">
@@ -73,6 +73,14 @@ const EditOrderStatus = ({ updateOrderStatus, setUpdateOrderStatus }) => {
                 <div className="FS_13 mb-0 fw-light">
                   <p className="FS_13 mb-0 fw-light">{deliverto || ""}</p>
                   <p className="FS_13 mb-0 fw-light">{billaddress || ""}</p>
+                </div>
+              )}
+              <h6 className="mt-4">Shipping Details</h6>
+              {!shipaddress && <p className="FS_13 mb-0 fw-light">N/A</p>}
+              {shipaddress && (
+                <div className="FS_13 mb-0 fw-light">
+                  <p className="FS_13 mb-0 fw-light">{deliverto || ""}</p>
+                  <p className="FS_13 mb-0 fw-light">{shipaddress || ""}</p>
                 </div>
               )}
 
@@ -147,7 +155,7 @@ const EditOrderStatus = ({ updateOrderStatus, setUpdateOrderStatus }) => {
             </div>
           </div>
           <div className="modal-footer d-flex align-items-center justify-content-between">
-            <div className="EditOrderModal_StatusBtn_Container d-flex align-items-center">
+            <div className="EditOrderModal_StatusBtn_Container d-flex flex-wrap align-items-center">
               {/* pending || processing || shipped || delivered || returned || cancelled */}
               <button
                 className={`btn EditOrderModal_StatusBtn FS_13 rounded-0 ${

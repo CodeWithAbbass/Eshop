@@ -332,13 +332,13 @@ const DEditProduct = () => {
           <div className="DAddProduct_Heading px-2 bg-white mb-4 d-flex align-items-center justify-content-between">
             <button
               onClick={(e) => handleSubmit(e)}
-              className={`btn btn-outline-primary DEditProduct_SaveBtn rounded-0 FS_14 ${
+              className={`btn DAdmin_Hero_Btn FS_14 ${
                 productData.title.length > 3 &&
                 productData.price > 0 &&
                 ValidationImageLength.length > 0 &&
                 ValidationImageLength.length < 6
                   ? ""
-                  : "text-muted border-secondary"
+                  : "text-muted bg-secondary fst-italic shadow-none"
               }`}
               disabled={
                 productData.title.length > 3 &&

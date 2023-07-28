@@ -11,6 +11,5 @@ router.get("/", getAllCat);
 router.post("/add", addCategory);
 router.post("/edit", editCategory);
 router.delete("/delete/:id", deleteCategory);
-// router.post("/countup/:id", defaultAddress);
 
 module.exports = router;

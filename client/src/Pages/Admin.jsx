@@ -266,7 +266,7 @@ const Admin = () => {
           </div>
         </div>
         <div className="Admin_Body_Layout d-flex w-100">
-          <div className="position-relative Admin_Sidebar_Layout me-0 me-lg-4">
+          <div className="position-relative Admin_Sidebar_Layout">
             {/* Left Sidebar */}
             <div className="Admin_LeftSidebar position-fixed top-0 start-0">
               <div className="Admin_Sidebar_Container close">

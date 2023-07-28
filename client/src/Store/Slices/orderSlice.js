@@ -257,8 +257,8 @@ export const editAddress = createAsyncThunk(
     }
   }
 );
-export const defaultAddress = createAsyncThunk(
-  "defaultAddress",
+export const dShippingAddress = createAsyncThunk(
+  "dShippingAddress",
   async (aid) => {
     const authtoken = localStorage.getItem("authtoken");
     if (!authtoken) {
@@ -266,7 +266,38 @@ export const defaultAddress = createAsyncThunk(
       return [];
     }
     try {
-      const URL = `${import.meta.env.VITE_API_KEY}/address/da/${aid}`;
+      const URL = `${import.meta.env.VITE_API_KEY}/address/ds/${aid}`;
+      const response = await fetch(URL, {
+        method: "POST",
+        headers: {
+          authtoken,
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        alert(result.message);
+        return result.data;
+      }
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+);
+export const dBillingAddress = createAsyncThunk(
+  "dBillingAddress",
+  async (aid) => {
+    const authtoken = localStorage.getItem("authtoken");
+    if (!authtoken) {
+      alert("Please Login Before Setting Default Address");
+      return [];
+    }
+    try {
+      const URL = `${import.meta.env.VITE_API_KEY}/address/db/${aid}`;
       const response = await fetch(URL, {
         method: "POST",
         headers: {
@@ -503,17 +534,32 @@ const orderSlice = createSlice({
         state.loading = false;
         state.error = action.error.message;
       })
-      .addCase(defaultAddress.pending, (state) => {
+      .addCase(dShippingAddress.pending, (state) => {
         state.loading = true;
       })
-      .addCase(defaultAddress.fulfilled, (state, action) => {
+      .addCase(dShippingAddress.fulfilled, (state, action) => {
         // console.log(action, "from fulfiled");
 
         state.loading = false;
         state.addressbook = action.payload;
         state.error = null;
       })
-      .addCase(defaultAddress.rejected, (state, action) => {
+      .addCase(dShippingAddress.rejected, (state, action) => {
+        // console.log(action, "from rejections");
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(dBillingAddress.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(dBillingAddress.fulfilled, (state, action) => {
+        // console.log(action, "from fulfiled");
+
+        state.loading = false;
+        state.addressbook = action.payload;
+        state.error = null;
+      })
+      .addCase(dBillingAddress.rejected, (state, action) => {
         // console.log(action, "from rejections");
         state.loading = false;
         state.error = action.error.message;

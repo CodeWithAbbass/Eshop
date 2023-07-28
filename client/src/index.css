@@ -25,13 +25,16 @@ ul {
   list-style: none;
 }
 .FS_12 {
-  font-size: 12px;
+  font-size: 12px !important;
 }
 .FS_13 {
-  font-size: 13px;
+  font-size: 13px !important;
 }
 .FS_14 {
-  font-size: 14px;
+  font-size: 14px !important;
+}
+.FW_500 {
+  font-weight: 500;
 }
 .BtnStyle1 {
   background-color: #40cdbd;
@@ -80,4 +83,7 @@ ul {
 }
 .Bg_Other2 {
   color: #7fac9c !important;
+}
+input::placeholder {
+  font-size: 12px !important;
 }

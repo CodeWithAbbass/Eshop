@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "../../../Css/Admin/DOrder.css";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import PriceFormat from "../../../helpers/PriceFormat";
 import ColorFinder from "../../../helpers/ColorFinder";
 import CalcDiscount from "../../../helpers/CalcDiscount";
@@ -36,7 +37,7 @@ const DAllOrders = () => {
           <h4 className="m-0 fw-normal">All Orders</h4>
           <Link
             to="/admin/orders/add"
-            className="btn btn-outline-primary DAllOrders_Header_Btn FS_12 ms-2 px-2 py-1"
+            className="btn DAdmin_Hero_Btn FS_12 ms-2 px-2 py-1"
           >
             Add New
           </Link>
@@ -137,9 +138,8 @@ const DAllOrders = () => {
               </div>
               <div className="DAllProduct_AllProducts_Item_Container my-2">
                 <div className="DAllOrders_Item_Header bg-white row m-0 w-100 justify-content-between border FS_14">
-                  <div className="col-3">Order</div>
-                  <div className="col-3">Billing Address</div>
-                  <div className="col-2">Date</div>
+                  <div className="col-5">Order</div>
+                  <div className="col-3">Date</div>
                   <div className="col-2">Status</div>
                   <div className="col-2 text-end">Total</div>
                 </div>
@@ -147,6 +147,7 @@ const DAllOrders = () => {
                   AllOrders.map((order, index) => {
                     const {
                       id,
+                      orderid,
                       status,
                       publish,
                       products,
@@ -159,6 +160,7 @@ const DAllOrders = () => {
                     products?.forEach((element) => {
                       AfterDiscountPrice =
                         AfterDiscountPrice +
+                        element.ShippingFee +
                         CalcDiscount(element?.discount, element?.price) *
                           element?.quantity;
                     });
@@ -170,11 +172,18 @@ const DAllOrders = () => {
                         } row m-0 w-100 border border-top-0 justify-content-between`}
                         key={index}
                       >
-                        <div className="col-3 DAOIB_OrderID_EditStatus d-flex align-items-center justify-content-between">
+                        <div className="col-5 DAOIB_OrderID_EditStatus d-flex align-items-center justify-content-between">
                           <div className="">
                             <span>{"#" + id || ""}</span>
                             <span className="ms-2">{deliverto || ""}</span>
                           </div>
+
+                          <Link
+                            to={`/admin/orders/edit/${orderid}`}
+                            className="ms-auto"
+                          >
+                            <ModeEditIcon className="DAOIB_EditStatus_Icon" />
+                          </Link>
                           <button
                             type="button"
                             className="btn DAOIB_EditStatus_Btn"
@@ -185,10 +194,8 @@ const DAllOrders = () => {
                             <VisibilityIcon className="DAOIB_EditStatus_Icon" />
                           </button>
                         </div>
-                        <div className="col-3 DAOIB_OrderID_EditStatus d-flex align-items-center justify-content-between overflow-hidden">
-                          {billaddress || ""}
-                        </div>
-                        <div className="col-2 DAOIB_OrderPlaced lh-sm d-flex flex-column justify-content-center FS_13">
+
+                        <div className="col-3 DAOIB_OrderPlaced lh-sm d-flex flex-column justify-content-center FS_13">
                           <p className="mb-0">Order Placed</p>
                           <p className="mb-0">{DateFormat(publish)}</p>
                         </div>
@@ -209,7 +216,7 @@ const DAllOrders = () => {
                   })}
               </div>
             </div>
-            {/* <div className="DAllProduct_AllProducts_Mobile w-100">
+            <div className="DAllOrder_Mobile w-100">
               <div className="DAllProduct_AllProducts_Header d-flex flex-wrap align-items-center justify-content-start gap-3">
                 <div className="d-flex align-items-center justify-content-start gap-3 w-auto">
                   <div className="dropdown DAllProduct_AllProducts_Header_Btn_Container w-auto">
@@ -294,164 +301,86 @@ const DAllOrders = () => {
                 </div>
               </div>
 
-              <div className="DAllProduct_AllProducts_Item_Container">
-                <div className="DAllProduct_AllProducts_Item_Header bg-white d-flex align-items-center w-100 border-top mt-3">
-                  <div className="DAPIH_Title_Container px-2 mb-0">Name</div>
+              <div className="DAllOrders_Item_Container">
+                <div className="DAllOrders_Item_Header FS_14 row bg-white m-0 w-100 border-top mt-3">
+                  <div className="px-2 mb-0 FS_13 col-6">Orders</div>
+                  <div className="px-2 mb-0 FS_13 col-3">Status</div>
+                  <div className="px-2 mb-0 FS_13 col-3 text-end">Total</div>
                 </div>
                 <div className="DALC_Cards_Container p-0">
                   {AllOrders.length > 0 &&
                     AllOrders.map((order, index) => {
                       const {
-                        title,
                         id,
-                        uid,
-                        sku,
-                        images,
-                        saleprice,
-                        stock,
-                        stockstatus,
-                        category,
-                        price,
-                        tags,
+                        orderid,
+                        status,
                         publish,
+                        products,
+                        deliverto,
+                        phone,
+                        shipaddress,
+                        billaddress,
                       } = order;
-                      let Date = publish?.split("T");
-                      let TimeStamp = Date[1] ? Date[1].split(".") : "00:00:00";
-                      const Year = Date[0] ? Date[0] : "0000";
-                      const Time = TimeStamp[0] ? TimeStamp[0] : "00:00:00";
-
+                      let AfterDiscountPrice = 0;
+                      products?.forEach((element) => {
+                        AfterDiscountPrice =
+                          AfterDiscountPrice +
+                          element.ShippingFee +
+                          CalcDiscount(element?.discount, element?.price) *
+                            element?.quantity;
+                      });
                       return (
-                        <div className="DALC_Cards_Item" key={index}>
-                          <div
-                            className="accordion accordion-flush rounded-0"
-                            id={`CardContainer${index}`}
-                          >
-                            <div className="accordion-item rounded-0">
-                              <h2 className="accordion-header rounded-0  border-top">
-                                <button
-                                  className="accordion-button collapsed shadow-none bg-transparent rounded-0 p-2 h-100 DALC_Cards_Item_Heading"
-                                  type="button"
-                                  data-bs-toggle="collapse"
-                                  data-bs-target={`#Card${index}`}
-                                  aria-expanded="true"
-                                  aria-controls={`Card${index}`}
-                                >
-                                  {title || ""}
-                                </button>
-                              </h2>
-                              <div
-                                id={`Card${index}`}
-                                className="accordion-collapse collapse"
-                                aria-labelledby="headingOne"
-                                data-bs-parent={`#CardContainer${index}`}
+                        <div
+                          className="bg-white border-top DAllOrders_Item py-2 row m-0 w-100 justify-content-between"
+                          key={index}
+                        >
+                          <div className="DAllOrders_Item_OrderTo col-6 d-flex align-items-center justify-content-between">
+                            <p className="DAllOrders_Item_Edit mb-0">
+                              <span className="FS_13">{"#" + id}</span>
+                              <span className="FS_13 ms-2">
+                                {deliverto || ""}
+                              </span>
+                            </p>
+                            <p className="DAllOrders_Item_Edit mb-0 ms-2 DAOIB_EditStatus_Btn me-2">
+                              <Link
+                                to={`/admin/orders/edit/${orderid}`}
+                                className="FS_13"
                               >
-                                <div className="accordion-body p-2">
-                                  <div className="DAPAC_Item_Info">
-                                    <div className="DAPAC_Item_Header d-flex align-items-center gap-2">
-                                      <img
-                                        className="DAPAC_Item_Img"
-                                        src={images[0] || ""}
-                                        alt="Product Picture"
-                                      />
-                                      <div className="DAPAC_Item_Operation_Container">
-                                        <button className="btn rounded-0 FS_12 py-0 px-2 border-0 border-end">
-                                          ID: {id || ""}
-                                        </button>
-                                        <Link
-                                          to={`/admin/products/edit/${uid}`}
-                                          className="btn rounded-0 FS_12 py-0 px-2 border-0 border-end"
-                                        >
-                                          Edit
-                                        </Link>
-                                        <button
-                                          className="btn rounded-0 FS_12 py-0 px-2 border-0 border-end text-danger"
-                                          onClick={() => DeleteProduct(uid)}
-                                        >
-                                          Trash
-                                        </button>
-                                        <Link
-                                          to={`/product/${uid}`}
-                                          className="btn rounded-0 FS_12 py-0 px-2 border-0"
-                                        >
-                                          View
-                                        </Link>
-                                      </div>
-                                    </div>
-                                    <div className="DAPAC_Item_OtherInfo FS_12 w-auto my-4">
-                                      <div className="DAPAC_Item_OtherInfo_SKU w-100 mt-2">
-                                        <span className="DAPAC_Item_OtherInfo_LeftHeading d-inline-block">
-                                          SKU
-                                        </span>
-                                        <span className="DAPAC_Item_OtherInfo_RightValue d-inline-block">
-                                          {sku || "__"}
-                                        </span>
-                                      </div>
-                                      <div className="DAPAC_Item_OtherInfo_Stock w-100 mt-2">
-                                        <span className="DAPAC_Item_OtherInfo_LeftHeading d-inline-block">
-                                          Stock
-                                        </span>
-                                        <span className="DAPAC_Item_OtherInfo_RightValue d-inline-block text-success fw-semibold">
-                                          {stockstatus || stock
-                                            ? "In stock"
-                                            : ""}
-                                        </span>
-                                      </div>
-                                      <div className="DAPAC_Item_OtherInfo_Price w-100 mt-2">
-                                        <span className="DAPAC_Item_OtherInfo_LeftHeading d-inline-block">
-                                          Price
-                                        </span>
-                                        <div className="DAPAC_Item_OtherInfo_RightValue d-inline-block">
-                                          <div className="d-flex align-items-center flex-wrap gap-1">
-                                            <span className="DAPIH_Price_Regular text-decoration-line-through">
-                                              {isNaN(saleprice)
-                                                ? ""
-                                                : PriceFormat(price)}
-                                            </span>
-                                            <span className="DAPIH_Price_New">
-                                              {isNaN(saleprice)
-                                                ? PriceFormat(price)
-                                                : PriceFormat(saleprice)}
-                                            </span>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="DAPAC_Item_OtherInfo_Category d-flex align-items-start w-100 mt-2">
-                                        <span className="DAPAC_Item_OtherInfo_LeftHeading d-inline-block">
-                                          Category
-                                        </span>
-                                        <span className="DAPAC_Item_OtherInfo_RightValue d-inline-block ">
-                                          {category?.join(" , ") ||
-                                            "UnCategorized"}
-                                        </span>
-                                      </div>
-                                      <div className="DAPAC_Item_OtherInfo_Tag d-flex align-items-start w-100 mt-2">
-                                        <span className="DAPAC_Item_OtherInfo_LeftHeading d-inline-block">
-                                          Tag
-                                        </span>
-                                        <span className="DAPAC_Item_OtherInfo_RightValue d-inline-block ">
-                                          {tags?.join(" , ") || "__"}
-                                        </span>
-                                      </div>
-                                      <div className="DAPAC_Item_OtherInfo_Tag w-100 mt-2">
-                                        <span className="DAPAC_Item_OtherInfo_LeftHeading d-inline-block">
-                                          Publish
-                                        </span>
-                                        <span className="DAPAC_Item_OtherInfo_RightValue d-inline-block ">
-                                          {Year + ` at ` + Time}
-                                        </span>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
+                                <ModeEditIcon className="DAOIB_EditStatus_Icon" />
+                              </Link>
+
+                              <button
+                                type="button"
+                                className="btn DAOIB_EditStatus_Btn FS_13 ms-1 p-0"
+                                data-bs-toggle="modal"
+                                data-bs-target="#EditOrderStatus"
+                                onClick={() => setUpdateOrderStatus(order)}
+                              >
+                                <VisibilityIcon className="DAOIB_EditStatus_Icon" />
+                              </button>
+                            </p>
+                          </div>
+
+                          <div className="DAllOrders_Item_Status col-3 p-0">
+                            <button
+                              className={`btn btn-${ColorFinder(
+                                status
+                              )} DAOIB_OrderStatusBtn text-capitalize FS_12 `}
+                            >
+                              {status || ""}
+                            </button>
+                          </div>
+                          <div className="DAllOrders_Item_Total col-3 text-end d-flex align-items-center justify-content-end">
+                            <span className="FS_12">
+                              {PriceFormat(AfterDiscountPrice) || ""}
+                            </span>
                           </div>
                         </div>
                       );
                     })}
                 </div>
               </div>
-            </div> */}
+            </div>
           </div>
         )}
       </div>

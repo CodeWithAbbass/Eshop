@@ -15,7 +15,7 @@ const DesktopCheckout = () => {
   const PaymentMethod = useSelector((state) => state.Orders.paymentmethod);
   const AddressBook = useSelector((state) => state.Orders.addressbook);
   const DefaultAddress = useSelector((state) =>
-    state.Orders.addressbook.filter((item) => item.defaultaddress == true)
+    state.Orders.addressbook.filter((item) => item.shippingaddress == true)
   );
   const totalAmount = useSelector((state) => state.Cart.totalAmount);
   let totalPriceWithoutDiscount = 0;

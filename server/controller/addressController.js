@@ -28,8 +28,8 @@ exports.addAddress = async (req, res) => {
   try {
     let success = false;
 
-    let { name, phone, address } = req.body;
-    if (!name || !phone || !address) {
+    let { name, phone, email, address } = req.body;
+    if (!name || !phone || !email || !address) {
       return res
         .status(400)
         .send({ success, data: [], message: "Please Fill Mandatory Fields." });
@@ -50,8 +50,8 @@ exports.addAddress = async (req, res) => {
       Date.now().toString(5) +
       crypto.randomBytes(5).toString("hex");
     const newAddress = await pool.query(
-      `INSERT INTO address (aid, uid, name, phone, address) VALUES ($1, $2, $3, $4, $5) RETURNING *`,
-      [aid, req.user.uid, name, phone, address]
+      `INSERT INTO address (aid, uid, name, phone, email, address) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
+      [aid, req.user.uid, name, phone, email, address]
     );
     if (newAddress.rowCount == 0) {
       success = false;
@@ -74,7 +74,7 @@ exports.addAddress = async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 };
-exports.defaultAddress = async (req, res) => {
+exports.dShippingAddress = async (req, res) => {
   try {
     let success = false;
     const addressExist = await pool.query(
@@ -88,7 +88,7 @@ exports.defaultAddress = async (req, res) => {
     }
     // Default Reset Address Book
     const resetAddressBook = await pool.query(
-      `UPDATE address SET defaultaddress = $2 WHERE uid = $1 RETURNING *`,
+      `UPDATE address SET shippingaddress = $2 WHERE uid = $1 RETURNING *`,
       [req.user.uid, false]
     );
     if (resetAddressBook.rowCount == 0) {
@@ -97,7 +97,7 @@ exports.defaultAddress = async (req, res) => {
         .send({ success, message: "Address Was Not Changed!" });
     }
     const updatedAddressBook = await pool.query(
-      `UPDATE address SET defaultaddress = $3 WHERE uid = $1 AND aid = $2 RETURNING *`,
+      `UPDATE address SET shippingaddress = $3 WHERE uid = $1 AND aid = $2 RETURNING *`,
       [req.user.uid, req.params.id, true]
     );
     if (updatedAddressBook.rowCount == 0) {
@@ -113,7 +113,53 @@ exports.defaultAddress = async (req, res) => {
     res.send({
       success,
       data: allAddresses.rows,
-      message: "Default Address Changed Successfully",
+      message: "Default Shipping Address Updated Successfully",
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Internal Server Error");
+  }
+};
+exports.dBillingAddress = async (req, res) => {
+  try {
+    let success = false;
+    const addressExist = await pool.query(
+      `SELECT * FROM address WHERE aid = $1`,
+      [req.params.id]
+    );
+    if (addressExist.rowCount == 0) {
+      return res
+        .status(400)
+        .send({ success, data: [], message: "Address Not Found" });
+    }
+    // Default Reset Address Book
+    const resetAddressBook = await pool.query(
+      `UPDATE address SET billingaddress = $2 WHERE uid = $1 RETURNING *`,
+      [req.user.uid, false]
+    );
+    if (resetAddressBook.rowCount == 0) {
+      return res
+        .status(400)
+        .send({ success, message: "Address Was Not Changed!" });
+    }
+    const updatedAddressBook = await pool.query(
+      `UPDATE address SET billingaddress = $3 WHERE uid = $1 AND aid = $2 RETURNING *`,
+      [req.user.uid, req.params.id, true]
+    );
+    if (updatedAddressBook.rowCount == 0) {
+      return res
+        .status(400)
+        .send({ success, data: [], message: "Address Not Found" });
+    }
+    const allAddresses = await pool.query(
+      `SELECT * FROM address WHERE uid = $1`,
+      [req.user.uid]
+    );
+    success = true;
+    res.send({
+      success,
+      data: allAddresses.rows,
+      message: "Default Billing Address Updated Successfully",
     });
   } catch (error) {
     console.error(error.message);

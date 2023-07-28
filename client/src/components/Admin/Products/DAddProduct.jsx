@@ -261,13 +261,13 @@ const DAddProduct = () => {
         <div className="DAddProduct_Heading px-2 bg-white mb-4 d-flex align-items-center justify-content-between">
           <button
             onClick={(e) => handleSubmit(e)}
-            className={`btn DAdmin_Hero_Btn rounded-0 FS_14 ${
+            className={`btn DAdmin_Hero_Btn FS_14 ${
               productData.title.length > 3 &&
               productData.price > 0 &&
               productData.images.length > 0 &&
               productData.images.length < 6
                 ? ""
-                : "text-muted border-secondary"
+                : "text-muted bg-secondary fst-italic shadow-none"
             }`}
             disabled={
               productData.title.length > 3 &&
@@ -296,10 +296,9 @@ const DAddProduct = () => {
                   autoComplete="true"
                   value={productData.title || ""}
                   onChange={onChangeAddProduct}
-                  placeholder="Product Name"
                 />
               </div>
-              <div className="DALCF_Product_Name_Container mb-4">
+              <div className="DALCF_Product_SmallDesc_Container mb-4">
                 <label className="DALC_Forms_Heading FS_13" htmlFor="smalldesc">
                   Small Description
                 </label>
@@ -312,7 +311,6 @@ const DAddProduct = () => {
                   maxLength="250"
                   value={productData.smalldesc || ""}
                   onChange={onChangeAddProduct}
-                  placeholder="Small Description"
                 />
               </div>
               <div className="DALCF_Product_Description_Container bg-white">

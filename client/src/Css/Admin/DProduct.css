@@ -33,13 +33,11 @@
   line-height: 1.4;
   padding: 8px 12px;
 }
-@media (max-width: 991px) {
+@media (max-width: 1200px) {
   .DAddProduct_Layout_Container {
     flex-wrap: wrap;
   }
-  .DALC_Forms_Container {
-    margin: 0 !important;
-  }
+
   .DALC_Cards_Container_Layout_Container {
     width: 100%;
   }
@@ -57,7 +55,7 @@
   border-bottom: 0 !important;
 }
 .DALC_Cards_Container {
-  padding-top: 2rem;
+  padding-top: 24px;
 }
 
 .DALC_Cards_Item_Product_Cat_Item,
@@ -409,12 +407,18 @@
 }
 .DAPIH_Category_Container,
 .DAPIH_Date_Container {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   width: 15%;
   color: #2271b1;
 }
 .DAPIH_Title_Txt {
   color: #2271b1;
   font-size: 14px !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-weight: 600;
 }
 .DAPIH_Stock_Txt {
@@ -434,7 +438,7 @@
 
 .DAPIH_Tags_Txt {
   height: 100%;
-  padding: 5px;
+
   overflow-y: auto;
 }
 .DAPIH_Tags_Txt::-webkit-scrollbar {

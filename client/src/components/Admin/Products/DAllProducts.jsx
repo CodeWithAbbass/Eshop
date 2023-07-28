@@ -34,9 +34,9 @@ const DAllProducts = () => {
           <h4 className="DALC_Forms_Heading m-0 fw-normal">All Products</h4>
           <Link
             to="/admin/products/addproduct"
-            className="btn btn-outline-primary DAllProduct_Header_Btn FS_12 ms-2 px-2 py-1"
+            className="btn DAdmin_Hero_Btn FS_14 ms-2 px-2 py-1"
           >
-            Add New
+            Add New Product
           </Link>
         </div>
         {AllProducts.length == 0 ? (
@@ -233,8 +233,10 @@ const DAllProducts = () => {
                         <div className="DAPIH_Category_Container DAPIH_Category_Txt">
                           {category?.join(" , ") || "UnCategorized"}
                         </div>
-                        <div className="DAPIH_Tags_Container DAPIH_Tags_Txt">
-                          {tags?.join(" , ") || "_"}
+                        <div className="DAPIH_Tags_Container DAPIH_Tags_Txt d-flex align-items-center pe-3">
+                          <span className="h-100 py-3">
+                            {tags?.join(", ") || "_"}
+                          </span>
                         </div>
                         <div className="DAPIH_Date_Container DAPIH_Date_Txt">
                           <span className="d-block">Publish</span>
@@ -474,7 +476,7 @@ const DAllProducts = () => {
                                         <span className="DAPAC_Item_OtherInfo_LeftHeading d-inline-block">
                                           Publish
                                         </span>
-                                        <span className="DAPAC_Item_OtherInfo_RightValue d-inline-block ">
+                                        <span className="DAPAC_Item_OtherInfo_RightValue ">
                                           {Year + ` at ` + Time}
                                         </span>
                                       </div>
