@@ -14,8 +14,11 @@ const MobileCheckout = () => {
   const ShippingFee = useSelector((state) => state.Cart.shippingFee);
   const PaymentMethod = useSelector((state) => state.Orders.paymentmethod);
   const AddressBook = useSelector((state) => state.Orders.addressbook);
-  const DefaultAddress = useSelector((state) =>
+  const ShipAddress = useSelector((state) =>
     state.Orders.addressbook.filter((item) => item.shippingaddress == true)
+  );
+  const BillAddress = useSelector((state) =>
+    state.Orders.addressbook.filter((item) => item.billingaddress == true)
   );
   const totalAmount = useSelector((state) => state.Cart.totalAmount);
 
@@ -42,20 +45,29 @@ const MobileCheckout = () => {
       };
       products.push(newProduct);
     });
+
     let confirmOrder = {
-      deliverto: DefaultAddress[0] ? DefaultAddress[0].name : "",
-      phone: DefaultAddress[0] ? DefaultAddress[0].phone : "",
       products,
       paymentmethod: PaymentMethod,
-      shipaddress: DefaultAddress[0] ? DefaultAddress[0].address : "",
-      billaddress: DefaultAddress[0] ? DefaultAddress[0].address : "",
+      shipaddress: {
+        deliverto: ShipAddress[0]?.name,
+        address: ShipAddress[0]?.address,
+        email: ShipAddress[0]?.email,
+        phone: ShipAddress[0]?.phone,
+      },
+      billaddress: {
+        deliverto: BillAddress[0]?.name,
+        address: BillAddress[0]?.address,
+        email: BillAddress[0]?.email,
+        phone: BillAddress[0]?.phone,
+      },
     };
     dispatch(placeOrder(confirmOrder));
     Navigate("/user/order");
   };
   useEffect(() => {
     return () => {};
-  }, [AddressBook, DefaultAddress]);
+  }, [AddressBook, ShipAddress]);
 
   return (
     <div className="MobileCheckout">
@@ -99,11 +111,11 @@ const MobileCheckout = () => {
               </div>
               <button
                 className={`DCC_Order_Summery_OrderBtn w-100 text-center mt-2 ${
-                  AddressBook[0] && DefaultAddress[0]
+                  AddressBook[0] && ShipAddress[0]
                     ? ""
                     : "bg-secondary border-secondary"
                 }`}
-                disabled={AddressBook[0] && DefaultAddress[0] ? false : true}
+                disabled={AddressBook[0] && ShipAddress[0] ? false : true}
                 onClick={() => {
                   OrderConfirmation();
                   // dispatch(clearCart())
@@ -129,7 +141,7 @@ const MobileCheckout = () => {
                   </span>
                 </button>
               )}
-              {!DefaultAddress[0] && AddressBook[0] && (
+              {!ShipAddress[0] && AddressBook[0] && (
                 <button
                   type="button"
                   className="btn AddNewAddress_Btn w-100 h-100 rounded-0 p-0 d-flex align-items-center justify-content-center"
@@ -142,22 +154,22 @@ const MobileCheckout = () => {
                   </span>
                 </button>
               )}
-              {AddressBook[0] && DefaultAddress[0] && (
+              {AddressBook[0] && ShipAddress[0] && (
                 <div className="DCC_Left_Address_Wrapper py-3">
                   <div className="DCC_Left_Address_DeliverTo mb-2">
                     <span className="DCC_Left_Address_Heading">
                       Deliver To:
                     </span>
                     <span className="DCC_Left_Address_Txt ms-1">
-                      {DefaultAddress[0] ? DefaultAddress[0].name : ""}
+                      {ShipAddress[0] ? ShipAddress[0].name : ""}
                     </span>
                   </div>
                   <div className="DCC_Left_Address_DeliverTo mb-2">
                     <div className="DCC_Left_Address_Heading">
-                      {DefaultAddress[0] ? DefaultAddress[0].phone : ""}
+                      {ShipAddress[0] ? ShipAddress[0].phone : ""}
                     </div>
                     <div className="DCC_Left_Address_Txt mt-2">
-                      {DefaultAddress[0] ? DefaultAddress[0].address : ""}
+                      {ShipAddress[0] ? ShipAddress[0].address : ""}
                       <button
                         type="button"
                         className="btn DCC_Left_Address_Change bg-transparent rounded-0 p-0 d-inline ms-2"

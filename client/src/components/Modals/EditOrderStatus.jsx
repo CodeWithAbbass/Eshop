@@ -9,21 +9,11 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { updateStatus } from "../../Store/Slices/orderSlice";
 import ColorFinder from "../../helpers/ColorFinder";
+import DateFormat from "../../helpers/DataFormat";
 const EditOrderStatus = ({ updateOrderStatus, setUpdateOrderStatus }) => {
   const dispatch = useDispatch();
-  let {
-    id,
-    orderid,
-    status,
-    publish,
-    products,
-    deliverto,
-    email,
-    phone,
-    shipaddress,
-    billaddress,
-  } = updateOrderStatus;
-
+  let { id, orderid, status, publish, products, shipaddress, billaddress } =
+    updateOrderStatus;
   const ChangeOrderStatus = (status) => {
     // setUpdateOrderStatus({ ...updateOrderStatus, status });
     dispatch(updateStatus({ orderid, status }));
@@ -68,46 +58,105 @@ const EditOrderStatus = ({ updateOrderStatus, setUpdateOrderStatus }) => {
           <div className="modal-body p-0">
             <div className="EditOrderStatus_OrderInfo py-3 px-4">
               <h6>Billing Details</h6>
-              {!billaddress && <p className="FS_13 mb-0 fw-light">N/A</p>}
+
               {billaddress && (
-                <div className="FS_13 mb-0 fw-light">
-                  <p className="FS_13 mb-0 fw-light">{deliverto || ""}</p>
-                  <p className="FS_13 mb-0 fw-light">{billaddress || ""}</p>
+                <div className="FS_13 mb-0 fw-light d-flex justify-content-between">
+                  <div className="EditOrderStatus_Left">
+                    <p className="FS_13 mb-0 fw-light">
+                      {billaddress?.deliverto || ""}
+                    </p>
+                    <p className="FS_13 mb-0 fw-light mt-2 pe-3">
+                      {billaddress?.address || ""}
+                    </p>
+                  </div>
+                  <div className="EditOrderStatus_Right">
+                    <div className="EditOrderStatus_Email_Container">
+                      <small className="FS_12 mb-0 d-flex align-items-center">
+                        <MailOutlineIcon className="DAOIB_EditStatus_Icon me-2" />
+                        {billaddress?.email ? (
+                          <a
+                            href={`mailto:${billaddress?.email || ""}`}
+                            className="text-decoration-underline"
+                          >
+                            {billaddress?.email || "N/A"}
+                          </a>
+                        ) : (
+                          <p className="FS_13 mb-0 fw-light text-decoration-underline">
+                            N/A
+                          </p>
+                        )}
+                      </small>
+                    </div>
+                    <div className="EditOrderStatus_Phone_Container mt-2">
+                      <small className="FS_12 mb-0">
+                        <PhoneInTalkIcon className="DAOIB_EditStatus_Icon me-2" />
+                        {billaddress?.phone ? (
+                          <a
+                            href={`tel:${billaddress?.phone || ""}`}
+                            className="text-decoration-underline"
+                          >
+                            {billaddress?.phone || ""}
+                          </a>
+                        ) : (
+                          <p className="FS_13 mb-0 fw-light text-decoration-underline">
+                            N/A
+                          </p>
+                        )}
+                      </small>
+                    </div>
+                  </div>
                 </div>
               )}
               <h6 className="mt-4">Shipping Details</h6>
-              {!shipaddress && <p className="FS_13 mb-0 fw-light">N/A</p>}
+
               {shipaddress && (
-                <div className="FS_13 mb-0 fw-light">
-                  <p className="FS_13 mb-0 fw-light">{deliverto || ""}</p>
-                  <p className="FS_13 mb-0 fw-light">{shipaddress || ""}</p>
+                <div className="FS_13 mb-0 fw-light d-flex justify-content-between">
+                  <div className="EditOrderStatus_Left">
+                    <p className="FS_13 mb-0 fw-light">
+                      {shipaddress?.deliverto || ""}
+                    </p>
+                    <p className="FS_13 mb-0 fw-light mt-2 pe-3">
+                      {shipaddress?.address || ""}
+                    </p>
+                  </div>
+                  <div className="EditOrderStatus_Right">
+                    <div className="EditOrderStatus_Email_Container">
+                      <small className="FS_12 mb-0 d-flex align-items-center">
+                        <MailOutlineIcon className="DAOIB_EditStatus_Icon me-2" />
+                        {shipaddress?.email ? (
+                          <a
+                            href={`mailto:${shipaddress?.email || ""}`}
+                            className="text-decoration-underline"
+                          >
+                            {shipaddress?.email || "N/A"}
+                          </a>
+                        ) : (
+                          <p className="FS_13 mb-0 fw-light text-decoration-underline">
+                            N/A
+                          </p>
+                        )}
+                      </small>
+                    </div>
+                    <div className="EditOrderStatus_Phone_Container mt-2">
+                      <small className="FS_12 mb-0">
+                        <PhoneInTalkIcon className="DAOIB_EditStatus_Icon me-2" />
+                        {shipaddress?.phone ? (
+                          <a
+                            href={`tel:${shipaddress?.phone || ""}`}
+                            className="text-decoration-underline"
+                          >
+                            {shipaddress?.phone || ""}
+                          </a>
+                        ) : (
+                          <p className="FS_13 mb-0 fw-light text-decoration-underline">
+                            N/A
+                          </p>
+                        )}
+                      </small>
+                    </div>
+                  </div>
                 </div>
               )}
-
-              <div className="EditOrderStatus_Email_Container mt-3">
-                <small className="FS_13 d-block mb-0">Email</small>
-                <p className="FS_12 mb-0 d-flex align-items-center">
-                  <MailOutlineIcon className="DAOIB_EditStatus_Icon me-2" />
-                  <a
-                    href={`mailto:${email || ""}`}
-                    className="text-decoration-underline"
-                  >
-                    {email || "N/A"}
-                  </a>
-                </p>
-              </div>
-              <div className="EditOrderStatus_Phone_Container mt-3">
-                <small className="FS_13 d-block mb-0">Phone</small>
-                <p className="FS_12 mb-0">
-                  <PhoneInTalkIcon className="DAOIB_EditStatus_Icon me-2" />
-                  <a
-                    href={`tel:${phone || ""}`}
-                    className="text-decoration-underline"
-                  >
-                    {phone || ""}
-                  </a>
-                </p>
-              </div>
             </div>
 
             <div className="EditOrderStatus_Product_Container mt-4">

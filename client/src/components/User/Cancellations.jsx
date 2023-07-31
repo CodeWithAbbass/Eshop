@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 import "../../Css/User.css";
-import moment from "moment/moment";
 import { useSelector } from "react-redux";
+import DateFormat from "../../helpers/DataFormat";
 const MyCancellations = () => {
-  const Orders = useSelector((state) => state.Orders.orders);
+  const Orders = useSelector((state) => state.Orders.userOrders);
 
   return (
     <div className="User_Cancellations_Container">
@@ -12,24 +12,16 @@ const MyCancellations = () => {
           My Cancellation
         </Link>
       </div>
-      {Orders.length == 0 && (
-        <div className="User_Returns_No_Returns_Container text-center mt-5">
-          <div className="User_Returns_No_Returns_Heading mb-3">
-            There are no cancelled yet.
-          </div>
-          <Link className="User_Returns_No_Rturns_Btn d-block text-center">
-            Continue Shopping
-          </Link>
-        </div>
-      )}
-      <div className="UCC_Container bg-white mt-2">
+
+      <div className="UCC_Container mt-2">
         {Orders.length > 0 &&
           Orders.map((item, index) => {
-            let { date, orderid, products, status } = item;
+            let { publish, orderid, products, status } = item;
+
             if (status == "cancelled") {
               return (
                 <div
-                  className="UCC_Cancellations_Item_Container my-3"
+                  className="UCC_Cancellations_Item_Container my-3 bg-white"
                   key={index}
                 >
                   <div className="UCC_Cancellations_Header border-bottom py-2 px-3">
@@ -37,11 +29,7 @@ const MyCancellations = () => {
                       <div className="col-8 p-0">
                         <p className="UCC_Cancellations_Header_Requested_Heading mb-0">
                           Requested on
-                          <span className="ms-1">
-                            {moment
-                              .unix(date / 1000)
-                              .format("ddd MMM DD YYYY HH:mm:ss")}
-                          </span>
+                          <span className="ms-1">{DateFormat(publish)}</span>
                         </p>
                         <div className="UCC_Cancellations_Header_Order">
                           <span>Order</span>
@@ -110,6 +98,23 @@ const MyCancellations = () => {
                         );
                       })}
                   </div>
+                </div>
+              );
+            } else {
+              return (
+                <div
+                  className="User_Returns_No_Returns_Container text-center mt-5"
+                  key={index}
+                >
+                  <div className="User_Returns_No_Returns_Heading mb-3">
+                    There are no cancelled yet.
+                  </div>
+                  <Link
+                    to="/categories"
+                    className="User_Returns_No_Rturns_Btn d-block text-center"
+                  >
+                    Continue Shopping
+                  </Link>
                 </div>
               );
             }

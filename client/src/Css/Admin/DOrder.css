@@ -20,6 +20,7 @@
 }
 .DAOIB_OrderStatusBtn {
   border-radius: 2px;
+  min-width: 100px;
 }
 .DAOIB_EditStatus_Btn {
   color: #43aafd;
@@ -92,4 +93,52 @@
 }
 .DAllOrders_Item {
   height: 50px;
+}
+.DALCOPC_Header {
+  height: 40px;
+  background-color: #f4f4f4;
+  color: #999;
+  line-height: 40px;
+}
+.DALCOPC_Product_Item {
+  min-height: 50px;
+}
+.DAOIB_Edit_Icon {
+  width: 14px !important;
+  height: 14px !important;
+  cursor: pointer;
+  transition: all 0.4s ease-in-out;
+}
+.DAOIB_Edit_Icon:hover {
+  color: red;
+  transition: all 0.4s ease-in-out;
+}
+
+.DALCOPC_Cost_Col,
+.DALCOPC_Qty_Col {
+  width: 60px;
+}
+.DALCOPC_Total_Col {
+  flex: 1;
+}
+.DALCOPC_Product_img {
+  width: 38px;
+  height: 38px;
+  border: 2px solid #e8e8e8;
+  background: #f8f8f8;
+  color: #ccc;
+  position: relative;
+  font-size: 21px;
+  display: block;
+  text-align: center;
+}
+.DALCOPC_Product_Edit_IconContainer {
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.4s ease-in-out;
+}
+.DALCOPC_Product_Item:hover .DALCOPC_Product_Edit_IconContainer {
+  opacity: 1;
+  visibility: visible;
+  transition: all 0.4s ease-in-out;
 }

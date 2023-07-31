@@ -169,8 +169,8 @@ exports.dBillingAddress = async (req, res) => {
 exports.updateAddress = async (req, res) => {
   try {
     let success = false;
-    let { name, phone, address } = req.body;
-    if (!name || !phone || !address) {
+    let { name, phone, address, email } = req.body;
+    if (!name || !phone || !email || !address) {
       return res
         .status(400)
         .send({ success, data: [], message: "Please Fill Mandatory Fields." });
@@ -185,8 +185,8 @@ exports.updateAddress = async (req, res) => {
         .send({ success, data: [], message: "Address Not Found" });
     }
     const newAddress = await pool.query(
-      `UPDATE address SET name = $3, phone = $4, address = $5 WHERE aid = $1 AND uid = $2`,
-      [req.params.id, req.user.uid, name, phone, address]
+      `UPDATE address SET name = $3, phone = $4, email = $5, address = $6 WHERE aid = $1 AND uid = $2`,
+      [req.params.id, req.user.uid, name, phone, email, address]
     );
     if (newAddress.rowCount == 0) {
       success = false;

@@ -7,6 +7,7 @@ const AddAddress = () => {
   const [addNewLocation, setNewLocation] = useState({
     name: "",
     phone: "",
+    email: "",
     address: "",
   });
   const addNewAddressOnChange = (e) => {
@@ -73,6 +74,19 @@ const AddAddress = () => {
               </div>
               <div className="mb-3 DCC_Checkout_Input_Container">
                 <label htmlFor="Address" className="form-label">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  className="form-control rounded-0 shadow-none DCC_Checkout_Input"
+                  id="email"
+                  name="email"
+                  value={addNewLocation.email || ""}
+                  onChange={addNewAddressOnChange}
+                />
+              </div>
+              <div className="mb-3 DCC_Checkout_Input_Container">
+                <label htmlFor="Address" className="form-label">
                   Address
                 </label>
                 <input
@@ -84,7 +98,7 @@ const AddAddress = () => {
                   onChange={addNewAddressOnChange}
                 />
               </div>
-              <div className="mb-3 DCC_Checkout_Input_Container">
+              <div className="mb-3 w-100">
                 <label className="form-label"></label>
                 <button
                   className="btn rounded-0 AddNewAddress_Btn_Input_Btn text-center w-100"

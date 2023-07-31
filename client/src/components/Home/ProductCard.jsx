@@ -23,13 +23,13 @@ const ProductCard = ({ item }) => {
     >
       <div className="Product_Link_Wrapper mx-2 h-100">
         <Link
-          className="H_Product_Link h-100 d-block bg-white"
+          className="H_Product_Link h-100 d-block bg-white d-flex flex-column align-items-start justify-content-start"
           to={`/product/${uid}`}
         >
           <img
-            className="card-img-top rounded-0 "
+            className="card-img-top rounded-0"
             src={images.length > 0 ? images[0] : ""}
-            alt="Card images cap"
+            alt="Card image"
           />
           <div className="card-body p-2">
             <h5 className="card-title">{title}</h5>

@@ -50,8 +50,8 @@ const Wishlist = () => {
               Add your favorites to wishlist and they will show here.
             </p>
             <Link
-              className="UWN_ShoppingNow d-block bg-transparent mt-4"
-              to="/"
+              to="/categories"
+              className="User_Returns_No_Rturns_Btn d-block text-center mt-4"
             >
               Continue Shopping
             </Link>

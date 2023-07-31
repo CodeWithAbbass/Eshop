@@ -44,7 +44,15 @@ const AddressBook = () => {
           <div className="row m-0 w-100">
             {UserAddressBook.length > 0 &&
               UserAddressBook.map((item, index) => {
-                let { name, phone, address, aid, shippingaddress } = item;
+                let {
+                  name,
+                  phone,
+                  email,
+                  address,
+                  aid,
+                  shippingaddress,
+                  billingaddress,
+                } = item;
                 return (
                   <div className="col-lg-6 col-md-12 p-1" key={index}>
                     <div className="UAC_AddressBook p-4">
@@ -65,42 +73,43 @@ const AddressBook = () => {
                             className="User_Container_Right_Btn btn float-end d-inline-flex align-items-center rounded-0"
                             data-bs-toggle="modal"
                             data-bs-target="#EditAddressBookForm"
-                            onClick={() =>
-                              dispatch(
-                                editAddressState({ aid, name, phone, address })
-                              )
-                            }
+                            onClick={() => dispatch(editAddressState(item))}
                           >
                             Edit
                           </button>
                         </div>
                       </div>
                       <div className="UAC_AddressBook_Info">
-                        <div className="MMA_Profile_Item_Title mb-2">
-                          {phone || ""}
+                        <div className="MMA_Profile_Item_Title mb-2 d-flex flex-wrap align-items-center">
+                          <p className="mb-0">{phone || ""}</p>
+                          <p className="mb-0 ms-3">{email || ""}</p>
                         </div>
                         <div className="MMA_Profile_Item_Title mb-4">
                           {address || ""}
                         </div>
-                        {shippingaddress && (
-                          <div className="UAC_AddressBook_Info_MainTag_Container d-flex align-items-center justify-content-start">
-                            <small className="UAC_AddressBook_Info_MainTag defaultAddress">
-                              Default Shipping Address
-                            </small>
-                            <small className="UAC_AddressBook_Info_SecondaryTag ">
-                              Default Billing Address
-                            </small>
-                          </div>
+                        {shippingaddress ? (
+                          <small className="UAC_AddressBook_Info_MainTag defaultAddress">
+                            Default Shipping Address
+                          </small>
+                        ) : (
+                          <small
+                            className="UAC_AddressBook_Info_MainTag"
+                            onClick={() => dispatch(dShippingAddress(aid))}
+                          >
+                            Set Default Shipping Address
+                          </small>
                         )}
-                        {shippingaddress || (
-                          <div className="UAC_AddressBook_Info_MainTag_Container d-flex align-items-center justify-content-start">
-                            <small
-                              className="UAC_AddressBook_Info_MainTag"
-                              onClick={() => dispatch(dShippingAddress(aid))}
-                            >
-                              Set As Default Address
-                            </small>
-                          </div>
+                        {billingaddress ? (
+                          <small className="UAC_AddressBook_Info_MainTag defaultAddress">
+                            Default Billing Address
+                          </small>
+                        ) : (
+                          <small
+                            className="UAC_AddressBook_Info_MainTag"
+                            onClick={() => dispatch(dBillingAddress(aid))}
+                          >
+                            Set Default Billing Address
+                          </small>
                         )}
                       </div>
                     </div>
@@ -138,7 +147,8 @@ const AddressBook = () => {
             {UserAddressBook.length == 0
               ? ""
               : UserAddressBook.map((item, index) => {
-                  let { name, phone, address, aid, shippingaddress } = item;
+                  let { name, phone, email, address, aid, shippingaddress } =
+                    item;
                   return (
                     <div className="col-lg-6 col-md-12 p-1" key={index}>
                       <div className="UAC_AddressBook p-3">
@@ -159,24 +169,16 @@ const AddressBook = () => {
                               className="User_Container_Right_Btn btn float-end d-inline-flex align-items-center rounded-0"
                               data-bs-toggle="modal"
                               data-bs-target="#EditAddressBookForm"
-                              onClick={() =>
-                                dispatch(
-                                  editAddressState({
-                                    aid,
-                                    name,
-                                    phone,
-                                    address,
-                                  })
-                                )
-                              }
+                              onClick={() => dispatch(editAddressState(item))}
                             >
                               Edit
                             </button>
                           </div>
                         </div>
                         <div className="UAC_AddressBook_Info">
-                          <div className="MMA_Profile_Item_Title mb-2">
-                            {phone || ""}
+                          <div className="MMA_Profile_Item_Title mb-2 d-flex flex-wrap align-items-center">
+                            <p className="mb-0">{phone || ""}</p>
+                            <p className="mb-0 ms-3">{email || ""}</p>
                           </div>
                           <div className="MMA_Profile_Item_Title mb-4">
                             {address || ""}

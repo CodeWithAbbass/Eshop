@@ -9,6 +9,7 @@ import { cancelOrder, getOrderDetails } from "../../Store/Slices/orderSlice";
 import JustForYou from "../Home/JustForYou";
 import DateFormat from "../../helpers/DataFormat";
 import ESTDeliveryTime from "../../helpers/ESTDeliveryTime";
+import CalcDiscount from "../../helpers/CalcDiscount";
 
 const OrderDetails = () => {
   const { id } = useParams();
@@ -24,17 +25,19 @@ const OrderDetails = () => {
     return <div className="User_OrderDetails">Order Not Found</div>;
   }
   let totalBill = 0;
+  let totalDiscount = 0;
   let {
     orderid,
     status,
     publish,
     products,
-    deliverto,
-    phone,
     shipaddress,
     billaddress,
+    paymentmethod,
   } = OrderInfo[0];
   products.forEach((element) => {
+    totalDiscount =
+      totalDiscount + CalcDiscount(element?.discount, element?.price);
     totalBill = totalBill + element.price * element.quantity;
   });
 
@@ -69,7 +72,7 @@ const OrderDetails = () => {
           <div className="User_OrderDetails_Header_Left">
             <div className="m-0 User_OrderDetails_Header_Package d-flex align-items-center justify-content-start">
               <RedeemIcon />
-              <span className="ms-2">Package 1</span>
+              <span className="ms-2">Package {products.length}</span>
             </div>
             <div className="m-0 User_OrderDetails_Header_SoldBy">
               <span>Sold by</span>
@@ -103,7 +106,7 @@ const OrderDetails = () => {
             </span>
             <span className="UOC_Orders_txt User_OrderDetails_OrderBody_Header_Right">
               <LocalShippingOutlinedIcon />
-              <span className="ms-2">Standard Delivery </span>
+              <span className="ms-2">Standard Delivery</span>
             </span>
           </div>
           <div className="User_OrderDetails_OrderBody_Progress d-flex my-3 mt-5">
@@ -293,49 +296,65 @@ const OrderDetails = () => {
           <div className="row m-0 w-100 justify-content-between">
             <div className="col-12 col-md-6 p-0 pe-md-2 ">
               <div className="UODOBA_ShipAddress_Container bg-white p-3">
-                <p className="UODOBA_AddressInfo_Heading mb-2">
+                <p className="UODOBA_AddressInfo_Heading mb-2 FW_500">
                   Shipping Address
                 </p>
-                <p className="UODOBA_AddressInfo_Txt UODOBA_AddressInfo_Username mb-0">
-                  {deliverto || ""}
+                <p className="UODOBA_AddressInfo_Username mb-0 FS_14">
+                  {shipaddress?.deliverto || ""}
                 </p>
-                <p className="UODOBA_AddressInfo_Txt UODOBA_AddressInfo_Address">
-                  {shipaddress || ""}
+                <p className="UODOBA_AddressInfo_Address FS_14">
+                  {shipaddress?.address || ""}
                 </p>
-                <p className="UODOBA_AddressInfo_Txt UODOBA_AddressInfo_Phone mb-0">
-                  {phone || ""}
+                <p className="UODOBA_AddressInfo_Phone mb-0 FS_14">
+                  {shipaddress?.phone || ""}
                 </p>
               </div>
               <div className="UODOBA_BillAddress_Container bg-white p-3 mt-md-3">
-                <p className="UODOBA_AddressInfo_Heading mb-2">Bill Address</p>
-                <p className="UODOBA_AddressInfo_Txt UODOBA_AddressInfo_Username mb-0">
-                  {deliverto || ""}
+                <p className="UODOBA_AddressInfo_Heading mb-2 FW_500">
+                  Billing Address
                 </p>
-                <p className="UODOBA_AddressInfo_Txt UODOBA_AddressInfo_Address">
-                  {billaddress || ""}
+                <p className="UODOBA_AddressInfo_Username mb-0 FS_14">
+                  {billaddress?.deliverto || ""}
                 </p>
-                <p className="UODOBA_AddressInfo_Txt UODOBA_AddressInfo_Phone mb-0">
-                  {phone || ""}
+                <p className="UODOBA_AddressInfo_Address FS_14">
+                  {billaddress?.address || ""}
+                </p>
+                <p className="UODOBA_AddressInfo_Phone mb-0 FS_14">
+                  {billaddress?.phone || ""}
                 </p>
               </div>
             </div>
             <div className="col-12 col-md-6 p-0 ps-md-2  ">
               <div className="UODOBA_Summery_Container bg-white p-3">
-                <p className="UODOBA_Summery_Heading mb-2">Total Summery</p>
-                <div className="UODOBA_Summery_Txt UODOBA_Summery_Subtotal d-flex align-items-center justify-content-between ">
-                  <p className="mb-0">Subtotal</p>
-                  <p className="mb-0">{PriceFormat(totalBill)}</p>
+                <p className="UODOBA_Summery_Heading mb-2 FW_500">
+                  Total Summery
+                </p>
+                <div className="UODOBA_Summery_Subtotal d-flex align-items-center justify-content-between ">
+                  <p className="mb-0 FS_14">Subtotal</p>
+                  <p className="mb-0 FS_14">{PriceFormat(totalBill)}</p>
                 </div>
-                <div className="UODOBA_Summery_Txt UODOBA_Summery_ShippingFee d-flex align-items-center justify-content-between border-bottom pb-3">
-                  <p className="mb-0">Delivery Fee</p>
-                  <p className="mb-0">{PriceFormat(ShippingFee)}</p>
+                <div className="UODOBA_Summery_ShippingFee d-flex align-items-center justify-content-between mt-1">
+                  <p className="mb-0 FS_14">Delivery Fee</p>
+                  <p className="mb-0 FS_14">{PriceFormat(ShippingFee)}</p>
                 </div>
-                <div className="UODOBA_Summery_Txt UODOBA_Summery_Total d-flex align-items-center justify-content-between my-3">
-                  <p className="mb-0">Total</p>
-                  <p className="mb-0">{PriceFormat(totalBill + ShippingFee)}</p>
+                <div className="UODOBA_Summery_Discount d-flex align-items-center justify-content-between border-bottom pb-3 mt-1">
+                  <p className="mb-0 FS_14">Discount</p>
+                  <p className="mb-0 FS_14">
+                    {PriceFormat(totalBill - totalDiscount)}
+                  </p>
                 </div>
-                <p className="UODOBA_Summery_Txt mb-0">
-                  Paid By Cash On Delivery
+                <div className="UODOBA_Summery_Total d-flex align-items-center justify-content-between my-3">
+                  <p className="mb-0 FW_500">Total</p>
+                  <p className="mb-0 FW_500">
+                    {PriceFormat(totalBill + ShippingFee)}
+                  </p>
+                </div>
+                <p className="mb-0 FS_14 text-secondary">
+                  <span>Paid by: </span>
+                  <span className="FW_500 text-dark">
+                    {(paymentmethod == "cod" && "Cash on delivery") ||
+                      (paymentmethod == "card" && "Card")}
+                  </span>
                 </p>
               </div>
             </div>

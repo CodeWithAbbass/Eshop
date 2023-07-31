@@ -1,5 +1,5 @@
 .card-img-top {
-  height: 200px;
+  height: 160px;
   padding: 10px;
 }
 @media (max-width: 768px) {
@@ -8,5 +8,8 @@
   }
   .H_Product_Price {
     font-size: 16px;
+  }
+  .card-img-top {
+    height: 120px;
   }
 }

@@ -462,6 +462,9 @@
   .UOC_Orders_Item_Info_Container {
     width: 77%;
   }
+  .UOC_Orders_Item_Pic_Link {
+    height: 45px;
+  }
 }
 
 /* ************************************************* */
@@ -582,10 +585,6 @@
   color: #c9c9c9 !important;
 }
 
-.UODOBA_AddressInfo_Txt,
-.UODOBA_Summery_Txt {
-  font-size: 14px;
-}
 .user_OrderDetails_OrderBody_ProductInfo_Mobile {
   display: none;
 }

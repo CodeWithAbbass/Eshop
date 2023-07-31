@@ -151,8 +151,6 @@ const DAllOrders = () => {
                       status,
                       publish,
                       products,
-                      deliverto,
-                      phone,
                       shipaddress,
                       billaddress,
                     } = order;
@@ -164,7 +162,6 @@ const DAllOrders = () => {
                         CalcDiscount(element?.discount, element?.price) *
                           element?.quantity;
                     });
-
                     return (
                       <div
                         className={`DAllOrders_Item_Body FS_13 ${
@@ -175,7 +172,9 @@ const DAllOrders = () => {
                         <div className="col-5 DAOIB_OrderID_EditStatus d-flex align-items-center justify-content-between">
                           <div className="">
                             <span>{"#" + id || ""}</span>
-                            <span className="ms-2">{deliverto || ""}</span>
+                            <span className="ms-2">
+                              {shipaddress?.deliverto || ""}
+                            </span>
                           </div>
 
                           <Link

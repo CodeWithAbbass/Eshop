@@ -203,7 +203,7 @@
 }
 .AddressBookModal_Body {
   height: 100%;
-  overflow-y: scroll;
-  margin-bottom: 5rem;
+  overflow-y: auto;
+  margin-bottom: 1rem;
 }
 /* ************************************* */

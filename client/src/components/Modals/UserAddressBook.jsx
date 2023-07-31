@@ -9,10 +9,14 @@ import {
   deleteAddress,
   editAddressState,
 } from "../../Store/Slices/orderSlice";
+import { useEffect } from "react";
 const UserAddressBook = () => {
   const dispatch = useDispatch();
   const AddressBook = useSelector((state) => state.Orders.addressbook);
 
+  useEffect(() => {
+    return () => {};
+  }, []);
   return (
     <div
       className="modal AddressBookModal fade"
@@ -84,6 +88,7 @@ const UserAddressBook = () => {
                             shippingaddress,
                             billingaddress,
                           } = item;
+
                           return (
                             <div className="col-lg-6 col-md-12 p-1" key={index}>
                               <div className="UAC_AddressBook p-2">
@@ -109,14 +114,7 @@ const UserAddressBook = () => {
                                       data-bs-toggle="modal"
                                       data-bs-target="#EditAddressBookForm"
                                       onClick={() =>
-                                        dispatch(
-                                          editAddressState({
-                                            aid,
-                                            name,
-                                            phone,
-                                            address,
-                                          })
-                                        )
+                                        dispatch(editAddressState(item))
                                       }
                                     >
                                       Edit

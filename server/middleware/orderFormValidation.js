@@ -3,7 +3,7 @@ const orderFormValidation = async (req, res, next) => {
   const validationRule = {
     products: "required",
     paymentmethod: "required|string",
-    shipaddress: "required|string",
+    shipaddress: "required",
   };
 
   await validator(req.body, validationRule, {}, (err, status) => {

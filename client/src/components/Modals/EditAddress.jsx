@@ -9,6 +9,7 @@ const EditAddress = ({}) => {
     aid: "",
     name: "",
     phone: "",
+    email: "",
     address: "",
   });
 
@@ -17,6 +18,7 @@ const EditAddress = ({}) => {
     setChangeAddress({ ...changeAddress, [name]: value });
   };
   useEffect(() => {
+
     setChangeAddress({ ...EditState });
     return () => {};
   }, [EditState]);
@@ -80,6 +82,19 @@ const EditAddress = ({}) => {
               </div>
               <div className="mb-3 DCC_Checkout_Input_Container">
                 <label htmlFor="Address" className="form-label">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  className="form-control rounded-0 shadow-none DCC_Checkout_Input"
+                  id="email"
+                  name="email"
+                  value={changeAddress.email || ""}
+                  onChange={editAddressOnChange}
+                />
+              </div>
+              <div className="mb-3 DCC_Checkout_Input_Container">
+                <label htmlFor="Address" className="form-label">
                   Address
                 </label>
                 <input
@@ -91,7 +106,7 @@ const EditAddress = ({}) => {
                   onChange={editAddressOnChange}
                 />
               </div>
-              <div className="mb-3 DCC_Checkout_Input_Container">
+              <div className="mb-3 w-100">
                 <label className="form-label"></label>
                 <button
                   className="btn rounded-0 AddNewAddress_Btn_Input_Btn text-center w-100"

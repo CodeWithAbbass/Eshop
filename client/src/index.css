@@ -87,3 +87,10 @@ ul {
 input::placeholder {
   font-size: 12px !important;
 }
+input::-webkit-inner-spin-button,
+input::-webkit-outer-spin-button {
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
+  margin: 0;
+}

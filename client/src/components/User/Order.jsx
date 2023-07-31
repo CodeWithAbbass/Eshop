@@ -1,10 +1,17 @@
 import { Link } from "react-router-dom";
 import "../../Css/User.css";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import DateFormat from "../../helpers/DataFormat";
+import { useEffect } from "react";
+import { getUserOrders } from "../../Store/Slices/orderSlice";
 
 const Order = () => {
+  const dispatch = useDispatch();
   const Orders = useSelector((state) => state.Orders.userOrders);
+  useEffect(() => {
+    dispatch(getUserOrders());
+    return () => {};
+  }, [dispatch]);
   return (
     <div className="User_Orders_Container">
       {Orders.length == 0 && (

@@ -12,6 +12,8 @@ exports.getAllOrders = async (req, res) => {
     }
     for (const iterator of allOrders.rows) {
       iterator.products = JSON.parse(iterator.products);
+      iterator.shipaddress = JSON.parse(iterator.shipaddress);
+      iterator.billaddress = JSON.parse(iterator.billaddress);
     }
     success = true;
     res.send({
@@ -37,6 +39,8 @@ exports.getUserOrders = async (req, res) => {
     }
     for (const iterator of userOrder.rows) {
       iterator.products = JSON.parse(iterator.products);
+      iterator.shipaddress = JSON.parse(iterator.shipaddress);
+      iterator.billaddress = JSON.parse(iterator.billaddress);
     }
     success = true;
     res.send({
@@ -69,6 +73,8 @@ exports.getOrderDetails = async (req, res) => {
     }
     for (const iterator of orderDetails.rows) {
       iterator.products = JSON.parse(iterator.products);
+      iterator.shipaddress = JSON.parse(iterator.shipaddress);
+      iterator.billaddress = JSON.parse(iterator.billaddress);
     }
     success = true;
     res.send({
@@ -90,46 +96,38 @@ exports.placeOrder = async (req, res) => {
       Date.now().toString(5) +
       crypto.randomBytes(5).toString("hex");
     let {
-      deliverto,
-      phone,
       orderid = uid,
       userid = req.user.uid,
 
       products,
-      status = req.body.paymentmethod.toLowerCase() == "card"
+      status = !status && req.body.paymentmethod.toLowerCase() == "card"
         ? "processing"
         : "pending",
       paymentmethod,
       shipaddress,
       billaddress,
     } = req.body;
-    if (!billaddress) {
-      billaddress = shipaddress;
+    if (!billaddress.address) {
+      billaddress = { ...shipaddress };
     }
-    if (
-      !deliverto ||
-      !products ||
-      !paymentmethod ||
-      !shipaddress ||
-      !billaddress
-    ) {
+    if (!products || !paymentmethod || !shipaddress || !billaddress) {
       return res
         .status(400)
         .send({ success, message: "Please Fill the Mandatory Fields." });
     }
     const StrProducts = JSON.stringify(products);
+    const StrShipAddress = JSON.stringify(shipaddress);
+    const StrBillAddress = JSON.stringify(billaddress);
 
     const placeOrder = await pool.query(
-      `INSERT INTO orders (orderid, userid, status, shipaddress, billaddress, paymentmethod, deliverto, phone, products) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`,
+      `INSERT INTO orders (orderid, userid, status, shipaddress, billaddress, paymentmethod, products) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
       [
         orderid,
         userid,
         status,
-        shipaddress,
-        billaddress,
+        StrShipAddress,
+        StrBillAddress,
         paymentmethod,
-        deliverto,
-        phone,
         StrProducts,
       ]
     );
@@ -145,6 +143,8 @@ exports.placeOrder = async (req, res) => {
     );
     for (const iterator of allOrders.rows) {
       iterator.products = JSON.parse(iterator.products);
+      iterator.shipaddress = JSON.parse(iterator.shipaddress);
+      iterator.billaddress = JSON.parse(iterator.billaddress);
     }
     success = true;
     res.send({
@@ -193,6 +193,8 @@ exports.updateStatus = async (req, res) => {
     }
     for (const iterator of allOrders.rows) {
       iterator.products = JSON.parse(iterator.products);
+      iterator.shipaddress = JSON.parse(iterator.shipaddress);
+      iterator.billaddress = JSON.parse(iterator.billaddress);
     }
     success = true;
     res.send({
@@ -226,11 +228,21 @@ exports.cancelOrder = async (req, res) => {
         message: "Order Was Not Cancelled",
       });
     }
-    cancelOrder.rows[0].products = JSON.parse(cancelOrder.rows[0].products);
+    const allOrders = await pool.query("SELECT * FROM orders");
+    if (allOrders.rowCount == 0) {
+      return res
+        .status(404)
+        .send({ success, data: [], message: "No New Orders Yet!" });
+    }
+    for (const iterator of allOrders.rows) {
+      iterator.products = JSON.parse(iterator.products);
+      iterator.shipaddress = JSON.parse(iterator.shipaddress);
+      iterator.billaddress = JSON.parse(iterator.billaddress);
+    }
     success = true;
     res.send({
       success,
-      data: cancelOrder.rows,
+      data: allOrders.rows,
       message: "Order Cancelled Successfully",
     });
   } catch (error) {
@@ -257,10 +269,22 @@ exports.deleteOrder = async (req, res) => {
         .status(500)
         .send({ success, data: [], message: "Order Deletion Process Failed" });
     }
+    const allOrders = await pool.query("SELECT * FROM orders");
+    if (allOrders.rowCount == 0) {
+      return res
+        .status(400)
+        .send({ success, data: [], message: "No New Orders Yet!" });
+    }
+    for (const iterator of allOrders.rows) {
+      iterator.products = JSON.parse(iterator.products);
+      iterator.shipaddress = JSON.parse(iterator.shipaddress);
+      iterator.billaddress = JSON.parse(iterator.billaddress);
+    }
+
     success = true;
     res.send({
       success,
-      data: deleteOrder.rows,
+      data: allOrders.rows,
       message: "Order Deleted Successfully",
     });
   } catch (error) {
