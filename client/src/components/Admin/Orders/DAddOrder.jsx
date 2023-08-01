@@ -1,12 +1,14 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import "../../../Css/Admin/DOrder.css";
-import { useState } from "react";
-import ModeIcon from "@mui/icons-material/Mode";
+import { useEffect, useState } from "react";
 import ClearRoundedIcon from "@mui/icons-material/ClearRounded";
+import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import { Link } from "react-router-dom";
+import SearchProductModal from "../../Modals/SearchProductModal";
 const DAddOrder = () => {
   const dispatch = useDispatch();
-
+  const [AddProductToOrder, setAddProductToOrder] = useState("");
+  const AllProducts = useSelector((state) => state.Products.items);
   const [orderData, setOrderData] = useState({
     shipaddress: {
       deliverto: "",
@@ -23,6 +25,7 @@ const DAddOrder = () => {
     setAsShipAddress: false,
     paymentmethod: "cod",
     products: [],
+    ShippingFee: 1,
   });
   const ShipOnChange = (e) => {
     const { name, value } = e.target;
@@ -62,10 +65,14 @@ const DAddOrder = () => {
     const { value } = e.target;
     setOrderData({ ...orderData, paymentmethod: value });
   };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(orderData);
   };
+  useEffect(() => {
+    return () => {};
+  }, []);
   return (
     <div className="AddOrder">
       <div className="AddOrder_Container">
@@ -76,7 +83,7 @@ const DAddOrder = () => {
             </button>
           </div>
           <div className="DAddProduct_Layout_Container d-flex flex-wrap align-items-start justify-content-between gap-4">
-            <div className="DALC_Forms_Container ">
+            <div className="DALC_Forms_Container">
               <div className="DALC_Forms_OrderData_Container bg-white border">
                 <h5 className="DALC_Forms_OrderData_Heading fw-normal px-3 pt-3">
                   Order Details
@@ -192,7 +199,7 @@ const DAddOrder = () => {
                           </label>
                           <input
                             type="number"
-                            className="form-control rounded-1 shadow-none FS_13 p-1 px-2"
+                            className="form-control rounded-1 shadow-none FS_13 p-1 px-2 HideNumberSpinButton"
                             name="phone"
                             id="bphone"
                             required
@@ -264,7 +271,7 @@ const DAddOrder = () => {
                           </label>
                           <input
                             type="number"
-                            className="form-control rounded-1 shadow-none FS_13 p-1 px-2"
+                            className="form-control rounded-1 shadow-none FS_13 p-1 px-2 HideNumberSpinButton"
                             name="phone"
                             id="sphone"
                             onWheel={function (e) {
@@ -298,29 +305,39 @@ const DAddOrder = () => {
               </div>
               <div className="DALC_Order_Product_Container bg-white mt-4 border">
                 <div className="DALCOPC_Header row w-100 m-0 FS_13 fw-light">
-                  <div className="col-8">Item</div>
-                  <div className="col-4 d-flex align-items-center justify-content-between">
+                  <div className="col-6 col-md-8 d-flex align-items-center ">
+                    <span className="">Item</span>
+                    <button
+                      type="button"
+                      data-bs-toggle="modal"
+                      data-bs-target="#SearchProductModal"
+                      className="btn FS_12 ms-3 rounded-0"
+                    >
+                      Add Item
+                    </button>
+                  </div>
+                  <div className="col-6 col-md-4 d-flex align-items-center">
                     <div className="DALCOPC_Cost_Col">Cost</div>
                     <div className="DALCOPC_Qty_Col">Qty</div>
-                    <div className="DALCOPC_Total_Col text-center">Total</div>
+                    <div className="DALCOPC_Total_Col">Total</div>
                   </div>
                 </div>
                 <div className="DALCOPC_Product_Item_Container">
                   <div className="row w-100 m-0 DALCOPC_Product_Item py-3">
-                    <div className="col-8 d-flex gap-3">
-                      <Link className="DALCOPC_Product_img">
+                    <div className="col-6 col-md-8 d-flex align-items-start gap-3 overflow-hidden">
+                      <Link className="DALCOPC_Product_Link">
                         <img
-                          src="http://localhost:5000/36096aha5b.png"
-                          alt="Product Picture"
-                          className="h-100"
+                          src="https://us1.wpdemo.org/wpd_1690805481_3507/tmp-site-q5qgbnkwqgmtl.us1.wpdemo.org/wp-content/uploads/2020/10/vneck-tee-2-150x150.jpg"
+                          // alt="Product Picture"
+                          className="DALCOPC_Product_img"
                         />
                       </Link>
-                      <div className="DALCOPC_Product_info">
+                      <div className="DALCOPC_Product_info lh-sm">
                         <Link
                           to="#"
-                          className="DALCOPC_Product_Info_Title FS_13"
+                          className="DALCOPC_Product_Info_Title FS_13 text-decoration-underline"
                         >
-                          V-Neck T-Shirt - Red
+                          V-Neck T-Shirt Red
                         </Link>
                         <div className="DALCOPC_Product_Info_SKU text-muted FS_12">
                           <span className="FW_500">SKU: </span>
@@ -328,17 +345,112 @@ const DAddOrder = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="col-4 d-flex align-items-center justify-content-between FS_12 text-muted">
-                      <p className="mb-0 DALCOPC_Cost_Col">$20</p>
-                      <p className="mb-0 DALCOPC_Qty_Col">
-                        <small className="">× </small>
-                        <span>1</span>
-                      </p>
-                      <div className="DALCOPC_Total_Col d-flex align-items-center justify-content-center gap-2 DALCOPC_Total_Price">
-                        <p className="mb-0 ms-4">$20</p>
-                        <div className="DALCOPC_Product_Edit_IconContainer">
-                          <ModeIcon className="DAOIB_Edit_Icon" />
-                          <ClearRoundedIcon className="DAOIB_Edit_Icon ms-1" />
+                    <div className="col-6 col-md-4 d-flex align-items-center justify-content-between FS_12 text-muted">
+                      <div className="DALCOPC_Cost_Col">$20</div>
+                      <div className="DALCOPC_Qty_Col position-relative overflow-hidden pe-2">
+                        <small className="position-absolute top-50 translate-middle-y">
+                          ×
+                        </small>
+                        <input
+                          type="number"
+                          name="quantity"
+                          id="Qty"
+                          // value={1}
+                          onChange={function (e) {
+                            if (e.target.value < 1) {
+                              e.target.value = 1;
+                            }
+                            if (e.target.value > 10) {
+                              e.target.value = 10;
+                            }
+                          }}
+                          className="form-control rounded-0 shadow-none p-0 ps-2 pe-0 FS_12 DALCOPC_Qty_Input lh-sm border-0"
+                        />
+                      </div>
+                      <div className="DALCOPC_Total_Col d-flex align-items-center DALCOPC_Total_Price">
+                        <span className="me-3">$20</span>
+                        <DeleteRoundedIcon className="DAOIB_Edit_Icon DALCOPC_Product_Edit_IconContainer" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="DAOC_OrderData_Total_Container p-3 py-2">
+                  <div className="DALC_OrderData_Total_ItemsSubtotal d-flex align-items-center justify-content-between ms-auto">
+                    <div className="DALC_OrderData_Total_ItemsSubtotal_Heading text-end">
+                      <p className="FS_13 mb-0">Items Subtotal:</p>
+                    </div>
+                    <div className="DALC_OrderData_Total_ItemsSubtotal_Price text-end">
+                      <p className="FS_14 mb-0 fw-bolder ">$40.00</p>
+                    </div>
+                  </div>
+                  <div className="DALC_OrderData_Total_OrderTotal d-flex align-items-center justify-content-between ms-auto">
+                    <div className="DALC_OrderData_Total_ItemsSubtotal_Heading text-end">
+                      <p className="FS_13 mb-0">Order Total:</p>
+                    </div>
+                    <div className="DALC_OrderData_Total_ItemsSubtotal_Price text-end">
+                      <p className="FS_14 mb-0 fw-bolder ">$40.00</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="DALC_Cards_Container_Layout_Container">
+              <div className="DALC_Cards_Item">
+                <div className="accordion rounded-0" id="Card1Container">
+                  <div className="accordion-item rounded-0">
+                    <h2 className="accordion-header rounded-0">
+                      <button
+                        className="accordion-button shadow-none bg-transparent rounded-0 border-bottom p-2 h-100 DALC_Cards_Item_Heading"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#Card1"
+                        aria-expanded="true"
+                        aria-controls="Card1"
+                      >
+                        Product Categories
+                      </button>
+                    </h2>
+                    <div
+                      id="Card1"
+                      className="accordion-collapse collapse show"
+                      aria-labelledby="headingOne"
+                      data-bs-parent="#Card1Container"
+                    >
+                      <div className="accordion-body p-0">
+                        <div className="DALC_Cards_Item_Card1Container_Body">
+                          <ul
+                            className={`DALC_Cards_Item_Product_Cat px-3 py-3 w-100 mb-0`}
+                          >
+                            <li className="DALC_Cards_Item_Product_Cat_Item">
+                              <label className="DALC_Cards_Item_Product_Cat_Item_Label">
+                                <input
+                                  type="checkbox"
+                                  id="ProductCat"
+                                  className="DALC_Cards_Item_Product_Cat_Item_Input"
+                                  name="category"
+                                />
+                                Cat
+                              </label>
+                            </li>
+                          </ul>
+
+                          <div className="DALC_Cat_AddNew_Container mb-3 px-3">
+                            <Link className="DALC_Cat_AddNewCat_Link text-primary text-decoration-underline">
+                              + Add New Category
+                            </Link>
+                            <div className="DALC_Cat_AddNew_Item my-2 d-flex align-items-center justify-content-between gap-3">
+                              <input
+                                type="text"
+                                name="NewCat"
+                                id="NewCat"
+                                placeholder="Enter New Category"
+                                className="form-control DALC_Cat_AddNew_Item_Input DALC_Cat_AddNewCat_Input rounded-0 p-2"
+                              />
+                              <button className="btn shadow-none border rounded-0 p-0 DALC_Cat_AddNewCat_Btn">
+                                Add
+                              </button>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -346,11 +458,9 @@ const DAddOrder = () => {
                 </div>
               </div>
             </div>
-            <div className="DALC_Cards_Container_Layout_Container border">
-              Card
-            </div>
           </div>
         </form>
+        <SearchProductModal />
       </div>
     </div>
   );

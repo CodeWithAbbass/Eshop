@@ -87,10 +87,13 @@ ul {
 input::placeholder {
   font-size: 12px !important;
 }
-input::-webkit-inner-spin-button,
-input::-webkit-outer-spin-button {
-  -webkit-appearance: none !important;
-  -moz-appearance: none !important;
-  appearance: none !important;
+.HideNumberSpinButton::-webkit-inner-spin-button,
+.HideNumberSpinButton::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
   margin: 0;
+}
+.modal-header {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
 }

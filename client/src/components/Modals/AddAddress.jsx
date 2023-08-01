@@ -25,7 +25,7 @@ const AddAddress = () => {
     >
       <div className="modal-dialog modal-dialog-centered" role="document">
         <div className="modal-content rounded-0 position-relative">
-          <div className="modal-header AddressBookModal_Header border-0">
+          <div className="modal-header border-0">
             <span
               className="modal-title AddressBook_Title"
               id="exampleModalLongTitle"

@@ -144,9 +144,6 @@
               Address Book Modal Css
 *************************************************** */
 
-.AddressBookModal_Header.modal-header {
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
-}
 .AddressBook_Title {
   font-size: 12px;
   font-weight: 500;
