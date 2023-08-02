@@ -7,8 +7,8 @@ import { Link } from "react-router-dom";
 import SearchProductModal from "../../Modals/SearchProductModal";
 const DAddOrder = () => {
   const dispatch = useDispatch();
-  const [AddProductToOrder, setAddProductToOrder] = useState("");
-  const AllProducts = useSelector((state) => state.Products.items);
+  const [AddProductToOrder, setAddProductToOrder] = useState([{}]);
+
   const [orderData, setOrderData] = useState({
     shipaddress: {
       deliverto: "",
@@ -65,14 +65,14 @@ const DAddOrder = () => {
     const { value } = e.target;
     setOrderData({ ...orderData, paymentmethod: value });
   };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(orderData);
   };
   useEffect(() => {
     return () => {};
-  }, []);
+  }, [AddProductToOrder]);
+
   return (
     <div className="AddOrder">
       <div className="AddOrder_Container">
@@ -460,7 +460,10 @@ const DAddOrder = () => {
             </div>
           </div>
         </form>
-        <SearchProductModal />
+        <SearchProductModal
+          AddProductToOrder={AddProductToOrder}
+          setAddProductToOrder={setAddProductToOrder}
+        />
       </div>
     </div>
   );

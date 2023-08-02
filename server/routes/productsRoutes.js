@@ -6,6 +6,7 @@ const {
   singleProduct,
   editProduct,
   deleteProduct,
+  searchProduct,
 } = require("../controller/productController");
 
 const { fetchAdmin } = require("../middleware/fetchAdmin");
@@ -13,6 +14,7 @@ const upload = require("../middleware/upload");
 
 router.get("/allproducts", allProduct);
 router.get("/:id", singleProduct);
+router.get("/q/:str", searchProduct);
 router.post("/add", upload.array("images", 5), addProduct);
 router.post("/edit", upload.array("file", 5), editProduct);
 router.delete("/delete/:id", deleteProduct);

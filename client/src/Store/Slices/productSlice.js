@@ -114,11 +114,32 @@ export const deleteProduct = createAsyncThunk("deleteProduct", async (uid) => {
     throw new Error(error);
   }
 });
+export const searchProduct = createAsyncThunk("searchProduct", async (str) => {
+  try {
+    const URL = `${import.meta.env.VITE_API_KEY}/product/q/${str}`;
+    const response = await fetch(URL, {
+      method: "GET",
+      headers: {
+        // "Content-Type": "multipart/form-data",
+      },
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      return result.data;
+    }
+    return [];
+  } catch (error) {
+    throw new Error(error);
+  }
+});
 export const productSlice = createSlice({
   name: "Products",
   initialState: {
     items: [],
     singleproduct: {},
+    filtered: [],
     loading: false,
     error: "",
     layout: {
@@ -209,6 +230,18 @@ export const productSlice = createSlice({
       })
       .addCase(deleteProduct.rejected, (state, action) => {
         state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(searchProduct.pending, (state) => {
+        state.search = true;
+      })
+      .addCase(searchProduct.fulfilled, (state, action) => {
+        state.search = false;
+        state.filtered = [...action.payload];
+        state.error = null;
+      })
+      .addCase(searchProduct.rejected, (state, action) => {
+        state.search = false;
         state.error = action.error.message;
       });
   },

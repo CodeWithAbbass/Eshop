@@ -227,3 +227,29 @@
     text-align: left !important;
   }
 }
+
+/* ************************************************ */
+/*          Add Product To Order Modal Css          */
+/* ************************************************ */
+.DALCOPC_AddProductToOrder_Qty {
+  width: 70px;
+}
+.DALCOPC_Cards_Item .accordion-header {
+  height: 28px;
+  line-height: 100%;
+}
+.DALCOPC_AddProductToOrder_Qty {
+  height: 30px;
+}
+.DALCOPC_AddProductToOrder_Container {
+  z-index: 5;
+  transition: all 0.4s ease-in-out;
+}
+.DALCOPC_Cards_Item .accordion-item,
+.DALCOPC_ExistProduct_Container {
+  border-color: #0ae !important;
+}
+.DALCOPC_ExistProduct_Product:hover {
+  background: #0ae;
+  color: #fff;
+}

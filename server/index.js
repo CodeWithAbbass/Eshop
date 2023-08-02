@@ -44,7 +44,7 @@ app.get("/", (req, res) => {
   res.send("Ping Successfully :)");
 });
 app.all("/*", (req, res) => {
-  res.status(404).send("404 Page Not Found");
+  res.status(404).send("404 API Not Exist");
 });
 app.listen(port, () => {
   console.log(`E-Shop listening on http://localhost:${port}`);

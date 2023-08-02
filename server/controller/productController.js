@@ -422,3 +422,35 @@ exports.deleteProduct = async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 };
+exports.searchProduct = async (req, res) => {
+  try {
+    let success = false;
+    const searchResult = await pool.query(
+      `SELECT * FROM products WHERE title ILIKE $1`,
+      ["%" + req.params.str + "%"]
+    );
+
+    if (searchResult.rowCount == 0) {
+      return res.send({ success, message: "Product Not Found" });
+    }
+
+    for (const iterator of searchResult.rows) {
+      iterator.images = JSON.parse(iterator.images);
+      iterator.saleschedule = JSON.parse(iterator.saleschedule);
+      iterator.attributes = JSON.parse(iterator.attributes);
+      iterator.description = JSON.parse(iterator.description);
+      iterator.category = JSON.parse(iterator.category);
+      iterator.tags = JSON.parse(iterator.tags);
+    }
+
+    success = true;
+    res.send({
+      success,
+      data: searchResult.rows,
+      message: "Product Found Successfully",
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Internal Server Error");
+  }
+};
