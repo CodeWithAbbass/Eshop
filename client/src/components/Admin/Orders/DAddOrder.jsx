@@ -5,9 +5,11 @@ import ClearRoundedIcon from "@mui/icons-material/ClearRounded";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import { Link } from "react-router-dom";
 import SearchProductModal from "../../Modals/SearchProductModal";
+import PriceFormat from "../../../helpers/PriceFormat";
+import CalcDiscount from "../../../helpers/CalcDiscount";
 const DAddOrder = () => {
   const dispatch = useDispatch();
-  const [AddProductToOrder, setAddProductToOrder] = useState([{}]);
+  const [AddProductToOrder, setAddProductToOrder] = useState([]);
 
   const [orderData, setOrderData] = useState({
     shipaddress: {
@@ -25,8 +27,9 @@ const DAddOrder = () => {
     setAsShipAddress: false,
     paymentmethod: "cod",
     products: [],
-    ShippingFee: 1,
   });
+  let TotalPrice = 0;
+  let itemSubtotal = 0;
   const ShipOnChange = (e) => {
     const { name, value } = e.target;
     const ShipAddress = { ...orderData.shipaddress, [name]: value };
@@ -65,9 +68,35 @@ const DAddOrder = () => {
     const { value } = e.target;
     setOrderData({ ...orderData, paymentmethod: value });
   };
+  const QuantityOnChange = (e, item) => {
+    if (e.target.value < 1) {
+      e.target.value = 1;
+    }
+    if (item?.maxquantity && e.target.value > item?.maxquantity) {
+      e.target.value = item.maxquantity;
+    }
+    const NewAddProduct = AddProductToOrder.map((elem, index) => {
+      if (elem.uid == item.uid) {
+        elem.quantity = +e.target.value;
+      }
+      return elem;
+    });
+    setAddProductToOrder([...NewAddProduct]);
+  };
+  const DeleteProduct = (product) => {
+    setAddProductToOrder(
+      AddProductToOrder.filter((item, i) => product.uid != item.uid)
+    );
+  };
   const handleSubmit = (e) => {
+    setOrderData({ ...orderData, products: [...AddProductToOrder] });
     e.preventDefault();
+    if (orderData.products.length == 0) {
+      alert("Please select atleast one product");
+      return;
+    }
     console.log(orderData);
+    // dispatch(placeOrder(confirmOrder));
   };
   useEffect(() => {
     return () => {};
@@ -77,8 +106,16 @@ const DAddOrder = () => {
     <div className="AddOrder">
       <div className="AddOrder_Container">
         <form action="" method="post" onSubmit={handleSubmit}>
-          <div className="DAddOrder_Heading px-2 bg-white mb-4 d-flex align-items-center justify-content-between">
-            <button type="submit" className={`btn DAdmin_Hero_Btn FS_14`}>
+          <div
+            className={`DAddOrder_Heading px-2 bg-white mb-4 d-flex align-items-center justify-content-between`}
+          >
+            <button
+              type="submit"
+              className={`btn DAdmin_Hero_Btn FS_14 ${
+                orderData.products.length == 0 && "text-muted fst-italic"
+              }`}
+              disabled={orderData.products.length == 0}
+            >
               Create Order
             </button>
           </div>
@@ -305,74 +342,104 @@ const DAddOrder = () => {
               </div>
               <div className="DALC_Order_Product_Container bg-white mt-4 border">
                 <div className="DALCOPC_Header row w-100 m-0 FS_13 fw-light">
-                  <div className="col-6 col-md-8 d-flex align-items-center ">
+                  <div className="col-7 col-sm-6 d-flex align-items-center ">
                     <span className="">Item</span>
                     <button
                       type="button"
                       data-bs-toggle="modal"
                       data-bs-target="#SearchProductModal"
-                      className="btn FS_12 ms-3 rounded-0"
+                      className="btn FS_12 ms-3 rounded-0 border"
                     >
                       Add Item
                     </button>
                   </div>
-                  <div className="col-6 col-md-4 d-flex align-items-center">
-                    <div className="DALCOPC_Cost_Col">Cost</div>
+                  <div className="col-5 col-sm-6 d-flex align-items-center">
+                    <div className="DALCOPC_Cost_Col">Price</div>
+                    <div className="DALCOPC_Discount_Col">Discount</div>
                     <div className="DALCOPC_Qty_Col">Qty</div>
-                    <div className="DALCOPC_Total_Col">Total</div>
+                    <div className="DALCOPC_Total_Col text-end">Total</div>
                   </div>
                 </div>
-                <div className="DALCOPC_Product_Item_Container">
-                  <div className="row w-100 m-0 DALCOPC_Product_Item py-3">
-                    <div className="col-6 col-md-8 d-flex align-items-start gap-3 overflow-hidden">
-                      <Link className="DALCOPC_Product_Link">
-                        <img
-                          src="https://us1.wpdemo.org/wpd_1690805481_3507/tmp-site-q5qgbnkwqgmtl.us1.wpdemo.org/wp-content/uploads/2020/10/vneck-tee-2-150x150.jpg"
-                          // alt="Product Picture"
-                          className="DALCOPC_Product_img"
-                        />
-                      </Link>
-                      <div className="DALCOPC_Product_info lh-sm">
-                        <Link
-                          to="#"
-                          className="DALCOPC_Product_Info_Title FS_13 text-decoration-underline"
-                        >
-                          V-Neck T-Shirt Red
-                        </Link>
-                        <div className="DALCOPC_Product_Info_SKU text-muted FS_12">
-                          <span className="FW_500">SKU: </span>
-                          <span className="">woo-vneck-tee-green</span>
+                <div className="DALCOPC_Product_Item_Container overflow-auto">
+                  {AddProductToOrder.map((product, index) => {
+                    const {
+                      title,
+                      price,
+                      discount,
+                      quantity,
+                      sku,
+                      images,
+                      shipfee,
+                    } = product;
+                    let totalShippingFee = quantity * shipfee;
+                    TotalPrice =
+                      TotalPrice +
+                      CalcDiscount(discount, price) * quantity +
+                      totalShippingFee;
+                    itemSubtotal =
+                      itemSubtotal + CalcDiscount(discount, price) * quantity;
+
+                    return (
+                      <div
+                        className="row m-0 DALCOPC_Product_Item py-3"
+                        key={index}
+                      >
+                        <div className="col-7 col-sm-6 d-flex align-items-start gap-3 overflow-hidden">
+                          <Link className="DALCOPC_Product_Link">
+                            <img
+                              src={images?.[0] || ""}
+                              // alt="Product Picture"
+                              className="DALCOPC_Product_img"
+                            />
+                          </Link>
+                          <div className="DALCOPC_Product_info lh-sm">
+                            <Link
+                              to="#"
+                              className="DALCOPC_Product_Info_Title FS_13 text-decoration-underline"
+                            >
+                              {title || ""}
+                            </Link>
+                            <div className="DALCOPC_Product_Info_SKU text-muted FS_12">
+                              <span className="FW_500">SKU: </span>
+                              <span className="">{sku || ""}</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="col-5 col-sm-6 d-flex align-items-center justify-content-between FS_12 text-muted">
+                          <div className="DALCOPC_Cost_Col">
+                            {PriceFormat(price) || 0}
+                          </div>
+                          <div className="DALCOPC_Discount_Col">
+                            {PriceFormat(
+                              price - CalcDiscount(discount, price)
+                            ) || 0}
+                          </div>
+                          <div className="DALCOPC_Qty_Col position-relative overflow-hidden pe-2">
+                            <small className="position-absolute top-50 translate-middle-y">
+                              ×
+                            </small>
+                            <input
+                              type="number"
+                              name="quantity"
+                              id="Qty"
+                              value={quantity || ""}
+                              onChange={(e) => QuantityOnChange(e, product)}
+                              className="form-control rounded-0 shadow-none p-0 ps-2 pe-0 FS_12 DALCOPC_Qty_Input lh-sm border-0"
+                            />
+                          </div>
+                          <div className="DALCOPC_Total_Col d-flex align-items-center justify-content-end DALCOPC_Total_Price">
+                            <DeleteRoundedIcon
+                              className="DAOIB_Edit_Icon DALCOPC_Product_Edit_IconContainer"
+                              onClick={() => DeleteProduct(product)}
+                            />
+                            <span className="ms-3">
+                              {PriceFormat(CalcDiscount(discount, price))}
+                            </span>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <div className="col-6 col-md-4 d-flex align-items-center justify-content-between FS_12 text-muted">
-                      <div className="DALCOPC_Cost_Col">$20</div>
-                      <div className="DALCOPC_Qty_Col position-relative overflow-hidden pe-2">
-                        <small className="position-absolute top-50 translate-middle-y">
-                          ×
-                        </small>
-                        <input
-                          type="number"
-                          name="quantity"
-                          id="Qty"
-                          // value={1}
-                          onChange={function (e) {
-                            if (e.target.value < 1) {
-                              e.target.value = 1;
-                            }
-                            if (e.target.value > 10) {
-                              e.target.value = 10;
-                            }
-                          }}
-                          className="form-control rounded-0 shadow-none p-0 ps-2 pe-0 FS_12 DALCOPC_Qty_Input lh-sm border-0"
-                        />
-                      </div>
-                      <div className="DALCOPC_Total_Col d-flex align-items-center DALCOPC_Total_Price">
-                        <span className="me-3">$20</span>
-                        <DeleteRoundedIcon className="DAOIB_Edit_Icon DALCOPC_Product_Edit_IconContainer" />
-                      </div>
-                    </div>
-                  </div>
+                    );
+                  })}
                 </div>
                 <div className="DAOC_OrderData_Total_Container p-3 py-2">
                   <div className="DALC_OrderData_Total_ItemsSubtotal d-flex align-items-center justify-content-between ms-auto">
@@ -380,15 +447,19 @@ const DAddOrder = () => {
                       <p className="FS_13 mb-0">Items Subtotal:</p>
                     </div>
                     <div className="DALC_OrderData_Total_ItemsSubtotal_Price text-end">
-                      <p className="FS_14 mb-0 fw-bolder ">$40.00</p>
+                      <p className="FS_14 mb-0 fw-bolder ">
+                        {PriceFormat(itemSubtotal) || "$0"}
+                      </p>
                     </div>
                   </div>
                   <div className="DALC_OrderData_Total_OrderTotal d-flex align-items-center justify-content-between ms-auto">
-                    <div className="DALC_OrderData_Total_ItemsSubtotal_Heading text-end">
+                    <div className="DALC_OrderData_Total_OrderTotal_Heading text-end">
                       <p className="FS_13 mb-0">Order Total:</p>
                     </div>
-                    <div className="DALC_OrderData_Total_ItemsSubtotal_Price text-end">
-                      <p className="FS_14 mb-0 fw-bolder ">$40.00</p>
+                    <div className="DALC_OrderData_Total_OrderTotal_Price text-end">
+                      <p className="FS_14 mb-0 fw-bolder ">
+                        {PriceFormat(TotalPrice) || "$0"}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -403,15 +474,15 @@ const DAddOrder = () => {
                         className="accordion-button shadow-none bg-transparent rounded-0 border-bottom p-2 h-100 DALC_Cards_Item_Heading"
                         type="button"
                         data-bs-toggle="collapse"
-                        data-bs-target="#Card1"
+                        data-bs-target="#RightCard"
                         aria-expanded="true"
-                        aria-controls="Card1"
+                        aria-controls="RightCard"
                       >
                         Product Categories
                       </button>
                     </h2>
                     <div
-                      id="Card1"
+                      id="RightCard"
                       className="accordion-collapse collapse show"
                       aria-labelledby="headingOne"
                       data-bs-parent="#Card1Container"

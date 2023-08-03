@@ -101,6 +101,7 @@ exports.addProduct = async (req, res) => {
       brand,
       saleprice,
       saleschedule,
+      shipfee,
       stockmanagement,
       maxquantity,
       allowbackorder,
@@ -154,7 +155,8 @@ exports.addProduct = async (req, res) => {
       smalldesc,
       description,
       tags,
-      images) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20) RETURNING *`,
+      images,
+      shipfee) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21) RETURNING *`,
       [
         uid,
         parseFloat(rating),
@@ -176,6 +178,7 @@ exports.addProduct = async (req, res) => {
         description,
         tags,
         images,
+        shipfee,
       ]
     );
     if (addProduct.rowCount == 0) {
@@ -221,6 +224,7 @@ exports.editProduct = async (req, res) => {
       brand,
       saleprice,
       saleschedule,
+      shipfee,
       stockmanagement,
       maxquantity,
       allowbackorder,
@@ -297,7 +301,8 @@ exports.editProduct = async (req, res) => {
         smalldesc = $16,
         description = $17,
         tags = $18,
-        images = $19
+        images = $19,
+        shipfee = $20
     WHERE uid = $1
     RETURNING *;
     `,
@@ -321,6 +326,7 @@ exports.editProduct = async (req, res) => {
         description,
         tags,
         images,
+        parseFloat(shipfee),
       ]
     );
     if (updateProduct.rowCount == 0) {

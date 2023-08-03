@@ -117,7 +117,8 @@
 }
 
 .DALCOPC_Cost_Col,
-.DALCOPC_Qty_Col {
+.DALCOPC_Qty_Col,
+.DALCOPC_Discount_Col {
   width: 90px;
 }
 .DALCOPC_Total_Col {
@@ -165,7 +166,8 @@
   width: 250px;
   color: #3c434a;
 }
-.DALC_OrderData_Total_ItemsSubtotal_Heading {
+.DALC_OrderData_Total_ItemsSubtotal_Heading,
+.DALC_OrderData_Total_OrderTotal_Heading {
   width: 100px;
 }
 .DALCOPC_ExistProduct_Container {
@@ -210,6 +212,7 @@
 .DALCOPC_AddProductToOrder_Selected_Product_Qty {
   width: 50px;
 }
+
 @media (max-width: 768px) {
   .DALCOPC_Cost_Col,
   .DALCOPC_Qty_Col {
@@ -223,11 +226,17 @@
     width: 100%;
     color: #3c434a;
   }
-  .DALC_OrderData_Total_ItemsSubtotal_Heading {
+  .DALC_OrderData_Total_ItemsSubtotal_Heading,
+  .DALC_OrderData_Total_OrderTotal_Heading {
     text-align: left !important;
   }
 }
-
+@media (max-width: 600px) {
+  .DALCOPC_Discount_Col,
+  .DALCOPC_Cost_Col {
+    display: none;
+  }
+}
 /* ************************************************ */
 /*          Add Product To Order Modal Css          */
 /* ************************************************ */
@@ -252,4 +261,10 @@
 .DALCOPC_ExistProduct_Product:hover {
   background: #0ae;
   color: #fff;
+}
+.SearchProductModal .modal-body {
+  min-height: 300px;
+  max-height: 300px;
+  overflow: auto;
+  margin-bottom: 1rem;
 }

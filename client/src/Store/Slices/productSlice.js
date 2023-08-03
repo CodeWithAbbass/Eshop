@@ -161,6 +161,10 @@ export const productSlice = createSlice({
       }
       return state;
     },
+    clearFilter(state, action) {
+      state.filtered = [];
+      return state;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -248,5 +252,5 @@ export const productSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { changeLayout } = productSlice.actions;
+export const { changeLayout, clearFilter } = productSlice.actions;
 export default productSlice.reducer;

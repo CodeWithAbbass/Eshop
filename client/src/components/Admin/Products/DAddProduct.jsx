@@ -27,6 +27,7 @@ const DAddProduct = () => {
     discount: null,
     saleprice: null,
     saleschedule: { start: "", end: "" },
+    shipfee: 0,
     stockmanagement: false,
     maxquantity: null,
     allowbackorder: false,
@@ -236,6 +237,7 @@ const DAddProduct = () => {
     formData.append("discount", productData.discount);
     formData.append("saleprice", productData.saleprice);
     formData.append("saleschedule", JSON.stringify(productData.saleschedule));
+    formData.append("shipfee", productData.shipfee);
     formData.append("stockmanagement", productData.stockmanagement);
     formData.append("maxquantity", productData.maxquantity);
     formData.append("allowbackorder", productData.allowbackorder);
@@ -790,7 +792,7 @@ const DAddProduct = () => {
                                 </div>
                                 <div className="DALCFPDIRI_Dimensions mt-3">
                                   <label
-                                    htmlFor="productStock"
+                                    htmlFor="length"
                                     className="DALCFPDIR_Label DALCFPDIR_Label_Dimensions"
                                   >
                                     Dimensions (cm)
@@ -823,9 +825,25 @@ const DAddProduct = () => {
                                     onChange={onChangeAttributes}
                                   />
                                 </div>
+                                <div className="DALCFPDIRI_ShippingFee mt-3">
+                                  <label
+                                    htmlFor="shipfee"
+                                    className="DALCFPDIR_Label DALCFPDIR_Label_Dimensions"
+                                  >
+                                    Shipping Fee
+                                  </label>
+                                  <input
+                                    type="number"
+                                    name="shipfee"
+                                    id="shipfee"
+                                    placeholder="$"
+                                    className="form-control shadow-none d-inline border-2 DALCFPDIR_Input DALCFPDIR_Input_Dimensions"
+                                    value={productData?.shipfee || ""}
+                                    onChange={onChangeAddProduct}
+                                  />
+                                </div>
                               </div>
                             </div>
-
                             <div className="DALCFPDIR_Item DALCF_Product_Data_Item_Right_Images h-100 w-100 p-3">
                               <div className="DALCF_Product_Data_Item_Right_Images_Container">
                                 <div className="DALCFPDIRI_Images">

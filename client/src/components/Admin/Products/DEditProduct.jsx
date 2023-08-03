@@ -34,6 +34,7 @@ const DEditProduct = () => {
     discount: null,
     saleprice: null,
     saleschedule: { start: "", end: "" },
+    shipfee: 0,
     stockmanagement: false,
     maxquantity: null,
     allowbackorder: false,
@@ -281,6 +282,7 @@ const DEditProduct = () => {
     formData.append("discount", productData.discount);
     formData.append("saleprice", productData.saleprice);
     formData.append("saleschedule", JSON.stringify(productData.saleschedule));
+    formData.append("shipfee", productData.shipfee);
     formData.append("stockmanagement", productData.stockmanagement);
     formData.append("maxquantity", productData.maxquantity);
     formData.append("allowbackorder", productData.allowbackorder);
@@ -882,7 +884,7 @@ const DEditProduct = () => {
                                   </div>
                                   <div className="DALCFPDIRI_Dimensions mt-3">
                                     <label
-                                      htmlFor="productStock"
+                                      htmlFor="productDimension"
                                       className="DALCFPDIR_Label DALCFPDIR_Label_Dimensions"
                                     >
                                       Dimensions (cm)
@@ -919,6 +921,23 @@ const DEditProduct = () => {
                                         productData?.attributes?.height || ""
                                       }
                                       onChange={onChangeAttributes}
+                                    />
+                                  </div>
+                                  <div className="DALCFPDIRI_ShippingFee mt-3">
+                                    <label
+                                      htmlFor="shipfee"
+                                      className="DALCFPDIR_Label DALCFPDIR_Label_Dimensions"
+                                    >
+                                      Shipping Fee
+                                    </label>
+                                    <input
+                                      type="number"
+                                      name="shipfee"
+                                      id="shipfee"
+                                      placeholder="$"
+                                      className="form-control shadow-none d-inline border-2 DALCFPDIR_Input DALCFPDIR_Input_Dimensions"
+                                      value={productData?.shipfee || ""}
+                                      onChange={onChangeAddProduct}
                                     />
                                   </div>
                                 </div>
@@ -986,7 +1005,6 @@ const DEditProduct = () => {
             </div>
             <div className="DALC_Cards_Container_Layout_Container">
               {/* Category  */}
-
               <div className="DALC_Cards_Container ">
                 <div className="DALC_Cards_Item">
                   <div className="accordion rounded-0" id="Card1Container">
