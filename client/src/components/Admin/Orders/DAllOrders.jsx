@@ -158,7 +158,7 @@ const DAllOrders = () => {
                     products?.forEach((element) => {
                       AfterDiscountPrice =
                         AfterDiscountPrice +
-                        element.ShippingFee +
+                        element.shipfee +
                         CalcDiscount(element?.discount, element?.price) *
                           element?.quantity;
                     });
@@ -324,7 +324,7 @@ const DAllOrders = () => {
                       products?.forEach((element) => {
                         AfterDiscountPrice =
                           AfterDiscountPrice +
-                          element.ShippingFee +
+                          element.shipfee +
                           CalcDiscount(element?.discount, element?.price) *
                             element?.quantity;
                       });

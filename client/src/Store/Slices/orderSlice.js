@@ -63,20 +63,14 @@ export const getUserOrders = createAsyncThunk("getUserOrders", async (data) => {
 export const getOrderDetails = createAsyncThunk(
   "getOrderDetails",
   async (orderid) => {
-    const authtoken = localStorage.getItem("authtoken");
-    if (!authtoken) {
-      return [];
-    }
     try {
       const URL = `${import.meta.env.VITE_API_KEY}/order/details/${orderid}`;
       const response = await fetch(URL, {
         method: "GET",
         headers: {
-          authtoken,
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        credentials: "include",
       });
 
       const result = await response.json();
@@ -97,6 +91,35 @@ export const placeOrder = createAsyncThunk("placeOrder", async (data) => {
   }
   try {
     const URL = `${import.meta.env.VITE_API_KEY}/order/confirm`;
+    const response = await fetch(URL, {
+      method: "POST",
+      headers: {
+        authtoken,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify(data),
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      alert(result.message);
+      return result.data;
+    }
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+export const customOrder = createAsyncThunk("customOrder", async (data) => {
+  const authtoken = localStorage.getItem("authtoken");
+  if (!authtoken) {
+    alert("Please Login Before Place Order");
+    return [];
+  }
+  try {
+    const URL = `${import.meta.env.VITE_API_KEY}/order/cconfirm`; // cconfirm stand for Custom Order Confirmation
     const response = await fetch(URL, {
       method: "POST",
       headers: {
@@ -443,13 +466,23 @@ const orderSlice = createSlice({
         state.loading = true;
       })
       .addCase(placeOrder.fulfilled, (state, action) => {
-        // console.log(action, "from fulfiled");
-
         state.loading = false;
         state.orders = action.payload;
         state.error = null;
       })
       .addCase(placeOrder.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(customOrder.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(customOrder.fulfilled, (state, action) => {
+        state.loading = false;
+        state.orders = [...state.orders];
+        state.error = null;
+      })
+      .addCase(customOrder.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       })

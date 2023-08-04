@@ -15,14 +15,14 @@ const OrderDetails = () => {
   const { id } = useParams();
   let dispatch = useDispatch();
   const OrderInfo = useSelector((state) => state.Orders.orderDetails);
-  const ShippingFee = useSelector((state) => state.Cart.shippingFee);
+  let ShippingFee = 0;
 
   useEffect(() => {
     dispatch(getOrderDetails(id));
   }, []);
 
   if (OrderInfo.length == 0) {
-    return <div className="User_OrderDetails">Order Not Found</div>;
+    return <div className="User_OrderDetails FS_14">Order Not Found</div>;
   }
   let totalBill = 0;
   let totalDiscount = 0;
@@ -49,12 +49,12 @@ const OrderDetails = () => {
       <div className="User_OrderDetails_OrderHeader_Container bg-white p-2 my-3 d-flex align-items-center justify-content-between">
         <div className="User_OrderDetails_OrderHeader_Left">
           <div className="UOC_Orders_Header_OrderId">
-            <span>Order</span>
+            <span>Order#</span>
             <Link
               className="UOC_Orders_Header_Order_Number ms-1"
               to={`/user/orderdetails/${orderid}`}
             >
-              #{orderid.length > 20 ? orderid.slice(0, 20) : orderid || ""}
+              {orderid.slice(0, 15) + "..." || ""}
             </Link>
           </div>
           <div className="UOC_Orders_Header_Requested mb-0">
@@ -230,7 +230,16 @@ const OrderDetails = () => {
             <div className="user_OrderDetails_OrderBody_ProductInfo_Desktop">
               {products.length > 0 &&
                 products.map((item, index) => {
-                  let { uid, title, discount, price, quantity, images } = item;
+                  let {
+                    uid,
+                    title,
+                    discount,
+                    price,
+                    quantity,
+                    images,
+                    shipfee,
+                  } = item;
+                  ShippingFee = ShippingFee + shipfee * quantity;
 
                   return (
                     <div
@@ -242,7 +251,7 @@ const OrderDetails = () => {
                       </div>
                       <div className="col-5 UOC_Orders_txt">{title}</div>
                       <div className="col-3 UOC_Orders_txt text-end p-0">
-                        {price || ""}
+                        {PriceFormat(price) || ""}
                       </div>
                       <div className="col-3 UODOBP_Quantity text-end">
                         <span className="UODOBP_Quantity_Heading">Qty:</span>
@@ -263,14 +272,14 @@ const OrderDetails = () => {
                       key={index}
                     >
                       <Link
-                        className="col-2 text-center"
+                        className="col-2 p-0 text-center"
                         to={`/product/${uid}`}
                       >
                         <img
                           src={images[0] || ""}
                           alt=""
                           className=""
-                          style={{ width: "60px", height: "60px" }}
+                          // style={{ width: "60px", height: "60px" }}
                         />
                       </Link>
                       <Link
@@ -282,7 +291,9 @@ const OrderDetails = () => {
                       <div className="col-4 UODOBP_Quantity text-end">
                         <span className="UODOBP_Quantity_Heading">Qty:</span>
                         <span className="ms-1 text-dark">{quantity}</span>
-                        <p className="text-black mb-0 mt-2">{price}</p>
+                        <p className="text-black mb-0 mt-2">
+                          {PriceFormat(price)}
+                        </p>
                       </div>
                     </div>
                   );
@@ -335,7 +346,9 @@ const OrderDetails = () => {
                 </div>
                 <div className="UODOBA_Summery_ShippingFee d-flex align-items-center justify-content-between mt-1">
                   <p className="mb-0 FS_14">Delivery Fee</p>
-                  <p className="mb-0 FS_14">{PriceFormat(ShippingFee)}</p>
+                  <p className="mb-0 FS_14">
+                    {ShippingFee > 0 ? PriceFormat(ShippingFee) : "Free"}
+                  </p>
                 </div>
                 <div className="UODOBA_Summery_Discount d-flex align-items-center justify-content-between border-bottom pb-3 mt-1">
                   <p className="mb-0 FS_14">Discount</p>

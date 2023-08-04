@@ -55,6 +55,7 @@ import AddAddress from "./components/Modals/AddAddress";
 import DeliveryMethod from "./components/Modals/DeliveryMethod";
 import OrderDetails from "./components/User/OrderDetails";
 import DEditOrder from "./components/Admin/Orders/DEditOrder";
+import TrackOrder from "./components/TrackOrder";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -98,6 +99,7 @@ const App = () => {
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/categories" element={<Categories />} />
+          <Route path="/track-order" element={<TrackOrder />} />
           <Route path="/signup" element={<UserSignup />} />
           <Route path="/login" element={<UserLogin />} />
           <Route path="/user" element={<User />}>

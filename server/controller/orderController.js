@@ -64,8 +64,8 @@ exports.getOrderDetails = async (req, res) => {
       return res.send({ success, data: [], message: "Order Not Found" });
     }
     const orderDetails = await pool.query(
-      `SELECT * FROM orders WHERE userid = $1 AND orderid = $2`,
-      [req.user.uid, req.params.id]
+      `SELECT * FROM orders WHERE orderid = $1`,
+      [req.params.id]
     );
     if (orderDetails.rowCount == 0 || orderDetails.rows.length == 0) {
       success = true;
@@ -98,7 +98,6 @@ exports.placeOrder = async (req, res) => {
     let {
       orderid = uid,
       userid = req.user.uid,
-
       products,
       status = !status && req.body.paymentmethod.toLowerCase() == "card"
         ? "processing"
@@ -151,6 +150,65 @@ exports.placeOrder = async (req, res) => {
       success,
       data: allOrders.rows,
       message: "Order Placed Successfully",
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Internal Server Error");
+  }
+};
+exports.placeCustomOrder = async (req, res) => {
+  try {
+    let success = false;
+    // UOI stand for Unique Order ID
+    let UOI =
+      crypto.randomBytes(5).toString("hex") +
+      Date.now().toString(5) +
+      crypto.randomBytes(5).toString("hex");
+    let {
+      orderid = UOI,
+      userid = "Guest",
+      products,
+      status = !req?.body?.status &&
+      req?.body?.paymentmethod?.toLowerCase() == "card"
+        ? "processing"
+        : "pending",
+      paymentmethod,
+      shipaddress,
+      billaddress,
+    } = req.body;
+    if (!billaddress.address) {
+      billaddress = { ...shipaddress };
+    }
+    if (!products || !paymentmethod || !shipaddress || !billaddress) {
+      return res
+        .status(400)
+        .send({ success, message: "Please Fill the Mandatory Fields." });
+    }
+    const StrProducts = JSON.stringify(products);
+    const StrShipAddress = JSON.stringify(shipaddress);
+    const StrBillAddress = JSON.stringify(billaddress);
+
+    const placeOrder = await pool.query(
+      `INSERT INTO orders (orderid, userid, status, shipaddress, billaddress, paymentmethod, products) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
+      [
+        orderid,
+        userid,
+        status,
+        StrShipAddress,
+        StrBillAddress,
+        paymentmethod,
+        StrProducts,
+      ]
+    );
+    if (placeOrder.rowCount == 0) {
+      return res
+        .status(500)
+        .send({ success, message: "Order Confirmation Failed" });
+    }
+    success = true;
+    res.send({
+      success,
+      message: "Custom Order Placed Successfully",
     });
   } catch (error) {
     console.error(error.message);

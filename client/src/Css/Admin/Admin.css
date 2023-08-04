@@ -404,7 +404,7 @@
     0 0.0625rem 0.125rem rgba(22, 170, 255, 0.5);
   transition: color 0.15s, background-color 0.15s, border-color 0.15s,
     box-shadow 0.15s;
-  color: #fff !important;
+  color: #fff;
   background-color: #16aaff;
   border-color: #16aaff;
   font-size: 0.8rem !important;

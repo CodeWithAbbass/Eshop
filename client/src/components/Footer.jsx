@@ -4,6 +4,7 @@ import HomeIcon from "@mui/icons-material/Home";
 import WindowIcon from "@mui/icons-material/Window";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import PersonIcon from "@mui/icons-material/Person";
+import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 const Footer = () => {
@@ -276,9 +277,9 @@ const Footer = () => {
               }`}
             >
               <div className="MobileFooter_Link_Icon_Container">
-                <PersonIcon className="MobileFooter_Link_Icon" />
+                <MenuRoundedIcon className="MobileFooter_Link_Icon" />
               </div>
-              <span className="MobileFooter_Link_Txt">Account</span>
+              <span className="MobileFooter_Link_Txt">Menu</span>
             </Link>
           </div>
         </nav>

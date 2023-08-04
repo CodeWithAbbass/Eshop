@@ -1,0 +1,29 @@
+.TrackOrder_Container {
+  min-height: 300px;
+}
+.TrackOrder_TrackInput {
+  border-radius: 3px;
+  transition: all 0.4s ease-in-out !important;
+}
+.TrackOrder_TrackInput:focus {
+  border: 1px solid #40cdbd;
+}
+.TrackOrder_TrackBtn:focus,
+.TrackOrder_TrackBtn:hover {
+  background-color: #40cdbd;
+  color: #fff;
+}
+.TrackOrder_TrackBtn {
+  font-weight: 400;
+  font-size: 14px;
+  border: 1px solid #40cdbd;
+  border-radius: 3px;
+  color: #40cdbd;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+@media (max-width: 768px) {
+  .TrackOrder_Container {
+    padding-top: 6rem !important;
+  }
+}

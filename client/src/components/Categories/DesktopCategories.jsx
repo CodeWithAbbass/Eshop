@@ -12,6 +12,7 @@ import ProductCard from "../Home/ProductCard";
 import { changeLayout } from "../../Store/Slices/productSlice";
 const DesktopCategories = () => {
   const dispatch = useDispatch();
+  const AllCat = useSelector((state) => state.Categories.categories);
   const [service, setService] = useState({
     Installments: false,
     CashOnDelivery: true,
@@ -24,16 +25,16 @@ const DesktopCategories = () => {
     India: false,
   });
   const [sort, setSort] = useState("Best Match");
-  const CategoriesItems = [
-    { LinkTitle: "Men Fashion Watches", ItemLink: "#" },
-    { LinkTitle: "Women Fashion Watches", ItemLink: "#" },
-    { LinkTitle: "Men Casual Watches", ItemLink: "#" },
-    { LinkTitle: "Men Sports Watches", ItemLink: "#" },
-    { LinkTitle: "Men Business Watches", ItemLink: "#" },
-    { LinkTitle: "Women Casual Watches", ItemLink: "#" },
-    { LinkTitle: "Women Business Watches", ItemLink: "#" },
-    { LinkTitle: "SmartWatches", ItemLink: "#" },
-  ];
+  // const AllCat = [
+  //   { LinkTitle: "Men Fashion Watches", ItemLink: "#" },
+  //   { LinkTitle: "Women Fashion Watches", ItemLink: "#" },
+  //   { LinkTitle: "Men Casual Watches", ItemLink: "#" },
+  //   { LinkTitle: "Men Sports Watches", ItemLink: "#" },
+  //   { LinkTitle: "Men Business Watches", ItemLink: "#" },
+  //   { LinkTitle: "Women Casual Watches", ItemLink: "#" },
+  //   { LinkTitle: "Women Business Watches", ItemLink: "#" },
+  //   { LinkTitle: "SmartWatches", ItemLink: "#" },
+  // ];
   const onChangeService = (input) => {
     setService((prevState) => {
       const newState = { ...prevState };
@@ -83,20 +84,19 @@ const DesktopCategories = () => {
             <div className="Categories_Links_Container border-bottom pb-3">
               <p className="Categories_Links_Heading mb-2">Categories</p>
               <div className="Categories_Link_Item_Container">
-                {CategoriesItems.length == 0
-                  ? ""
-                  : CategoriesItems.map((item, index) => {
-                      let { LinkTitle, ItemLink } = item;
-                      return (
-                        <Link
-                          className="Categories_Link_Item d-block my-1"
-                          to={ItemLink}
-                          key={index}
-                        >
-                          {LinkTitle}
-                        </Link>
-                      );
-                    })}
+                {AllCat?.length > 0 &&
+                  AllCat?.map((item, index) => {
+                    let { cid, name, description } = item;
+                    return (
+                      <Link
+                        className="Categories_Link_Item d-block my-1"
+                        // to={ItemLink}
+                        key={index}
+                      >
+                        {name || ""}
+                      </Link>
+                    );
+                  })}
               </div>
             </div>
             <div className="Categories_Service_Item_Container mt-4 border-bottom pb-3">

@@ -100,11 +100,13 @@ const Header = () => {
             <li className="d-inline p-0">
               <Link
                 className={`TopBar_Link ${
-                  location.pathname == "/user/order" ? "active  Bg_Primary" : ""
+                  location.pathname == "/track-order"
+                    ? "active  Bg_Primary"
+                    : ""
                 }`}
-                to="/user/order"
+                to="/track-order"
               >
-                ORDER
+                Track My Order
               </Link>
             </li>
             <li className="d-inline p-0">
@@ -256,14 +258,14 @@ const Header = () => {
                   </li>
                   <li>
                     <Link
-                      to="/user/order"
+                      to="/track-order"
                       className={`dropdown-item d-block TopBar_Link ${
-                        location.pathname == "/user/order"
+                        location.pathname == "/track-order"
                           ? "active  Bg_Primary"
                           : ""
                       }`}
                     >
-                      Order
+                      Track My Order
                     </Link>
                   </li>
                   <li>

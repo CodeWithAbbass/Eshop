@@ -10,12 +10,15 @@ import Inventory2OutlinedIcon from "@mui/icons-material/Inventory2Outlined";
 import ReplayOutlinedIcon from "@mui/icons-material/ReplayOutlined";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import HomeIcon from "@mui/icons-material/Home";
+import TrackChangesRoundedIcon from "@mui/icons-material/TrackChangesRounded";
 import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 const MobileUser = () => {
   let User = useSelector((state) => state.User.user);
+  let OrderDetails = useSelector((state) => state.Orders.orderDetails);
+  const location = useLocation();
   const ToggleLeft = (Page) => {
     const LeftSide = document.querySelector(
       ".Mobile_User_Fixed_Page_ContainerLeft"
@@ -36,6 +39,18 @@ const MobileUser = () => {
       MMHeader.classList.remove("D_None_MainHeader");
     };
   }, []);
+  useEffect(() => {
+    const URL = location.pathname.split("/");
+    const Path = URL[1] + "/" + URL[2];
+    if (Object.keys(OrderDetails).length > 0 && Path == "user/orderdetails") {
+      const LeftSide = document.querySelector(
+        ".Mobile_User_Fixed_Page_ContainerLeft"
+      );
+      if (!LeftSide.classList.contains("active")) {
+        ToggleLeft();
+      }
+    }
+  }, [Object.keys(OrderDetails).length]);
   return (
     <div className="MobileUser">
       <div className="Mobile_User_Header d-flex align-items-center justify-content-between">
@@ -149,6 +164,17 @@ const MobileUser = () => {
               <span className="Mobile_User_Link_Txt ms-2">
                 My Cancellations
               </span>
+            </Link>
+          </li>
+          <li className="list-group-item p-0 Mobile_User_Nav_li">
+            <Link
+              to="/track-order"
+              className="px-3 py-2 d-flex Mobile_User_Nav_Link"
+            >
+              <span className="Mobile_User_Icon_Container">
+                <TrackChangesRoundedIcon className="Mobile_User_Link_Icon" />
+              </span>
+              <span className="Mobile_User_Link_Txt ms-2">Track My Order</span>
             </Link>
           </li>
         </ul>

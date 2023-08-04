@@ -56,7 +56,7 @@ const EditOrderStatus = ({ updateOrderStatus, setUpdateOrderStatus }) => {
             </div>
           </div>
           <div className="modal-body p-0">
-            <div className="EditOrderStatus_OrderInfo py-3 px-4">
+            <div className="EditOrderStatus_OrderInfo p-3">
               <h6>Billing Details</h6>
 
               {billaddress && (
@@ -161,13 +161,13 @@ const EditOrderStatus = ({ updateOrderStatus, setUpdateOrderStatus }) => {
 
             <div className="EditOrderStatus_Product_Container mt-4">
               <div className="EditOrderStatus_Product_Header row m-0 w-100 FS_13 px-3">
-                <div className="col-6 text-start">
+                <div className="col-6 ps-0 text-start">
                   <p className="mb-0 fw-semibold">Product</p>
                 </div>
                 <div className="col-3">
                   <p className="mb-0 fw-semibold">Quantity</p>
                 </div>
-                <div className="col-3 text-end">
+                <div className="col-3 pe-0 text-end">
                   <p className="mb-0 fw-semibold">Total</p>
                 </div>
               </div>
@@ -175,7 +175,7 @@ const EditOrderStatus = ({ updateOrderStatus, setUpdateOrderStatus }) => {
                 {products?.length > 0 &&
                   products?.map((product, index) => {
                     let AfterDiscount = 0;
-                    const { title, discount, quantity, price, ShippingFee } =
+                    const { title, discount, quantity, price, shipfee } =
                       product;
                     AfterDiscount =
                       AfterDiscount + CalcDiscount(discount, price) * quantity;
@@ -186,15 +186,15 @@ const EditOrderStatus = ({ updateOrderStatus, setUpdateOrderStatus }) => {
                         }`}
                         key={index}
                       >
-                        <div className="col-6 text-start">
+                        <div className="col-6 ps-0 text-start">
                           <p className="mb-0 ">{title || ""}</p>
                         </div>
                         <div className="col-3 text-center">
                           <p className="mb-0 ">{quantity || ""}</p>
                         </div>
-                        <div className="col-3 text-end">
+                        <div className="col-3 pe-0 text-end">
                           <p className="mb-0 ">
-                            {PriceFormat(AfterDiscount + ShippingFee)}
+                            {PriceFormat(AfterDiscount + shipfee)}
                           </p>
                         </div>
                       </div>
@@ -203,7 +203,7 @@ const EditOrderStatus = ({ updateOrderStatus, setUpdateOrderStatus }) => {
               </div>
             </div>
           </div>
-          <div className="modal-footer d-flex align-items-center justify-content-between">
+          <div className="modal-footer px-3 py-2 d-flex align-items-center justify-content-between">
             <div className="EditOrderModal_StatusBtn_Container d-flex flex-wrap align-items-center">
               {/* pending || processing || shipped || delivered || returned || cancelled */}
               <button

@@ -9,7 +9,7 @@ import { updateUser } from "../Store/Slices/userSlice";
 const User = () => {
   const dispatch = useDispatch();
   let User = useSelector((state) => state.User.user);
-
+  
   const [credentials, setCredentials] = useState({
     name: "",
     email: "",
