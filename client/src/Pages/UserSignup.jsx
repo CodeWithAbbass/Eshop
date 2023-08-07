@@ -77,6 +77,9 @@ const UserSignup = () => {
                 placeholder="Please Enter Your Phone Number"
                 value={credentials.phone}
                 onChange={onChange}
+                onWheel={function (e) {
+                  e.target.blur();
+                }}
               />
               {/* <div className="valid UserForm_Input_Phone">
                 Looks good!

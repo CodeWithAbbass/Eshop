@@ -109,6 +109,7 @@ const Admin = () => {
       subcategories: [
         { subheading: "All Orders", link: "orders/allorders" },
         { subheading: "Add Order", link: "orders/add" },
+        { subheading: "Coupons", link: "shop-coupon" },
       ],
     },
     {

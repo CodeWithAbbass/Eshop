@@ -1,0 +1,75 @@
+.DCoupon_Heading {
+  min-height: 60px;
+  height: 60px;
+}
+.DCoupon_Data_Items_Container {
+  min-height: 500px;
+}
+.DCoupon_Data_Item_Left {
+  width: 230px;
+  font-size: 13px;
+  transition: all 0.4s ease-in-out;
+}
+.DCoupon_Data_Item_Right {
+  flex: 1;
+}
+.DCoupon_Data_Item {
+  font-size: 13px;
+  transition: 0.2s ease-in-out;
+  color: #3f6ad8;
+  cursor: pointer;
+  z-index: 2;
+  min-height: 45px;
+  line-height: 40px;
+}
+.DCoupon_Data_Item_Left > ul {
+  background-color: #fafafa;
+}
+.DCoupon_Data_Item.active,
+.DCoupon_Data_Item:hover {
+  background-color: #eee;
+  color: #555555;
+}
+.DCDIR_Item {
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out;
+  position: absolute;
+}
+.DCoupon_Data_Item_Icon {
+  width: 14px !important;
+  height: 14px !important;
+}
+.DCDIR_Item.active {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out;
+}
+.DCoupon_Data_Info_Label {
+  min-width: 110px;
+}
+.DCoupon_Data_Info_Input {
+  width: 50%;
+  min-width: 263px;
+  border-radius: 3px;
+  padding: 0.375rem 0.75rem;
+}
+.DCoupon_Data_Info_Products_Item {
+  background-color: #3f6ad8;
+  border: 1px solid #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #fafafa;
+}
+.DCoupon_Data_Info_Products_Item:hover {
+  background-color: #6777ff;
+  color: #fff;
+}
+@media (max-width: 768px) {
+  .DCoupon_Data_Item_Left {
+    width: 45px;
+  }
+  .DCoupon_Data_Item_Link {
+    display: none;
+  }
+}

@@ -1,0 +1,55 @@
+.DForm_Heading {
+  font-size: 22px;
+  color: #424242;
+  font-weight: 400;
+}
+.DForm_Label {
+  font-size: 12px;
+  height: 15px;
+  line-height: 15px;
+  overflow: hidden;
+  color: #424242;
+  display: block;
+  margin-bottom: 5px;
+}
+.DForm_Input {
+  border-radius: 3px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  height: 40px;
+  outline: none;
+}
+.DForm_SubmitBtn {
+  transition: background-color 0.4s ease-in-out, color 0.4s ease-in-out;
+  /* box-shadow: 0 16px 26px -10px rgba(63, 106, 216, 0.56),
+    0 4px 25px 0 rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(63, 106, 216, 0.2); */
+  background: #3f6ad8;
+  border-radius: 3px;
+  color: #fff;
+  height: 40px;
+  outline: none;
+}
+.DForm_SubmitBtn:hover {
+  background: #1246cc;
+}
+.DSignup_Container {
+  width: 810px;
+}
+.DForm_Validation {
+  font-size: 12px;
+  color: red;
+  transition: 0.4s ease-in-out;
+}
+.DForm_Validation.valid {
+  visibility: hidden;
+  opacity: 0;
+}
+.DForm_Validation.invalid {
+  visibility: visible;
+  opacity: 1;
+}
+@media (max-width: 991px) {
+  .DSignup_Container {
+    width: 100%;
+  }
+}

@@ -56,6 +56,8 @@ import DeliveryMethod from "./components/Modals/DeliveryMethod";
 import OrderDetails from "./components/User/OrderDetails";
 import DEditOrder from "./components/Admin/Orders/DEditOrder";
 import TrackOrder from "./components/TrackOrder";
+import DSignup from "./components/Admin/DSignup";
+import DCoupon from "./components/Admin/DCoupon";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -102,6 +104,7 @@ const App = () => {
           <Route path="/track-order" element={<TrackOrder />} />
           <Route path="/signup" element={<UserSignup />} />
           <Route path="/login" element={<UserLogin />} />
+
           <Route path="/user" element={<User />}>
             <Route path="/user" element={<Profile />} />
             <Route path="address" element={<AddressBook />} />
@@ -125,7 +128,10 @@ const App = () => {
               <Route path="add" element={<DAddOrder />} />
               <Route path="edit/:id" element={<DEditOrder />} />
             </Route>
+
+            <Route path="shop-coupon" element={<DCoupon />} />
             <Route path="analytic" element={<DAnalytics />} />
+            <Route path="signup" element={<DSignup />} />
           </Route>
           <Route path="*" element={<h1>404 Not Found</h1>} />
         </Routes>

@@ -84,7 +84,10 @@ ul {
 .Bg_Other2 {
   color: #7fac9c !important;
 }
-input::placeholder {
+
+input::placeholder,
+select::placeholder,
+textarea::placeholder {
   font-size: 12px !important;
 }
 .HideNumberSpinButton::-webkit-inner-spin-button,
@@ -96,4 +99,13 @@ input::placeholder {
 }
 .modal-header {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+}
+.form-label {
+  font-size: 12px;
+  height: 15px;
+  line-height: 15px;
+  overflow: hidden;
+  color: #424242;
+  display: block;
+  margin-bottom: 5px;
 }

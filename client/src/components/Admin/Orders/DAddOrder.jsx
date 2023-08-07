@@ -95,7 +95,7 @@ const DAddOrder = () => {
       alert("Please select atleast one product");
       return;
     }
-    console.log(orderData);
+
     dispatch(customOrder(orderData));
   };
   useEffect(() => {

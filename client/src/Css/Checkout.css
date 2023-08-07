@@ -108,15 +108,7 @@
 .DCC_Checkout_Input_Container {
   width: 49%;
 }
-.form-label {
-  font-size: 12px;
-  height: 15px;
-  line-height: 15px;
-  overflow: hidden;
-  color: #424242;
-  display: block;
-  margin-bottom: 5px;
-}
+
 .DCC_Checkout_Input {
   transition: 0.4s ease-in-out;
   font-size: 12px;
