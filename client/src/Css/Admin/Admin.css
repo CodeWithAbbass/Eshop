@@ -415,6 +415,8 @@
   border-radius: 3px !important;
 }
 
+.DAdmin_Hero_Btn:active,
+.DAdmin_Hero_Btn:focus,
 .DAdmin_Hero_Btn:hover {
   box-shadow: 0 0.125rem 0.625rem rgba(22, 170, 255, 0.5),
     0 0.0625rem 0.125rem rgba(22, 170, 255, 0.6) !important;

@@ -9,10 +9,15 @@ import DEditProduct from "./components/Admin/Products/DEditProduct";
 import DCategories from "./components/Admin/Products/DCategories";
 import DReviews from "./components/Admin/Products/DReviews";
 
+import DOrders from "./components/Admin/Orders/DOrders";
 import DAllOrders from "./components/Admin/Orders/DAllOrders";
 import DAddOrder from "./components/Admin/Orders/DAddOrder";
-import DOrders from "./components/Admin/Orders/DOrders";
+import DEditOrder from "./components/Admin/Orders/DEditOrder";
 import DAnalytics from "./components/Admin/Analytics/DAnalytics";
+
+import DAddCoupon from "./components/Admin/Coupons/DAddCoupon";
+
+import DSignup from "./components/Admin/DSignup";
 
 import {
   BrowserRouter,
@@ -54,10 +59,8 @@ import EditAddress from "./components/Modals/EditAddress";
 import AddAddress from "./components/Modals/AddAddress";
 import DeliveryMethod from "./components/Modals/DeliveryMethod";
 import OrderDetails from "./components/User/OrderDetails";
-import DEditOrder from "./components/Admin/Orders/DEditOrder";
 import TrackOrder from "./components/TrackOrder";
-import DSignup from "./components/Admin/DSignup";
-import DCoupon from "./components/Admin/DCoupon";
+import DAllCoupons from "./components/Admin/Coupons/DAllCoupons";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -77,7 +80,7 @@ const App = () => {
     dispatch(getAddress());
     dispatch(getUserOrderAddress());
     dispatch(totalPrice());
-    // dispatch(getAllCat());
+    dispatch(getAllCat());
   }, []);
 
   return (
@@ -129,7 +132,8 @@ const App = () => {
               <Route path="edit/:id" element={<DEditOrder />} />
             </Route>
 
-            <Route path="shop-coupon" element={<DCoupon />} />
+            <Route path="shop-coupon" element={<DAddCoupon />} />
+            <Route path="coupons" element={<DAllCoupons />} />
             <Route path="analytic" element={<DAnalytics />} />
             <Route path="signup" element={<DSignup />} />
           </Route>
