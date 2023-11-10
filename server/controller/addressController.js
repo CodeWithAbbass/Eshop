@@ -172,7 +172,7 @@ exports.updateAddress = async (req, res) => {
   try {
     let success = false;
     let { name, phone, address, email } = req.body;
-    if (!name || !phone || !email || !address) {
+    if (!name || !phone || !address) {
       return res
         .status(400)
         .send({ success, data: [], message: "Please Fill Mandatory Fields." });
