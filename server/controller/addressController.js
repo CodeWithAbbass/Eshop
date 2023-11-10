@@ -41,7 +41,7 @@ exports.addAddress = async (req, res) => {
       [req.user.uid]
     );
     if (UserAddressBook.rowCount >= 4) {
-      return res.send({
+      return res.status(400).send({
         success,
         data: UserAddressBook.rows,
         message: "Address Book Has Reached It's Limit",
