@@ -9,9 +9,11 @@ exports.getAllAddresses = async (req, res) => {
       [req.user.uid]
     );
     if (allAddresses.rows == 0) {
-      return res
-        .status(400)
-        .send({ success, data: [], message: "Address Book is Empty Yet!" });
+      return res.send({
+        success,
+        data: [],
+        message: "Address Book is Empty Yet!",
+      });
     }
     success = true;
     res.send({
@@ -29,7 +31,7 @@ exports.addAddress = async (req, res) => {
     let success = false;
 
     let { name, phone, email, address } = req.body;
-    if (!name || !phone || !email || !address) {
+    if (!name || !phone || !address) {
       return res
         .status(400)
         .send({ success, data: [], message: "Please Fill Mandatory Fields." });
