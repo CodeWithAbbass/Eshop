@@ -1,4 +1,5 @@
 const PriceFormat = (price) => {
+  // console.log(price);
   if (price > 0) {
     return Intl.NumberFormat("en-US", {
       style: "currency",

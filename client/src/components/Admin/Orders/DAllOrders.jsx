@@ -156,6 +156,7 @@ const DAllOrders = () => {
                     } = order;
                     let AfterDiscountPrice = 0;
                     products?.forEach((element) => {
+                      console.log(element);
                       AfterDiscountPrice =
                         AfterDiscountPrice +
                         element.shipfee +
@@ -322,12 +323,12 @@ const DAllOrders = () => {
                       } = order;
                       let AfterDiscountPrice = 0;
                       products?.forEach((element) => {
-                        AfterDiscountPrice =
-                          AfterDiscountPrice +
-                          element.shipfee +
+                        AfterDiscountPrice +=
+                          element.deliveryfees +
                           CalcDiscount(element?.discount, element?.price) *
                             element?.quantity;
                       });
+                      console.log(AfterDiscountPrice);
                       return (
                         <div
                           className="bg-white border-top DAllOrders_Item py-2 row m-0 w-100 justify-content-between"
