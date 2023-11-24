@@ -27,7 +27,7 @@ exports.fetchUser = async (req, res, next) => {
     // return serverResponse(res, STATUS_VARIABLES.TOKEN_EXPIRED, error.message);
     // res.status(400).send({ success: false, data: [], message: error.message });
     res
-      .status(400)
+      .status(401)
       .send({ success: false, data: [], message: "Please Login Again" });
   }
 };
