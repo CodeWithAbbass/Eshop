@@ -99,7 +99,8 @@ exports.placeOrder = async (req, res) => {
       orderid = uid,
       userid = req.user.uid,
       products,
-      status = req.body.paymentmethod.toLowerCase() == "card"
+      status = req.body.paymentmethod.toLowerCase() == "card" ||
+      req.body.paymentmethod == "crypto"
         ? "processing"
         : "pending",
       paymentmethod,
@@ -109,14 +110,7 @@ exports.placeOrder = async (req, res) => {
     if (!billaddress || !billaddress?.address) {
       billaddress = { ...shipaddress };
     }
-    if (
-      !products ||
-      !paymentmethod ||
-      !shipaddress ||
-      !billaddress ||
-      typeof billaddress === "string" ||
-      typeof shipaddress === "string"
-    ) {
+    if (!products || !paymentmethod || !shipaddress || !billaddress) {
       return res
         .status(400)
         .send({ success, message: "Please Fill the Mandatory Fields." });
