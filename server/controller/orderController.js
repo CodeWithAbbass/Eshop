@@ -107,6 +107,7 @@ exports.placeOrder = async (req, res) => {
       shipaddress,
       billaddress,
     } = req.body;
+
     if (!billaddress || !billaddress?.address) {
       billaddress = { ...shipaddress };
     }
