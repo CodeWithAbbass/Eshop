@@ -28,6 +28,9 @@ This is a **full-stack Ecommerce application** inspired by Daraz, covering the e
 -   🚀 **Node.js & Express.js** – REST API for data handling
 -   🗄 **PostgreSQL** – Scalable and reliable relational database
 
+### **Mobile App**
+
+
 ## 📸 Screenshots
 
 | Page Name           | Screenshot                                        |
