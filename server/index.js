@@ -26,9 +26,9 @@ app.use(cookieParser());
 // });
 
 const corsOptions = {
-  origin: "http://localhost:5173",
-  credentials: true, //access-control-allow-credentials:true
-  optionSuccessStatus: 200,
+    origin: "http://localhost:5173",
+    credentials: true, //access-control-allow-credentials:true
+    optionSuccessStatus: 200,
 };
 
 app.use(cors(corsOptions)); // Use this after the variable declaration
@@ -43,11 +43,11 @@ app.use("/api/wishlist", wishlist);
 app.use("/api/order", order);
 app.use("/api/address", address);
 app.get("/", (req, res) => {
-  res.send("Ping Successfully :)");
+    res.send("Ping Successfully :)");
 });
 app.all("/*", (req, res) => {
-  res.status(404).send("404 API Not Exist");
+    res.status(404).send("404 API Not Exist");
 });
 app.listen(port, () => {
-  console.log(`E-Shop listening on http://localhost:${port}`);
+    console.log(`E-Shop listening on http://localhost:${port}`);
 });

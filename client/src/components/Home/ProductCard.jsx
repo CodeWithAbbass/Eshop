@@ -28,7 +28,7 @@ const ProductCard = ({ item }) => {
         >
           <img
             className="card-img-top rounded-0"
-            src={images.length > 0 ? images[0] : ""}
+            src={images?.length > 0 ? images[0] : ""}
             alt="Card image"
           />
           <div className="card-body p-2">

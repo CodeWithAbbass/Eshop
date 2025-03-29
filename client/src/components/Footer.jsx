@@ -105,12 +105,12 @@ const Footer = () => {
                   </li>
                   <li className="DesktopFooter_Menu_item ">
                     <Link to="/" className="DesktopFooter_Menu_Link text-white">
-                      Daraz Donates
+                      Eshop Donates
                     </Link>
                   </li>
                   <li className="DesktopFooter_Menu_item ">
                     <Link to="/" className="DesktopFooter_Menu_Link text-white">
-                      Daraz Blog
+                      Eshop Blog
                     </Link>
                   </li>
                   <li className="DesktopFooter_Menu_item ">
@@ -135,12 +135,12 @@ const Footer = () => {
                   </li>
                   <li className="DesktopFooter_Menu_item ">
                     <Link to="/" className="DesktopFooter_Menu_Link text-white">
-                      Daraz Exclusive
+                      Eshop Exclusive
                     </Link>
                   </li>
                   <li className="DesktopFooter_Menu_item ">
                     <Link to="/" className="DesktopFooter_Menu_Link text-white">
-                      How to shop on Daraz
+                      How to shop on Eshop
                     </Link>
                   </li>
                 </ul>
