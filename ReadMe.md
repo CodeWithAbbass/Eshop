@@ -32,16 +32,26 @@ This is a **full-stack Ecommerce application** inspired by Daraz, covering the e
 
 | Page Name           | Screenshot                                        |
 | ------------------- | ------------------------------------------------- |
-| **Home Page**       | ![Home Page](link-to-home-screenshot.png)         |
-| **Product Page**    | ![Product Page](link-to-product-screenshot.png)   |
-| **Cart Page**       | ![Cart Page](link-to-cart-screenshot.png)         |
-| **Checkout Page**   | ![Checkout Page](link-to-checkout-screenshot.png) |
-| **Admin Dashboard** | ![Admin Dashboard](link-to-admin-screenshot.png)  |
+| **Home Page**       | ![Home Page](https://github.com/CodeWithAbbass/Eshop/blob/master/demo/Home.png)         |
+| **Product Page**    | ![Product Page](https://github.com/CodeWithAbbass/Eshop/blob/master/demo/Categories.png)   |
+| **Cart Page**       | ![Cart Page](https://github.com/CodeWithAbbass/Eshop/blob/master/demo/Cart.png)       |
+| **Checkout Page**   | ![Checkout Page](https://github.com/CodeWithAbbass/Eshop/blob/master/demo/Checkout.png) |
+| **Admin Dashboard** | ![Admin Dashboard](https://github.com/CodeWithAbbass/Eshop/blob/master/demo/Admin%20(AllProducts).png)  |
+
+➡ More images available in the repository.
+
+## 🚀 Achievements & Learnings
+- Built a **Full-stack** Ecommerce platform from product creation to order delivery.
+- Gained expertise in React, Redux Toolkit, Node.js, Express.js, and PostgreSQL.
+- Implemented secure authentication and an admin dashboard for product & order management.
+- Designed scalable REST APIs and optimized state management with Redux Toolkit.
+- Developed a responsive UI using Bootstrap for a seamless user experience.
+- This project was a key milestone in my full-stack development journey. 🚀
 
 ## 🏗️ Project Architecture
 
 ```bash
-/src
+/client/src
   ├── components
   ├── Pages
   ├── Store (Redux Toolkit)
